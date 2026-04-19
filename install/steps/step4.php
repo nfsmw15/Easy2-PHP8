@@ -4,11 +4,11 @@
                     <div class="col-lg-12">
                         <h1>Installation - Step 4</h1>
                         <ol class="breadcrumb">
-                            <li><a href="index.php">Einleitung</a></li>
-                            <li><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
-                            <li><a href="index.php?p=step1">Step 1 - Voraussetzungen</a></li>
-                            <li><a href="index.php?p=step2">Step 2 - MySQL-Daten</a></li>
-                            <li><a href="index.php?p=step3">Step 3 - Grundeinstellungen</a></li>
+                            <li class="breadcrumb-item"><a href="index.php">Einleitung</a></li>
+                            <li class="breadcrumb-item"><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
+                            <li class="breadcrumb-item"><a href="index.php?p=step1">Step 1 - Voraussetzungen</a></li>
+                            <li class="breadcrumb-item"><a href="index.php?p=step2">Step 2 - MySQL-Daten</a></li>
+                            <li class="breadcrumb-item"><a href="index.php?p=step3">Step 3 - Grundeinstellungen</a></li>
                             <li class="breadcrumb-item active actual">Step 4 - Accounts</li>
                             <li class="breadcrumb-item active">Fertig</li>
               	        </ol>
@@ -17,11 +17,11 @@
 				<?php echo $error; ?>
                 <div class="row">
                 	<div class="col-sm-6">
-                    	<div class="panel panel-primary">
-                        	<div class="panel-heading">
+                    	<div class="card">
+                        	<div class="card-header">
                             	<i class="fa fa-user-plus"></i> Account anlegen
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                             	<?php if(!$install->is_user()){ ?>
                                     <form action="index.php?p=step4&c=create_user" method="post">
 										 <div class="form-group <?php echo $install->valid_field["username"]; ?>">
@@ -58,11 +58,11 @@
                         </div>
                     </div>
                 	<div class="col-sm-6">
-                    	<div class="panel panel-primary">
-                        	<div class="panel-heading">
+                    	<div class="card">
+                        	<div class="card-header">
                             	Hilfe
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                        			<p><strong>Benutzername:</strong><br> W&auml;hle einen Benutzernamen aus, welchen du dir gut merken kannst. Ung&uuml;nstige Benutzernamen sind: Admin, Adm, Administrator, Root<br><br></p>
                        			<p><strong>E-Mail:</strong><br> Gebe hier bitte eine E-Mail Adresse f&uuml;r deinen Account an. Diese wird ben6ouml;tigt dich &uuml;ber Sachen zu informieren und zum zur&uuml;ksetzen des Passwortes.<br><br></p>
                        			<p><strong>Passwort:</strong><br> W&auml;hle dein Passwort weise, es ist der Schl&uuml;ssel zu deinem System! Vermeide allt&auml;gliche Begriffe, Zahlenreihen, Geburtstage, Telefonnummern und leichte Passw&ouml;rter wie: admin, root, 123456, administrator, &lt;Name der Seite&gt;.<br><br></p>

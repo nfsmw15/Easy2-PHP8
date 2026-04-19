@@ -302,6 +302,18 @@ class install
             return 'Datenbankverbindung fehlgeschlagen! Bitte Zugangsdaten prüfen.';
         }
 
+        // MySQL / MariaDB Versionscheck
+        $dbVersion = $db->query('SELECT VERSION()')->fetchColumn();
+        $_SESSION['db_version'] = $dbVersion;
+        $isMariaDB = stripos($dbVersion, 'mariadb') !== false;
+        $versionClean = preg_replace('/[^0-9.].*/', '', $dbVersion);
+        if ($isMariaDB && version_compare($versionClean, '10.3', '<')) {
+            return 'MariaDB-Version zu alt: ' . htmlspecialchars($dbVersion) . ' – Mindestens 10.3 erforderlich.';
+        }
+        if (!$isMariaDB && version_compare($versionClean, '5.7', '<')) {
+            return 'MySQL-Version zu alt: ' . htmlspecialchars($dbVersion) . ' – Mindestens 5.7 erforderlich.';
+        }
+
         if (!str_ends_with($prefix, '_ml')) $prefix .= '_ml';
 
         // Kryptographische Schlüssel generieren

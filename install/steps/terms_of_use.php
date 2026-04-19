@@ -4,7 +4,7 @@
                     <div class="col-lg-12">
                         <h1>Lizenz</h1>
                         <ol class="breadcrumb">
-                            <li><a href="index.php">Einleitung</a></li>
+                            <li class="breadcrumb-item"><a href="index.php">Einleitung</a></li>
                             <li class="breadcrumb-item active actual">Lizenz</li>
                             <li class="breadcrumb-item active">Step 1 - Voraussetzungen</li>
                             <li class="breadcrumb-item active">Step 2 - MySQL-Daten</li>

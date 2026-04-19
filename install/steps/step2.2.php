@@ -4,9 +4,9 @@
                     <div class="col-lg-12">
                         <h1>Installation - Step 2</h1>
                         <ol class="breadcrumb">
-                            <li><a href="index.php">Einleitung</a></li>
-                            <li><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
-                            <li><a href="index.php?p=step1">Step 1 - Voraussetzungen</a></li>
+                            <li class="breadcrumb-item"><a href="index.php">Einleitung</a></li>
+                            <li class="breadcrumb-item"><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
+                            <li class="breadcrumb-item"><a href="index.php?p=step1">Step 1 - Voraussetzungen</a></li>
                             <li class="breadcrumb-item active actual">Step 2 - MySQL-Daten</li>
                             <li class="breadcrumb-item active">Step 3 - Grundeinstellungen</li>
                             <li class="breadcrumb-item active">Step 4 - Accounts</li>
@@ -15,13 +15,23 @@
                     </div>
 				</div>
 				<?php echo $error; ?>
+                <?php if (!empty($_SESSION['db_version'])): ?>
+                <div class="row mb-2">
+                    <div class="col-lg-12">
+                        <div class="alert alert-success">
+                            <i class="fa fa-check"></i>
+                            Datenbankverbindung erfolgreich &ndash; Server-Version: <strong><?php echo htmlspecialchars($_SESSION['db_version'], ENT_QUOTES, 'UTF-8'); ?></strong>
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
                 <div class="row">
                 	<div class="col-sm-6">
-                    	<div class="panel panel-primary">
-                        	<div class="panel-heading">
+                    	<div class="card">
+                        	<div class="card-header">
                             	MySQL Tabellen
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
 								<table class="table table-striped">
                                 	<thead>
                                     	<tr>
@@ -41,11 +51,11 @@
                         </div>
                     </div>
                 	<div class="col-sm-6">
-                    	<div class="panel panel-primary">
-                        	<div class="panel-heading">
+                    	<div class="card">
+                        	<div class="card-header">
                             	Hinweis
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                             	<p>Bitte entscheide was du nun tun m&ouml;chtes. Dir stehen folgende M&ouml;glichkeiten zur Auswahl:</p>
                                 <ol>
                                 	<li>Verwende Tabellen doppelt, ACHTUNG! Wenn sich das System bereits auf deiner MySQL-Datenbank l&auml;uft und auf diese Tabelle ebenfalls zugreift geschehen alle &Auml;nderungen auf beiden Systemen! (nicht empfohlen)<br><br></li>
