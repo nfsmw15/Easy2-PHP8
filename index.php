@@ -106,19 +106,14 @@ $sites->includeSite(true);
 <body <?php if ($loginsystem->is_locked()) echo 'class="locked"'; ?>>
 
 <?php if (!$loginsystem->is_locked()): ?>
-    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar">
-                    <span class="sr-only">Navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="./"><?php echo htmlspecialchars((string)$loginsystem->getMainData('site_title'), ENT_QUOTES, 'UTF-8'); ?></a>
-            </div>
+            <a class="navbar-brand" href="./"><?php echo htmlspecialchars((string)$loginsystem->getMainData('site_title'), ENT_QUOTES, 'UTF-8'); ?></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="bs-navbar">
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="navbar-nav ml-auto">
                     <?php echo $menu->getMenu(); ?>
                 </ul>
             </div>
