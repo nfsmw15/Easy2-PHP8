@@ -12,14 +12,14 @@
 		<div class="col-sm-12 mb-4">
 			<div class="clearfix mb-3">
 				<?php if($f != 'new'){ ?>
-					<a class="btn btn-primary pull-right ml-1" href="?p=additional_fields&f=new"><i class="fa fa-plus"></i> Neues Feld anlegen</a>
+					<a class="btn btn-primary float-right ml-1" href="?p=additional_fields&f=new"><i class="fa fa-plus"></i> Neues Feld anlegen</a>
 					<?php if($f == 'edit' || $f == 'remove' || $f == 'show'){ ?>
-						<a class="btn btn-warning pull-right ml-1" href="?p=additional_fields"><i class="fa fa-times"></i> Abbrechen</a>
+						<a class="btn btn-warning float-right ml-1" href="?p=additional_fields"><i class="fa fa-times"></i> Abbrechen</a>
 					<?php } ?>
 				<?php } else { ?>
-					<a class="btn btn-warning pull-right ml-1" href="?p=additional_fields"><i class="fa fa-times"></i> Abbrechen</a>
+					<a class="btn btn-warning float-right ml-1" href="?p=additional_fields"><i class="fa fa-times"></i> Abbrechen</a>
 				<?php } ?>
-				<a class="btn btn-info pull-right" href="?p=settings"><i class="fa fa-arrow-left"></i> zu den Einstellungen</a>
+				<a class="btn btn-info float-right" href="?p=settings"><i class="fa fa-arrow-left"></i> zu den Einstellungen</a>
 			</div>
 			<?php if(empty($f)){ ?>
 				<div class="table-responsive">

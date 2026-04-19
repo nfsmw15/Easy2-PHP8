@@ -3,14 +3,14 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1>Lizenz</h1>
-                        <ol class="breadcrumb pull-right">
+                        <ol class="breadcrumb float-right">
                             <li><a href="index.php">Einleitung</a></li>
-                            <li class="active actual">Lizenz</li>
-                            <li class="active">Step 1 - Voraussetzungen</li>
-                            <li class="active">Step 2 - MySQL-Daten</li>
-                            <li class="active">Step 3 - Grundeinstellungen</li>
-                            <li class="active">Step 4 - Accounts</li>
-                            <li class="active">Fertig</li>
+                            <li class="breadcrumb-item active actual">Lizenz</li>
+                            <li class="breadcrumb-item active">Step 1 - Voraussetzungen</li>
+                            <li class="breadcrumb-item active">Step 2 - MySQL-Daten</li>
+                            <li class="breadcrumb-item active">Step 3 - Grundeinstellungen</li>
+                            <li class="breadcrumb-item active">Step 4 - Accounts</li>
+                            <li class="breadcrumb-item active">Fertig</li>
                         </ol>
                     </div>
                     <div class="col-lg-12">

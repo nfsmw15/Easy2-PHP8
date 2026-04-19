@@ -83,7 +83,7 @@
 				</div><!-- /.card -->
 			<?php } elseif($f == 'edit' && !empty($id)){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-pencil"></i> Men&uuml;punkt bearbeiten <a class="pull-right btn btn-xs btn-warning" href="?p=menu">Abbrechen</a></div>
+					<div class="card-header"><i class="fa fa-pencil"></i> Men&uuml;punkt bearbeiten <a class="float-right btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
 					<div class="card-body">
 						<form action="?p=menu&c=edit&f=edit&id=<?php echo $id; ?>" method="post">
 							<div class="form-group">
@@ -155,7 +155,7 @@
 				</div><!-- /.card -->
 			<?php } elseif($f == 'remove' && !empty($id)){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-trash"></i> Men&uuml;punkt l&ouml;schen <a class="pull-right btn btn-xs btn-warning" href="?p=menu">Abbrechen</a></div>
+					<div class="card-header"><i class="fa fa-trash"></i> Men&uuml;punkt l&ouml;schen <a class="float-right btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
 					<div class="card-body">
 						<form action="?p=menu&c=remove&f=remove&id=<?php echo $id; ?>" method="post">
 							<div class="form-group">
@@ -169,7 +169,7 @@
 				</div><!-- /.card -->
 			<?php } elseif($f == 'reset_positions'){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-eraser"></i> Men&uuml;positionen resetten <a class="pull-right btn btn-xs btn-warning" href="?p=menu">Abbrechen</a></div>
+					<div class="card-header"><i class="fa fa-eraser"></i> Men&uuml;positionen resetten <a class="float-right btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
 					<div class="card-body">
 						<form action="?p=menu&c=reset_positions&f=reset_positions" method="post">
 							<div class="form-group">
@@ -198,7 +198,7 @@
 				</div><!-- /.card -->
 			<?php } elseif($f == 'view' && !empty($id)){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-info-circle"></i> Men&uuml; Informationen <a class="pull-right btn btn-xs btn-warning" href="?p=menu">zur&uuml;ck</a></div>
+					<div class="card-header"><i class="fa fa-info-circle"></i> Men&uuml; Informationen <a class="float-right btn btn-sm btn-warning" href="?p=menu">zur&uuml;ck</a></div>
 					<div class="card-body">
 						<table class="table table-bordered">
 							<tbody>

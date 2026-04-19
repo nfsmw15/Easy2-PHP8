@@ -11,10 +11,10 @@
 		<div class="row mb-4">
 			<div class="col-sm-12 mb-2">
 				<div class="clearfix">
-					<a class="btn btn-primary pull-right" href="?p=additional_fields"><i class="fa fa-cog"></i> Zusatzfelder verwalten</a>
+					<a class="btn btn-primary float-right" href="?p=additional_fields"><i class="fa fa-cog"></i> Zusatzfelder verwalten</a>
 				</div>
            		<div class="card mt-3">
-               		<div class="card-header"><i class="fa fa-cogs"></i> Einstellungen <span class="pull-right">Version: <?php echo EASY_VERSION; ?></span></div>
+               		<div class="card-header"><i class="fa fa-cogs"></i> Einstellungen <span class="float-right">Version: <?php echo EASY_VERSION; ?></span></div>
 					<div class="card-body">
 						<div class="form-group">
 							<div class="row">
@@ -297,10 +297,10 @@
 						<div class="form-group">
                             <div class="row">
 								<div class="col-sm-6">
-									<input type="reset" class="btn btn-md btn-warning btn-block" value="Abbrechen">
+									<input type="reset" class="btn btn-warning btn-block" value="Abbrechen">
 								</div>
 								<div class="col-sm-6">
-                                	<input type="submit" class="btn btn-md btn-success btn-block" value="Speichern">
+                                	<input type="submit" class="btn btn-success btn-block" value="Speichern">
                                 </div>
                             </div>
                         </div>

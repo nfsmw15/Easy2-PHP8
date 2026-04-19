@@ -28,14 +28,14 @@
 													<input type="text" class="form-control" name="description" placeholder="Beschreibung" maxlength="256" value="<?php echo $_POST['description'] ?? ''; ?>">
 												</div>
 												<div class="form-group">
-													<input type="submit" value="Hinzuf&uuml;gen" class="btn btn-block btn-md btn-success">
+													<input type="submit" value="Hinzuf&uuml;gen" class="btn btn-block btn-success">
 												</div>
 											</form>
 										</div>
 									</div><!-- /.card -->
 								<?php } elseif($f == 'edit' && !empty($id)){ ?>
 									<div class="card">
-										<div class="card-header"><i class="fa fa-pencil"></i> Regel bearbeiten <a class="btn btn-xs btn-warning pull-right" href="?p=rules">Abbrechen</a></div>
+										<div class="card-header"><i class="fa fa-pencil"></i> Regel bearbeiten <a class="btn btn-sm btn-warning float-right" href="?p=rules">Abbrechen</a></div>
 										<div class="card-body">
 											<form action="?p=rules&c=edit&f=edit&id=<?php echo $id; ?>" method="post">
 												<div class="form-group">
@@ -48,21 +48,21 @@
 													<input type="text" class="form-control" name="description" placeholder="Beschreibung" maxlength="256" value="<?php echo $_POST['description'] ?? $rules->getValue('rules', 'id', $id, 'description'); ?>">
 												</div>
 												<div class="form-group">
-													<input type="submit" value="Speichern" class="btn btn-block btn-md btn-success">
+													<input type="submit" value="Speichern" class="btn btn-block btn-success">
 												</div>
 											</form>
 										</div>
 									</div><!-- /.card -->
 								<?php } elseif($f == 'delete' && !empty($id)){ ?>
 									<div class="card">
-										<div class="card-header"><i class="fa fa-trash"></i> Regel entfernen <a class="btn btn-xs btn-warning pull-right" href="?p=rules">Abbrechen</a></div>
+										<div class="card-header"><i class="fa fa-trash"></i> Regel entfernen <a class="btn btn-sm btn-warning float-right" href="?p=rules">Abbrechen</a></div>
 										<div class="card-body">
 											<form action="?p=rules&c=delete&f=delete&id=<?php echo $id; ?>" method="post">
 												<div class="form-group">
 													Soll diese Regel wirklich entfernt werden?
 												</div>
 												<div class="form-group">
-													<input type="submit" value="Entfernen" class="btn btn-block btn-md btn-danger">
+													<input type="submit" value="Entfernen" class="btn btn-block btn-danger">
 												</div>
 											</form>
 										</div>
