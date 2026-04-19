@@ -100,7 +100,7 @@ $sites->includeSite(true);
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="css/mlsystems.css" rel="stylesheet">
     <?php if (!empty($p) && $p === 'settings'): ?>
-        <link href="css/summernote.min.css" rel="stylesheet">
+        <link href="css/summernote-bs4.min.css" rel="stylesheet">
     <?php endif; ?>
 </head>
 <body <?php if ($loginsystem->is_locked()) echo 'class="locked"'; ?>>
@@ -140,7 +140,7 @@ $sites->includeSite(true);
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <?php if (!empty($p) && $p === 'settings'): ?>
-        <script src="js/summernote/summernote.min.js"></script>
+        <script src="js/summernote/summernote-bs4.min.js"></script>
         <script src="js/summernote/lang/summernote-de-DE.min.js"></script>
         <script src="js/summernote-init.js"></script>
     <?php endif; ?>
