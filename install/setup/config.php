@@ -31,15 +31,17 @@ define('EASY_VERSION', '0.9.8.6-php8');
 define('ENCRYPT_KEY',    '[generated_after_install_32bytes_hex]');
 define('COOKIE_SECRET',  '[generated_after_install_32bytes_hex_2]');
 
-// ─── Session-Härtung vor session_start() ────────────────────────────────────
-// cookie_secure: nur über HTTPS senden. Wird HTTPS-aware gesetzt.
-// (In index.php vor session_start() gesetzt, damit es beim Installer nicht bricht)
-ini_set('session.cookie_httponly', '1');
-ini_set('session.cookie_secure',   ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['SERVER_PORT'] ?? 80) == 443)) ? '1' : '0');
-ini_set('session.cookie_samesite', 'Strict');
-ini_set('session.use_strict_mode', '1');
-ini_set('session.use_only_cookies','1');
-ini_set('session.gc_maxlifetime',  '1800'); // 30 min inaktiv = abgelaufen
+// ─── Session-Härtung (nur wenn Session noch nicht gestartet) ────────────────
+if (session_status() === PHP_SESSION_NONE) {
+    $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (($_SERVER['SERVER_PORT'] ?? 80) == 443);
+    ini_set('session.cookie_httponly', '1');
+    ini_set('session.cookie_secure',   $isHttps ? '1' : '0');
+    ini_set('session.cookie_samesite', 'Strict');
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.use_only_cookies','1');
+    ini_set('session.gc_maxlifetime',  '1800');
+}
 
 // ─── PDO-Verbindung ──────────────────────────────────────────────────────────
 $dberror = true;
