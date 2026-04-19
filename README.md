@@ -1,36 +1,66 @@
-# easy2-php8
+# Easy2-PHP8 — Bootstrap 3 Branch
 
-PHP 8 fork of [EASY 2.0 Loginsystem](https://marlight-systems.de) by Marius Rasche.
+PHP 8 fork of [EASY 2.0 Loginsystem](https://github.com/Marlight/Easy2-Modern_Business) by Marius Rasche / Marlight Systems.
 
-## About
+> **Branches:**
+> - `main-bs3` — Bootstrap 3.3.7 (this branch)
+> - `main-bs4` — Bootstrap 4.6.2
 
-EASY 2.0 is a lightweight PHP login and CMS system. This fork rewrites the codebase for PHP 8 compatibility.
+## Features
 
-## Changes vs. original
+- Lightweight PHP login and CMS system
+- **Bootstrap 3.3.7** + Start Bootstrap Modern Business template
+- **PHPMailer 6.9.3** SMTP mail dispatch (replaces PHP `mail()`)
+- Summernote WYSIWYG editor for Impressum and Datenschutz
+- Admin panel: users, ranks, pages, settings, SMTP configuration
 
-- mysqli → PDO with Exceptions (`system/classes/database.php`)
-- mcrypt → OpenSSL AES-256-GCM (`system/functions.inc.php`)
-- `each()` removed (PHP 8 removed)
-- Session hardening: HttpOnly, Secure, SameSite
-- Security HTTP headers in `index.php`
-- `declare(strict_types=1)` in core files
+## Changes vs. original EASY 2.0
+
+- `mysqli` → PDO with Exceptions
+- `mcrypt` → OpenSSL AES-256-GCM encryption
+- Session hardening: HttpOnly, Secure, SameSite=Strict
+- Security HTTP headers + CSP in `index.php`
+- `declare(strict_types=1)` in all core files
+- PHP `mail()` → PHPMailer 6.9.3 with SMTP authentication
+- `BS_VERSION` and `EASY_VERSION` constants in `config.inc.php`
 
 ## Requirements
 
 - PHP 8.0+
-- MySQL / MariaDB
-- Apache or nginx (or PHP built-in server for development)
+- MySQL 5.7+ or MariaDB 10.3+
+- Apache or nginx
 
 ## Installation
 
 1. Copy files to your web root
 2. Run the installer at `./install/`
-3. Configure `system/config.inc.php`
+3. Configure SMTP in the admin panel under Settings
+
+## Updating an existing installation
+
+```bash
+git pull origin main-bs3
+```
+
+If updating from before v1.1.0, run in your database:
+
+```sql
+INSERT INTO `PREFIX_ml_main` (`id`, `tag`, `value`) VALUES
+(19, 'smtp_host', ''), (20, 'smtp_port', '587'),
+(21, 'smtp_user', ''), (22, 'smtp_pass', ''),
+(23, 'smtp_encryption', 'tls');
+```
+
+And add to `system/config.inc.php`:
+
+```php
+define('BS_VERSION', 3);
+```
 
 ## License
 
 Original EASY 2.0: GNU General Public License v3.0
 Copyright (C) 2018 Marius Rasche – Marlight Systems
 
-PHP 8 modifications: GNU Affero General Public License v3.0
-Copyright (C) 2026 Andreas P. <https://nfsmw15.de>
+PHP 8 fork: GNU Affero General Public License v3.0
+Copyright (C) 2026 nfsmw15 <https://nfsmw15.de>
