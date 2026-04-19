@@ -1,5 +1,25 @@
 # Changelog — EASY 2.0 PHP8 Fork
 
+## [1.1.0] — 2026-04-19
+
+### Neu
+- **PHPMailer 6.9.3** ersetzt PHP `mail()` — SMTP-Authentifizierung mit STARTTLS/SSL (z.B. Mailcow)
+- SMTP-Einstellungen im Admin-Panel konfigurierbar (Host, Port, Verschlüsselung, Benutzer, Passwort)
+- E-Mail-Templates (`emailtpl/`) hinzugefügt
+
+### Bugfixes
+- Captcha-Schriftart `system/fonts/Captureit.ttf` fehlte — jetzt enthalten
+- Session-`ini_set()`-Warnungen im Installer behoben (`session_status()` Guard)
+
+### Bootstrap 4-Branch (`main-bs4`)
+- Neuer Branch mit Bootstrap 4.6.2
+- Navbar, Breadcrumbs, Cards, Buttons auf BS4-Klassen migriert
+
+### Konfiguration
+- `EASY_VERSION` auf `1.1.0` gesetzt
+
+---
+
 ## [1.0.0] — 2026-04-17
 
 ### Fork-Basis

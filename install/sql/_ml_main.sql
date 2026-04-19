@@ -24,11 +24,16 @@ INSERT INTO `[prefix]_ml_main` (`id`, `tag`, `value`) VALUES
 (15, 'dsgvo_email', ''),
 (16, 'captcha_type', 'default'),
 (17, 'impressum_info', 'Musterfirma\r\nMax Mustermann\r\nMusterstrasse 123\r\n12345 Musterort\r\n\r\nTel: 0123 / 456789'),
-(18, 'privacy_policy_info', 'Musterfirma\r\nMax Mustermann\r\nMusterstrasse 123\r\n12345 Musterort\r\n\r\nTel: 0123 / 456789');
+(18, 'privacy_policy_info', 'Musterfirma\r\nMax Mustermann\r\nMusterstrasse 123\r\n12345 Musterort\r\n\r\nTel: 0123 / 456789'),
+(19, 'smtp_host', ''),
+(20, 'smtp_port', '587'),
+(21, 'smtp_user', ''),
+(22, 'smtp_pass', ''),
+(23, 'smtp_encryption', 'tls');
 
 ALTER TABLE `[prefix]_ml_main`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `[prefix]_ml_main`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 COMMIT;

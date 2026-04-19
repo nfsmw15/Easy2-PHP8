@@ -1876,7 +1876,12 @@ class loginsystem extends database
         $regist_ac	= length($_POST['regist_ac'] ?? 0, 1);
         $reg_mode	= length($_POST['reg_mode'] ?? 0, 1);
         $pwv_ac		= length($_POST['pwv_ac'] ?? 0, 1);
-        $dsgvo   	= length($_POST['dsgvo'] ?? '', 128);
+        $dsgvo       = length($_POST['dsgvo'] ?? '', 128);
+        $smtp_host   = length($_POST['smtp_host'] ?? '', 128);
+        $smtp_port   = length($_POST['smtp_port'] ?? '587', 5);
+        $smtp_user   = length($_POST['smtp_user'] ?? '', 128);
+        $smtp_pass   = length($_POST['smtp_pass'] ?? '', 256);
+        $smtp_enc    = length($_POST['smtp_encryption'] ?? 'tls', 3);
         $impress	= length($_POST['impressum_info'] ?? NULL, 4096, null, "sql");
         $imp_cont	= length($_POST['impressum_content'] ?? NULL, 9999999, null, "none");
         $privacy	= length($_POST['privacy_policy'] ?? NULL, 9999999, null, "none");
@@ -1935,6 +1940,11 @@ class loginsystem extends database
                 $update['default_avatar_type'] = $default_avatar_type;
                 $update['dsgvo_email'] = $dsgvo;
                 $update['impressum_info'] = $impress;
+                $update['smtp_host'] = $smtp_host;
+                $update['smtp_port'] = $smtp_port;
+                $update['smtp_user'] = $smtp_user;
+                $update['smtp_pass'] = $smtp_pass;
+                $update['smtp_encryption'] = $smtp_enc;
                 
                 foreach($update as $key => $val){
                     $sql = $this->mysql->query("Update ".Prefix."_main Set value = '$val' Where tag = '$key'");
@@ -1974,56 +1984,55 @@ class loginsystem extends database
      ************************************/
     
     public function sendMail(string $tpl, mixed $userID = null, array $data = [], ?string $to = null, ?string $rplto = null, string $header_file = 'header.tpl', string $footer_file = 'footer.tpl'): void {
-        /***********************
-         * $tpl => Datei mit dem gewuenschtem Inhalt
-         * $userID => UserID uebergeben (noch keine Verwendung)
-         * $data => Das "data" Array enthaelt alle Variablen Werte welche in dem E-Mail Template ersetzt werden sollen.
-         *          Der "key" enthaelt den Variablennamen und das "value" enthaelt den zu ersetzenden Wert.
-         * $to => Empfaenger der E-Mail (E-Mail Adresse)
-         * $rplto => E-Mail zurueck zu (E-Mail Adresse)
-         * $header_file => Abweichende Header(Kopf)-Datei angeben (Aus dem Verzeichnis "./emailtpl/")
-         * $footer_file => Abweichende Footer(Fuss)-Datei angeben (Aus dem Verzeichnis "./emailtpl/")
-         ***********************/
         $tpl_dir = './emailtpl/';
-        $tpl_file = $tpl_dir.$tpl;
-        $tpl_header_file = $tpl_dir.$header_file;
-        $tpl_footer_file = $tpl_dir.$footer_file;
-        $content = file_get_contents($tpl_header_file);
-        $content .= file_get_contents($tpl_file);
-        $content .= file_get_contents($tpl_footer_file);
-        
-        // Replacement
-        foreach($data as $key => $val){
-            $content = str_replace('['.$key.']', $val, $content);
+        $content = file_get_contents($tpl_dir . $header_file);
+        $content .= file_get_contents($tpl_dir . $tpl);
+        $content .= file_get_contents($tpl_dir . $footer_file);
+
+        foreach ($data as $key => $val) {
+            $content = str_replace('[' . $key . ']', $val, $content);
         }
-        
-        $link = getCurrentUrl();
-        $content = str_replace('[link]', $link, $content);
-        
-        $content = str_replace('[title]', parent::getMainData('site_title'), $content);
-        $message = str_replace('[adminmail]', parent::getMainData('administrator_mail'), $content);
-        
-        $to = empty($to) ? parent::getMainData('administrator_mail') : $to;
-        $rplto = empty($rplto) ? parent::getMainData('mail_receiver') : $rplto;
-        
-        $mime_boundary = "-----=" . md5(uniqid(microtime(), true));
-        
-        $header  = "From: ".parent::getMainData('site_title')." <".parent::getMainData('mail_sender').">"."\r\n";
-        $header .= "Reply-To: ".$rplto."\r\n";
-        $header .= "MIME-Version: 1.0\r\n";
-        $header .= "Content-Type: multipart/mixed;\r\n";
-        $header .= " boundary=\"".$mime_boundary."\"\r\n";
-        
-        $encoding = mb_detect_encoding($message, "utf-8, iso-8859-1, Windows-1252");
-        $content = "This is a multi-part message in MIME format.\r\n\r\n";
-        $content.= "--".$mime_boundary."\r\n";
-        $content.= "Content-Type: text/html; charset=\"$encoding\"\r\n";
-        $content.= "Content-Transfer-Encoding: 8bit\r\n\r\n";
-        $content.= $message."\r\n";
-        $content .= "--".$mime_boundary."--";
-        
-        
-        mail($to, "=?UTF-8?B?".base64_encode($data['subject'])."?=", $content, $header);
+        $content = str_replace('[link]',      getCurrentUrl(),                          $content);
+        $content = str_replace('[title]',     parent::getMainData('site_title'),        $content);
+        $content = str_replace('[adminmail]', parent::getMainData('administrator_mail'), $content);
+
+        $to    = empty($to)    ? parent::getMainData('administrator_mail') : $to;
+        $rplto = empty($rplto) ? parent::getMainData('mail_receiver')      : $rplto;
+
+        $smtpHost = (string)parent::getMainData('smtp_host');
+        $smtpPort = (int)(parent::getMainData('smtp_port') ?: 587);
+        $smtpUser = (string)parent::getMainData('smtp_user');
+        $smtpPass = (string)parent::getMainData('smtp_pass');
+        $smtpEnc  = (string)parent::getMainData('smtp_encryption');
+
+        require_once __DIR__ . '/../phpmailer/Exception.php';
+        require_once __DIR__ . '/../phpmailer/PHPMailer.php';
+        require_once __DIR__ . '/../phpmailer/SMTP.php';
+
+        $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+        try {
+            $mail->isSMTP();
+            $mail->Host       = $smtpHost;
+            $mail->SMTPAuth   = !empty($smtpUser);
+            $mail->Username   = $smtpUser;
+            $mail->Password   = $smtpPass;
+            $mail->Port       = $smtpPort;
+            if ($smtpEnc === 'ssl') {
+                $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
+            } elseif ($smtpEnc === 'tls') {
+                $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+            }
+            $mail->CharSet  = 'UTF-8';
+            $mail->setFrom((string)parent::getMainData('mail_sender'), (string)parent::getMainData('site_title'));
+            $mail->addAddress($to);
+            $mail->addReplyTo($rplto);
+            $mail->isHTML(true);
+            $mail->Subject = $data['subject'] ?? 'Nachricht';
+            $mail->Body    = $content;
+            $mail->send();
+        } catch (\PHPMailer\PHPMailer\Exception $e) {
+            error_log('sendMail() fehlgeschlagen: ' . $mail->ErrorInfo . ' | to=' . $to . ' tpl=' . $tpl);
+        }
     }
 }
 

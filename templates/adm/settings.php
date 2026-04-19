@@ -104,6 +104,55 @@
  						<hr>
 							<div class="form-group">
 								<div class="row">
+									<div class="col-sm-12">
+										<h4>SMTP-Einstellungen</h4>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<label for="smtp_host">SMTP-Host:</label>
+										<div class="form-group input-group">
+											<span class="input-group-addon"><i class="fa fa-fw fa-server"></i></span>
+											<input type="text" name="smtp_host" class="form-control" value="<?php echo isset($_POST['smtp_host']) ? $_POST['smtp_host'] : $loginsystem->getMainData('smtp_host'); ?>" id="smtp_host" maxlength="128" placeholder="z.B. mail.example.com">
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<label for="smtp_port">Port:</label>
+										<div class="form-group input-group">
+											<span class="input-group-addon"><i class="fa fa-fw fa-plug"></i></span>
+											<input type="number" name="smtp_port" class="form-control" value="<?php echo isset($_POST['smtp_port']) ? $_POST['smtp_port'] : $loginsystem->getMainData('smtp_port'); ?>" id="smtp_port" min="1" max="65535" placeholder="587">
+										</div>
+									</div>
+									<div class="col-sm-3">
+										<label for="smtp_encryption">Verschl&uuml;sselung:</label>
+										<select name="smtp_encryption" id="smtp_encryption" class="form-control">
+											<?php $smtpEnc = isset($_POST['smtp_encryption']) ? $_POST['smtp_encryption'] : $loginsystem->getMainData('smtp_encryption'); ?>
+											<option value="tls" <?php echo $smtpEnc === 'tls' ? 'selected' : ''; ?>>STARTTLS</option>
+											<option value="ssl" <?php echo $smtpEnc === 'ssl' ? 'selected' : ''; ?>>SSL/TLS</option>
+											<option value=""    <?php echo $smtpEnc === ''    ? 'selected' : ''; ?>>Keine</option>
+										</select>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<label for="smtp_user">SMTP-Benutzername:</label>
+										<div class="form-group input-group">
+											<span class="input-group-addon"><i class="fa fa-fw fa-user"></i></span>
+											<input type="text" name="smtp_user" class="form-control" value="<?php echo isset($_POST['smtp_user']) ? $_POST['smtp_user'] : $loginsystem->getMainData('smtp_user'); ?>" id="smtp_user" maxlength="128" placeholder="E-Mail oder Benutzername">
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<label for="smtp_pass">SMTP-Passwort:</label>
+										<div class="form-group input-group">
+											<span class="input-group-addon"><i class="fa fa-fw fa-lock"></i></span>
+											<input type="password" name="smtp_pass" class="form-control" value="<?php echo isset($_POST['smtp_pass']) ? $_POST['smtp_pass'] : $loginsystem->getMainData('smtp_pass'); ?>" id="smtp_pass" maxlength="256" placeholder="SMTP-Passwort">
+										</div>
+									</div>
+								</div>
+							</div>
+							<hr>
+							<div class="form-group">
+								<div class="row">
 									<div class="col-sm-6">
 										<label for="dsgvo">E-Mail f&uuml;r Datenschutz:</label>
 										<div class="form-group input-group">
