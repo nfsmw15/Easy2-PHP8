@@ -8,3 +8,6 @@ avatare/*
 
 # Laufzeit / Cache
 *.log
+
+# Zip-Pakete
+*.zip
