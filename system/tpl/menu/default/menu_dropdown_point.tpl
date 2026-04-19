@@ -1,6 +1,6 @@
-                    <li class="dropdown[active]">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">[icon] [title] <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            [list]
-                        </ul>
-                    </li>
+							<li class="nav-item dropdown[active]">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBlog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">[icon] [title]</a>
+								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
+									[list]
+								</div>
+							</li>

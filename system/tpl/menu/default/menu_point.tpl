@@ -1,3 +1,3 @@
-						<li class="[active]">
-							<a href="[url]" target="[target]" title="[title]">[icon] [title]</a>
+						<li class="nav-item[active]">
+							<a href="[url]" class="nav-link" target="[target]" title="[title]">[icon] [title]</a>
 						</li>

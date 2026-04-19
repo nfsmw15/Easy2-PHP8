@@ -1,21 +1,17 @@
     <!-- Page Content -->
     <div class="container">
 
-        <!-- Page Heading/Breadcrumbs -->
-        <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">
-                    <i class="fa fa-envelope"></i> Kontakt
-                </h1>
-                <ol class="breadcrumb">
-                    <li>
-                        <a href="index.php">Home</a>
-                    </li>
-                    <li class="active">Kontakt</li>
-                </ol>
-            </div>
-        </div>
-        <!-- /.row -->
+      <!-- Page Heading/Breadcrumbs -->
+      <h1 class="mt-4 mb-3">Contact
+        <small>Subheading</small>
+      </h1>
+
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="index.php">Home</a>
+        </li>
+        <li class="breadcrumb-item active">Contact</li>
+      </ol>
 
       <!-- Content Row -->
       <div class="row">
@@ -26,7 +22,7 @@
         </div>
         <!-- Contact Details Column -->
         <div class="col-lg-4 mb-4">
-          <h3>Kontakt Details</h3>
+          <h3>Contact Details</h3>
           <p>
             3481 Melrose Place
             <br>Beverly Hills, CA 90210

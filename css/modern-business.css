@@ -1,93 +1,60 @@
 /*!
- * Start Bootstrap - Modern Business (http://startbootstrap.com/)
- * Copyright 2013-2016 Start Bootstrap
- * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
+ * Start Bootstrap - Modern Business (https://startbootstrap.com/template-overviews/modern-business)
+ * Copyright 2013-2017 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-logomodern-business-nav/blob/master/LICENSE)
  */
 
-/* Global Styles */
-
-html,
-body {
-    height: 100%;
+html, body{
+	height: 100%;
 }
 
 body {
-    padding-top: 50px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+  padding-top: 54px;
 }
 
-.img-portfolio {
-    margin-bottom: 30px;
+@media (min-width: 992px) {
+  body {
+    padding-top: 56px;
+  }
 }
 
-.img-hover:hover {
-    opacity: 0.8;
+.carousel-item {
+  height: 65vh;
+  min-height: 300px;
+  background: no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
-/* Home Page Carousel */
-
-header.carousel {
-    height: 50%;
+.portfolio-item {
+  margin-bottom: 30px;
 }
 
-header.carousel .item,
-header.carousel .item.active,
-header.carousel .carousel-inner {
-    height: 100%;
+.btn{
+	cursor: pointer;
 }
 
-header.carousel .fill {
-    width: 100%;
-    height: 100%;
-    background-position: center;
-    background-size: cover;
+.row-fullheight{
+	height: 600px!important;
+	height: -moz-calc(100% - 168px)!important;/* Nav: 48px + Footer: 120px*/
+    height: -webkit-calc(100% - 168px)!important;/* Nav: 48px + Footer: 120px*/
+    height: calc(100% - 168px)!important;	/* Nav: 48px + Footer: 120px*/
 }
 
-/* 404 Page Styles */
-
-.error-404 {
-    font-size: 100px;
+.row-100{
+	height: 100%;
 }
 
-/* Pricing Page Styles */
-
-.price {
-    display: block;
-    font-size: 50px;
-    line-height: 50px;
+body.locked{
+	background-color: #333;
 }
 
-.price sup {
-    top: -20px;
-    left: 2px;
-    font-size: 20px;
-}
-
-.period {
-    display: block;
-    font-style: italic;
-}
-
-/* Footer Styles */
-
-footer {
-    margin: 50px 0;
-}
-
-/* Responsive Styles */
-
-@media(max-width:991px) {
-    .customer-img,
-    .img-related {
-        margin-bottom: 30px;
-    }
-}
-
-@media(max-width:767px) {
-    .img-portfolio {
-        margin-bottom: 15px;
-    }
-
-    header.carousel .carousel {
-        height: 70%;
-    }
+.round_pic{
+    width: 200px;
+    height: 200px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    border-radius: 100px;
 }

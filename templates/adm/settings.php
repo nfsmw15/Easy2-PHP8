@@ -1,32 +1,21 @@
 <div class="container">
-    <!-- Page Heading/Breadcrumbs -->
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">
-                <i class="fa fa-cog"></i> Einstellungen
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="./">&Uuml;bersicht</a>
-                </li>
-                <li class="active">Verwaltung</li>
-                <li>
-                    <a href="./?p=settings">Einstellungen</a>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <!-- /.row -->
+    <!-- Page header/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Einstellungen</h1>
+    <ol class="breadcrumb">
+    	<li class="breadcrumb-item"><a href="?">&Uuml;bersicht</a></li>
+  		<li class="breadcrumb-item active">Verwaltung</li>
+  		<li class="breadcrumb-item"><a href="?p=settings">Einstellungen</a></li>
+    </ol>
     <?php echo $error; ?>
-	<form action="./?p=settings&c=mainsave" method="post" enctype="multipart/form-data">
-		<div class="row">
-			<div class="col-sm-12">
+	<form action="?p=settings&c=mainsave" method="post" enctype="multipart/form-data">
+		<div class="row mb-4">
+			<div class="col-sm-12 mb-2">
 				<div class="clearfix">
-					<a class="btn btn-primary pull-right" href="./?p=additional_fields"><i class="fa fa-cog"></i> Zusatzfelder verwalten</a>
+					<a class="btn btn-primary pull-right" href="?p=additional_fields"><i class="fa fa-cog"></i> Zusatzfelder verwalten</a>
 				</div>
-           		<div class="panel panel-primary mt15px">
-               		<div class="panel-heading"><i class="fa fa-cogs"></i> Einstellungen <span class="pull-right">Version: <?php echo EASY_VERSION; ?></span></div>
-					<div class="panel-body">
+           		<div class="card mt-3">
+               		<div class="card-header"><i class="fa fa-cogs"></i> Einstellungen <span class="pull-right">Version: <?php echo EASY_VERSION; ?></span></div>
+					<div class="card-body">
 						<div class="form-group">
 							<div class="row">
 								<div class="col-sm-6">
@@ -136,7 +125,7 @@
 									<div class="col-sm-12">
 										<label for="impressum_content">Impressumsinhalt (Haftungsausschluss):</label>
 										<div class="form-group">
-											<textarea name="impressum_content" id="impressum_content"><?php echo isset($_POST['impressum_content']) ? html_entity_decode($_POST['impressum_content'], ENT_QUOTES, 'UTF-8') : html_entity_decode($loginsystem->getImpressum(), ENT_QUOTES, 'UTF-8'); ?></textarea>
+											<textarea name="impressum_content" id="impressum_content" class="form-control" rows="6"><?php echo isset($_POST['impressum_content']) ? $_POST['impressum_content'] : $loginsystem->getImpressum(); ?></textarea>
 										</div>
 									</div>
 								</div>
@@ -147,12 +136,13 @@
 									<div class="col-sm-12">
 										<label for="privacy_policy">Datenschutzerkl&auml;rung:</label>
 										<div class="form-group">
-											<textarea name="privacy_policy" id="privacy_policy"><?php echo isset($_POST['privacy_policy']) ? html_entity_decode($_POST['privacy_policy'], ENT_QUOTES, 'UTF-8') : html_entity_decode($loginsystem->getPrivacyPolicy(), ENT_QUOTES, 'UTF-8'); ?></textarea>
+											<textarea name="privacy_policy" id="privacy_policy" class="form-control" rows="6"><?php echo isset($_POST['privacy_policy']) ? $_POST['privacy_policy'] : $loginsystem->getPrivacyPolicy(); ?></textarea>
 										</div>
 									</div>
 								</div>
 							</div>
- 						<hr>						<h4>Login &amp; Registration</h4>
+							<hr>
+						<h4>Login &amp; Registration</h4>
  						<hr>
 						<div class="form-group">
 							<div class="row">
