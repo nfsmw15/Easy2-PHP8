@@ -3,7 +3,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1>Lizenz</h1>
-                        <ol class="breadcrumb float-right">
+                        <ol class="breadcrumb">
                             <li><a href="index.php">Einleitung</a></li>
                             <li class="breadcrumb-item active actual">Lizenz</li>
                             <li class="breadcrumb-item active">Step 1 - Voraussetzungen</li>

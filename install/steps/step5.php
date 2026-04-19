@@ -3,7 +3,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1>Installation - Step 5</h1>
-                        <ol class="breadcrumb float-right">
+                        <ol class="breadcrumb">
                             <li><a href="index.php">Einleitung</a></li>
                             <li><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
                             <li><a href="index.php?p=step1">Step 1 - Voraussetzungen</a></li>
