@@ -1,5 +1,20 @@
 # Changelog — EASY 2.0 PHP8 Fork
 
+## [1.1.1] — 2026-04-19
+
+### Neu
+- `BS_VERSION`-Konstante in `config.inc.php` definiert (Wert: `4`)
+- Summernote-Editor wird jetzt auch auf der `news_add`-Seite geladen
+
+### Bugfixes
+- Summernote BS4-Build (`summernote-bs4.min.js`) statt BS3-Build verwendet
+- jQuery 1.11.1 → **3.7.1** (Pflicht für Bootstrap 4 und Summernote BS4)
+- Bootstrap 4.6.2 **Bundle** (inkl. Popper.js) ersetzt standalone-Version
+- CSP-Header um `unsafe-eval` ergänzt (Summernote wurde blockiert)
+- Doppelte Summernote-Einbindung in `settings.php` entfernt
+
+---
+
 ## [1.1.0] — 2026-04-19
 
 ### Neu: Bootstrap 4 Branch (main-bs4)
