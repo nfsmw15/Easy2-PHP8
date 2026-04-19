@@ -90,6 +90,40 @@
 								</div>
 							</div>
 						</div>
+						<hr>
+						<h4><i class="fa fa-server"></i> SMTP-Einstellungen</h4>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-4">
+									<label for="smtp_host">SMTP Host:</label>
+									<input type="text" name="smtp_host" class="form-control" value="<?php echo isset($_POST['smtp_host']) ? $_POST['smtp_host'] : $loginsystem->getMainData('smtp_host'); ?>" id="smtp_host" maxlength="128" placeholder="z.B. mail.nfsmw15.de">
+								</div>
+								<div class="col-sm-2">
+									<label for="smtp_port">Port:</label>
+									<input type="number" name="smtp_port" class="form-control" value="<?php echo isset($_POST['smtp_port']) ? $_POST['smtp_port'] : $loginsystem->getMainData('smtp_port'); ?>" id="smtp_port" placeholder="587">
+								</div>
+								<div class="col-sm-3">
+									<label for="smtp_encryption">Verschl&uuml;sselung:</label>
+									<select name="smtp_encryption" class="form-control" id="smtp_encryption">
+										<option value="tls" <?php echo checker(isset($_POST['smtp_encryption']) ? $_POST['smtp_encryption'] : $loginsystem->getMainData('smtp_encryption'), 'tls'); ?>>STARTTLS (587)</option>
+										<option value="ssl" <?php echo checker(isset($_POST['smtp_encryption']) ? $_POST['smtp_encryption'] : $loginsystem->getMainData('smtp_encryption'), 'ssl'); ?>>SSL/TLS (465)</option>
+										<option value="" <?php echo checker(isset($_POST['smtp_encryption']) ? $_POST['smtp_encryption'] : $loginsystem->getMainData('smtp_encryption'), ''); ?>>Keine</option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-4">
+									<label for="smtp_user">SMTP Benutzername:</label>
+									<input type="text" name="smtp_user" class="form-control" value="<?php echo isset($_POST['smtp_user']) ? $_POST['smtp_user'] : $loginsystem->getMainData('smtp_user'); ?>" id="smtp_user" maxlength="128" placeholder="user@nfsmw15.de">
+								</div>
+								<div class="col-sm-4">
+									<label for="smtp_pass">SMTP Passwort:</label>
+									<input type="password" name="smtp_pass" class="form-control" value="<?php echo isset($_POST['smtp_pass']) ? $_POST['smtp_pass'] : $loginsystem->getMainData('smtp_pass'); ?>" id="smtp_pass" maxlength="256" placeholder="Passwort">
+								</div>
+							</div>
+						</div>
  						<hr>
 							<div class="form-group">
 								<div class="row">
