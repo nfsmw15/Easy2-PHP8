@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="./css/summernote.min.css">
 <div class="container">
     <!-- Page Heading/Breadcrumbs -->
     <div class="row">
@@ -370,6 +369,3 @@
 		</div><!-- /.row -->
 	</form>
 </div><!-- /.container -->
-<script src="./js/summernote/summernote.min.js"></script>
-<script src="./js/summernote/lang/summernote-de-DE.min.js"></script>
-<script src="./js/summernote-init.js"></script>
