@@ -2023,7 +2023,10 @@ class loginsystem extends database
         $content .= "--".$mime_boundary."--";
         
         
-        mail($to, "=?UTF-8?B?".base64_encode($data['subject'])."?=", $content, $header);
+        $result = mail($to, "=?UTF-8?B?".base64_encode($data['subject'])."?=", $content, $header);
+        if (!$result) {
+            error_log('sendMail() fehlgeschlagen: to=' . $to . ' tpl=' . $tpl . ' sender=' . parent::getMainData('mail_sender'));
+        }
     }
 }
 
