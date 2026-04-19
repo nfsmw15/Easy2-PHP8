@@ -1,33 +1,21 @@
 <div class="container">
-    <!-- Page Heading/Breadcrumbs -->
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">
-                <i class="fa fa-graduation-cap"></i> Rang
-                <small>Verwaltung</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="./">&Uuml;bersicht</a>
-                </li>
-                <li class="active">Verwaltung</li>
-                <li>
-                    <a href="./?p=ranks">Rangverwaltung</a>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <!-- /.row -->
+    <!-- Page header/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Rang <small>Verwaltung</small></h1>
+    <ol class="breadcrumb">
+    	<li class="breadcrumb-item"><a href="?">&Uuml;bersicht</a></li>
+  		<li class="breadcrumb-item active">Verwaltung</li>
+  		<li class="breadcrumb-item"><a href="?p=ranks">Rangverwaltung</a></li>
+    </ol>
 
 	<?php echo $error; ?>
-	<div class="row">
+	<div class="row mb-4">
         <div class="col-md-4">
         	<?php if($loginsystem->auditRight('rank_new') && empty($f)){ ?>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">Rang hinzuf&uuml;gen</div>
-                    <div class="panel-body">
+                <div class="card">
+                    <div class="card-header">Rang hinzuf&uuml;gen</div>
+                    <div class="card-body">
                         <p>Du kannst nur Rechte vergeben und Seiten freigeben, welche du selbst hast.</p>
-                        <form action="./?p=ranks&c=new_rank" method="post">
+                        <form action="?p=ranks&c=new_rank" method="post">
                             <div class="form-group">
                                 <input type="text" class="form-control" name="name" placeholder="Rangbezeichnung" maxlength="32" value="<?php echo $_POST['name'] ?? ''; ?>">
                             </div>
@@ -56,11 +44,11 @@
                     </div>
 				</div><!-- /.panel -->
 			<?php } elseif($loginsystem->auditRight('rank_edit') && $f == 'edit_rank' && !empty($id)){ ?>
-				<div class="panel panel-primary">
-                    <div class="panel-heading">Rang bearbeiten <a class="btn btn-xs btn-warning pull-right mt-2px" href="./?p=ranks">zur&uuml;ck</a></div>
-                    <div class="panel-body">
+				<div class="card">
+                    <div class="card-header">Rang bearbeiten <a class="btn btn-xs btn-warning pull-right mt-2px" href="?p=ranks">zur&uuml;ck</a></div>
+                    <div class="card-body">
                         <p>Du kannst nur Rechte vergeben und Seiten freigeben, welche du selbst hast.</p>
-                        <form action="./?p=ranks&c=edit_rank&f=edit_rank&id=<?php echo $id; ?>" method="post">
+                        <form action="?p=ranks&c=edit_rank&f=edit_rank&id=<?php echo $id; ?>" method="post">
                             <div class="form-group">
                                 <input type="text" class="form-control" name="name" placeholder="Rangbezeichnung" maxlength="32" value="<?php echo $_POST['name'] ?? $loginsystem->getValue('ranks', 'id', $id, 'title'); ?>">
                             </div>
@@ -107,10 +95,10 @@
                     </div>
 				</div><!-- /.panel -->
 			<?php } elseif($loginsystem->auditRight('rank_delete') && $f == 'delete_rank' && !empty($id)){ ?>
-				<div class="panel panel-primary">
-                    <div class="panel-heading">Rang l&ouml;schen <a class="btn btn-xs btn-warning pull-right mt-2px" href="./?p=ranks">zur&uuml;ck</a></div>
-                    <div class="panel-body">
-                        <form action="./?p=ranks&c=delete_rank&f=delete_rank&id=<?php echo $id; ?>" method="post">
+				<div class="card">
+                    <div class="card-header">Rang l&ouml;schen <a class="btn btn-xs btn-warning pull-right mt-2px" href="?p=ranks">zur&uuml;ck</a></div>
+                    <div class="card-body">
+                        <form action="?p=ranks&c=delete_rank&f=delete_rank&id=<?php echo $id; ?>" method="post">
                             <div class="form-group">
                                 <input type="password" class="form-control" name="passwd" placeholder="Passwort" maxlength="64">
                             </div>
@@ -132,8 +120,8 @@
                     </div>
 				</div><!-- /.panel -->
 			<?php } elseif($f == 'view_rank' && !empty($id)){ ?>
-				<div class="panel panel-primary">
-                    <div class="panel-heading">Rang einsehen <a class="btn btn-xs btn-warning pull-right mt-2px" href="./?p=ranks">zur&uuml;ck</a></div>
+				<div class="card">
+                    <div class="card-header">Rang einsehen <a class="btn btn-xs btn-warning pull-right mt-2px" href="?p=ranks">zur&uuml;ck</a></div>
                     <?php $rankInfo = $loginsystem->getValue('ranks', 'id', $id); ?>
 					<table class="table table-striped">
                         <tbody>
@@ -201,16 +189,16 @@
                     </table>
                 </div><!-- /.panel -->
             <?php } else { ?>
-				<div class="panel panel-primary">
-                    <div class="panel-heading">Keine Berechtigung!</div>
-                    <div class="panel-body">
+				<div class="card">
+                    <div class="card-header">Keine Berechtigung!</div>
+                    <div class="card-body">
                     	<em>Du hast keine Berechtigung diese Aktion auszuf&uuml;hren!</em>
                     </div>
                 </div><!-- /.panel -->
             <?php } ?>
-				<div class="panel panel-primary mt15px">
-                    <div class="panel-heading"><i class="fa fa-info-circle"></i> Informationen</div>
-                    <div class="panel-body">
+				<div class="card mt-4">
+                    <div class="card-header"><i class="fa fa-info-circle"></i> Informationen</div>
+                    <div class="card-body">
                     	<strong>Begriffe:</strong><br>
 						<p>M => Men&uuml;punkt<br>
 						P.-D.-M. => Pull-Down-Men&uuml;punkt<br>

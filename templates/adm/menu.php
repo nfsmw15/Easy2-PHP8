@@ -1,31 +1,19 @@
 <div class="container">
-    <!-- Page Heading/Breadcrumbs -->
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">
-                <i class="fa fa-list"></i> Men&uuml;
-                <small>verwalten</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="./">&Uuml;bersicht</a>
-                </li>
-                <li class="active">Verwaltung</li>
-                <li>
-                    <a href="./?p=menu">Men&uuml; verwalten</a>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <!-- /.row -->
+    <!-- Page header/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Men&uuml; <small>verwalten</small></h1>
+    <ol class="breadcrumb">
+    	<li class="breadcrumb-item"><a href="?">&Uuml;bersicht</a></li>
+  		<li class="breadcrumb-item active">Verwaltung</li>
+  		<li class="breadcrumb-item"><a href="?p=menu">Men&uuml; verwalten</a></li>
+    </ol>
 	<?php echo $error; ?>
-	<div class="row">
+	<div class="row mb-4">
 		<div class="col-sm-4">
 			<?php if(empty($f)){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-plus"></i> Men&uuml;punkt hinzuf&uuml;gen</div>
-					<div class="panel-body">
-						<form action="./?p=menu&c=add_menu" method="post">
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-plus"></i> Men&uuml;punkt hinzuf&uuml;gen</div>
+					<div class="card-body">
+						<form action="?p=menu&c=add_menu" method="post">
 							<div class="form-group">
 								<label>Name des Links:</label>
 								<input type="text" name="title" placeholder="Name des Links" maxlength="32" value="<?php echo isset($_POST['title']) ? $_POST['title'] : ''; ?>" class="form-control">
@@ -94,10 +82,10 @@
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'edit' && !empty($id)){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-pencil"></i> Men&uuml;punkt bearbeiten <a class="pull-right btn btn-xs btn-warning" href="./?p=menu">Abbrechen</a></div>
-					<div class="panel-body">
-						<form action="./?p=menu&c=edit&f=edit&id=<?php echo $id; ?>" method="post">
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-pencil"></i> Men&uuml;punkt bearbeiten <a class="pull-right btn btn-xs btn-warning" href="?p=menu">Abbrechen</a></div>
+					<div class="card-body">
+						<form action="?p=menu&c=edit&f=edit&id=<?php echo $id; ?>" method="post">
 							<div class="form-group">
 								<label>Name des Links:</label>
 								<input type="text" name="title" placeholder="Name des Links" maxlength="32" value="<?php echo isset($_POST['title']) ? $_POST['title'] : $menu->getValue('menu', 'id', $id, 'title'); ?>" class="form-control">
@@ -166,10 +154,10 @@
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'remove' && !empty($id)){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-trash"></i> Men&uuml;punkt l&ouml;schen <a class="pull-right btn btn-xs btn-warning" href="./?p=menu">Abbrechen</a></div>
-					<div class="panel-body">
-						<form action="./?p=menu&c=remove&f=remove&id=<?php echo $id; ?>" method="post">
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-trash"></i> Men&uuml;punkt l&ouml;schen <a class="pull-right btn btn-xs btn-warning" href="?p=menu">Abbrechen</a></div>
+					<div class="card-body">
+						<form action="?p=menu&c=remove&f=remove&id=<?php echo $id; ?>" method="post">
 							<div class="form-group">
 								<h5>Soll der Men&uuml;punkt "<?php echo $menu->getValue('menu', 'id', $id, 'title'); ?>" wirklich gel&ouml;scht werden?</h5>
 							</div>
@@ -180,10 +168,10 @@
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'reset_positions'){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-eraser"></i> Men&uuml;positionen resetten <a class="pull-right btn btn-xs btn-warning" href="./?p=menu">Abbrechen</a></div>
-					<div class="panel-body">
-						<form action="./?p=menu&c=reset_positions&f=reset_positions" method="post">
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-eraser"></i> Men&uuml;positionen resetten <a class="pull-right btn btn-xs btn-warning" href="?p=menu">Abbrechen</a></div>
+					<div class="card-body">
+						<form action="?p=menu&c=reset_positions&f=reset_positions" method="post">
 							<div class="form-group">
 								<h5>Sollen wirklich alle Positionen der Men&uuml;punkte zur&uuml;ckgesetzt werden?</h5>
 								<p>Es wird nach Alphabet sortiert.</p>
@@ -209,9 +197,9 @@
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'view' && !empty($id)){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-info-circle"></i> Men&uuml; Informationen <a class="pull-right btn btn-xs btn-warning" href="./?p=menu">zur&uuml;ck</a></div>
-					<div class="panel-body">
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-info-circle"></i> Men&uuml; Informationen <a class="pull-right btn btn-xs btn-warning" href="?p=menu">zur&uuml;ck</a></div>
+					<div class="card-body">
 						<table class="table table-bordered">
 							<tbody>
 								<tr>
@@ -227,7 +215,7 @@
 											if(!empty($getURL)){
 												echo '<a href="'.$getURL.'" target="_blank">'.$getURL.'</a>';
 											} elseif(!empty($getFILE)) {
-												echo '<a href="./?p='.$menu->getSite('url', $getFILE).'" target="_blank">./?p='.$menu->getSite('url', $getFILE).'</a>';
+												echo '<a href="?p='.$menu->getSite('url', $getFILE).'" target="_blank">?p='.$menu->getSite('url', $getFILE).'</a>';
 											} else {
 												echo 'Pull-Down';
 											}
@@ -284,21 +272,21 @@
 			<?php } ?>
 			
 			<?php if($loginsystem->auditRight('menu_reset_pos') && $loginsystem->auditRight('menu_fill_gaps')){ ?>
-				<div class="panel panel-primary mt15px">
-					<div class="panel-heading"><i class="fa fa-bullseye"></i> Weitere Aktionen</div>
-					<div class="panel-body">
+				<div class="card mt-4">
+					<div class="card-header"><i class="fa fa-bullseye"></i> Weitere Aktionen</div>
+					<div class="card-body">
 						<?php if($loginsystem->auditRight('menu_reset_pos')){ ?>
-							<a class="btn btn-block btn-danger" href="./?p=menu&f=reset_positions"><i class="fa fa-eraser"></i> Positionen zur&uuml;cksetzen</a>
+							<a class="btn btn-block btn-danger" href="?p=menu&f=reset_positions"><i class="fa fa-eraser"></i> Positionen zur&uuml;cksetzen</a>
 						<?php } ?>
 						<?php if($loginsystem->auditRight('menu_fill_gaps')){ ?>
-							<a class="btn btn-block btn-warning" href="./?p=menu&c=fill_gaps"><i class="fa fa-arrows-v"></i> Positionen pr&uuml;fen und beheben</a>
+							<a class="btn btn-block btn-warning" href="?p=menu&c=fill_gaps"><i class="fa fa-arrows-v"></i> Positionen pr&uuml;fen und beheben</a>
 						<?php } ?>
 					</div>
 				</div>
 			<?php } ?>
-			<div class="panel panel-primary mt15px">
-				<div class="panel-heading"><i class="fa fa-info-circle"></i> Infos</div>
-				<div class="panel-body">
+			<div class="card mt-4">
+				<div class="card-header"><i class="fa fa-info-circle"></i> Infos</div>
+				<div class="card-body">
 					<strong>Wie erstelle ich was?</strong><br>
 					<p>Um einen Link zu einer Datei zu erstellen, muss mindestens der Name ausgef&uuml;llt und die Datei ausgew&auml;hlt werden.<br>
 					Es kann aber auch ein Link zu einer externen Seite oder einem anderen Verzeichnis erstellt werden.

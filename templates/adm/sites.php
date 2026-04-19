@@ -1,31 +1,19 @@
 <div class="container">
-    <!-- Page Heading/Breadcrumbs -->
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">
-                <i class="fa fa-file"></i> Seiten
-                <small>verwalten</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="./">&Uuml;bersicht</a>
-                </li>
-                <li class="active">Verwaltung</li>
-                <li>
-                    <a href="./?p=sites">Seiten verwalten</a>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <!-- /.row -->
+    <!-- Page header/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Seiten <small>verwalten</small></h1>
+    <ol class="breadcrumb">
+    	<li class="breadcrumb-item"><a href="?">&Uuml;bersicht</a></li>
+  		<li class="breadcrumb-item active">Verwaltung</li>
+  		<li class="breadcrumb-item"><a href="?p=sites">Seiten verwalten</a></li>
+    </ol>
 	<?php echo $error; ?>
-	<div class="row">
+	<div class="row mb-4">
 		<div class="col-sm-4">
 			<?php if(empty($f)){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-plus"></i> Seite hinzuf&uuml;gen</div>
-					<div class="panel-body">
-						<form action="./?p=sites&c=add_site" method="post" enctype="multipart/form-data">
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-plus"></i> Seite hinzuf&uuml;gen</div>
+					<div class="card-body">
+						<form action="?p=sites&c=add_site" method="post" enctype="multipart/form-data">
 							<div class="form-group">
 								<label>Seitentitel:</label>
 								<input type="text" name="title" placeholder="Seitentitel" maxlength="32" value="<?php echo isset($_POST['title']) ? $_POST['title'] : ''; ?>" class="form-control">
@@ -71,10 +59,10 @@
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'edit' && !empty($id)){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-pencil"></i> Seite bearbeiten <a class="pull-right btn btn-xs btn-warning" href="./?p=sites">Abbrechen</a></div>
-					<div class="panel-body">
-						<form action="./?p=sites&c=edit&f=edit&id=<?php echo $id; ?>" method="post" enctype="multipart/form-data">
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-pencil"></i> Seite bearbeiten <a class="pull-right btn btn-xs btn-warning" href="?p=sites">Abbrechen</a></div>
+					<div class="card-body">
+						<form action="?p=sites&c=edit&f=edit&id=<?php echo $id; ?>" method="post" enctype="multipart/form-data">
 							<div class="form-group">
 								<label>Seitentitel:</label>
 								<input type="text" name="title" placeholder="Seitentitel" maxlength="32" value="<?php echo isset($_POST['title']) ? $_POST['title'] : $sites->getValue('sites', 'id', $id, 'title'); ?>" class="form-control">
@@ -120,10 +108,10 @@
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'remove' && !empty($id)){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-pencil"></i> Seite entfernen <a class="pull-right btn btn-xs btn-warning" href="./?p=sites">Abbrechen</a></div>
-					<div class="panel-body">
-						<form action="./?p=sites&c=remove&f=remove&id=<?php echo $id; ?>" method="post">
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-pencil"></i> Seite entfernen <a class="pull-right btn btn-xs btn-warning" href="?p=sites">Abbrechen</a></div>
+					<div class="card-body">
+						<form action="?p=sites&c=remove&f=remove&id=<?php echo $id; ?>" method="post">
 							<div class="form-group">
 								<h5>Soll die Seite "<?php echo $sites->getSite('complete_filename', $id);?>" wirklich entfernt werden?</h5>
 							</div>
@@ -142,9 +130,9 @@
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'check' && !empty($id)){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-info-circle"></i> Seiten Informationen <a class="pull-right btn btn-xs btn-warning" href="./?p=sites">zur&uuml;ck</a></div>
-					<div class="panel-body">
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-info-circle"></i> Seiten Informationen <a class="pull-right btn btn-xs btn-warning" href="?p=sites">zur&uuml;ck</a></div>
+					<div class="card-body">
 						<?php 
 							$filename = $sites->getSite('complete_filename', $id);
 							$dir	  = $sites->getValue('sites', 'id', $id, 'dir');
@@ -207,9 +195,9 @@
 					</div>
 				</div><!-- /.card -->
 			<?php } ?>
-			<div class="panel panel-primary mt15px">
-				<div class="panel-heading"><i class="fa fa-info-circle"></i> Infos</div>
-				<div class="panel-body">
+			<div class="card mt-4">
+				<div class="card-header"><i class="fa fa-info-circle"></i> Infos</div>
+				<div class="card-body">
 					<strong>Wie f&uuml;ge ich eine Seite hinzu?</strong><br>
 					<p>Um eine Seite hinzuzuf&uuml;gen, musst du diese zuerst mit einem Editor erstellen.
 						Anschließend f&uuml;gst du diese in das Verzeichnis "./templates/" ein.

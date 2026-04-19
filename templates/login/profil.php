@@ -1,32 +1,25 @@
 <div class="container">
-	
+
 	<!-- Page Heading/Breadcrumbs -->
-	<div class="row">
-		<div class="col-lg-12">
-			<h1 class="page-header">
-				<i class="fa fa-user"></i> Profil
-				<small><?php echo $loginsystem->getUser('username'); ?></small>
-			</h1>
-			<ol class="breadcrumb">
-				<li>
-					<a href="./">Home</a>
-				</li>
-				<li class="active">Profil</li>
-			</ol>
-		</div>
-	</div>
-	<!-- /.row -->
+	<h1 class="mt-4 mb-3">Profil
+		<small><?php echo $loginsystem->getUser('username'); ?></small>
+	</h1>
+
+	<ol class="breadcrumb">
+		<li class="breadcrumb-item"><a href="?">Home</a></li>
+		<li class="breadcrumb-item active">Profil</li>
+	</ol>
 	
         <div class="row">
             <div class="col-sm-3">
 				<img src="<?php echo $loginsystem->getUserAvatar(); ?>" alt="avatar" class="img-responsive box-center">
 				<br>
-				<a class="btn btn-block btn-danger" href="./?p=profil&f=remove_self">Konto l&ouml;schen</a>
+				<a class="btn btn-block btn-danger" href="?p=profil&f=remove_self">Konto l&ouml;schen</a>
             </div><!-- /.col-sm-3 -->
             <div class="col-sm-9 mb-2">
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-user"></i> Informationen</div>
-					<div class="panel-body">
+				<div class="card">
+					<div class="card-header"><i class="fa fa-user"></i> Informationen</div>
+					<div class="card-body">
                             <table class="table table-striped">
                                 <tbody>
                                     <tr>
@@ -54,7 +47,7 @@
 									?>
                                </tbody>
                             </table>
-					</div><!-- /.panel-body -->
+					</div><!-- /.card-body -->
 				</div><!-- /.card -->
             </div><!-- /.col-sm-9 -->
 		</div>
@@ -62,12 +55,12 @@
 		<?php if(empty($f)){ ?>
 			<div class="row mb-2">
 				<div class="col-sm-6 mt-2 mb-2">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
+					<div class="card">
+						<div class="card-header">
 							Passwort &auml;ndern
 						</div>
-						<div class="panel-body">
-							<form action="./?p=profil&c=passwd_change" method="post">
+						<div class="card-body">
+							<form action="?p=profil&c=passwd_change" method="post">
 								<div class="form-group">
 									<label>Neues Passwort: </label>
 									<input type="password" name="password" class="form-control" placeholder="Neues Passwort" required="">
@@ -88,12 +81,12 @@
 					</div>
 				</div><!-- /.col-sm-6 -->
 				<div class="col-sm-6 mt-2 mb-2">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
+					<div class="card">
+						<div class="card-header">
 							E-Mail &auml;ndern
 						</div>
-						<div class="panel-body">
-							<form action="./?p=profil&c=email_change" method="post">
+						<div class="card-body">
+							<form action="?p=profil&c=email_change" method="post">
 								<div class="form-group">
 									<label>Neue E-Mail: </label>
 									<input type="email" name="email" class="form-control" placeholder="Neue E-Mail" required="">
@@ -114,12 +107,12 @@
 					</div>
 				</div><!-- /.col-sm-6 -->
 				<div class="col-sm-6 mt-2 mb-2">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
+					<div class="card">
+						<div class="card-header">
 							Benutzerdaten &auml;ndern
 						</div>
-						<div class="panel-body">
-							<form action="./?p=profil&c=data_change" method="post">
+						<div class="card-body">
+							<form action="?p=profil&c=data_change" method="post">
 								<div class="form-group">
 									<label>Benutzername: </label>
 									<input type="text" name="edit-username" class="form-control" value="<?php echo isset($_POST['edit-username']) ? $_POST['edit-username'] : $loginsystem->getUser('username'); ?>" placeholder="Benutzername" required="">
@@ -143,12 +136,12 @@
 					</div>
 				</div><!-- /.col-sm-6 -->
 				<div class="col-sm-6 mt-2 mb-2">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
+					<div class="card">
+						<div class="card-header">
 							Profilbild &auml;ndern
 						</div>
-						<div class="panel-body">
-							<form action="./?p=profil&c=avatar_change" method="post" enctype="multipart/form-data">
+						<div class="card-body">
+							<form action="?p=profil&c=avatar_change" method="post" enctype="multipart/form-data">
 								<div class="form-group">
 									<label>Bild ausw&auml;hlen: <span class="wp11">ideal: 200x200px, max 1MB</span></label>
 									<input type="file" name="avatar-file" class="form-control" accept="image/*">
@@ -172,12 +165,12 @@
 		<?php } elseif($f == 'remove_self'){ ?>
        		<div class="row mb-2">
 				<div class="col-sm-6 mt-2 mb-2">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
+					<div class="card">
+						<div class="card-header">
 							Konto l&ouml;schen
 						</div>
-						<div class="panel-body">
-							<form action="./?p=profil&c=remove_self&f=remove_self" method="post">
+						<div class="card-body">
+							<form action="?p=profil&c=remove_self&f=remove_self" method="post">
 								<div class="form-group">
 									<h5>Bist du sicher das du dein Konto l&ouml;schen m&ouml;schtest?</h5>
 								</div>                        
@@ -193,15 +186,15 @@
 					</div>
 				</div><!-- /.col-sm-6 -->
 				<div class="col-sm-6 mt-2 mb-2">
-					<div class="panel panel-primary">
-						<div class="panel-heading">
+					<div class="card">
+						<div class="card-header">
 							Hinweis
 						</div>
-						<div class="panel-body">
+						<div class="card-body">
 							<p>Nach dem eingeben des Passwortes und absenden des Formulares, erh&auml;lst du eine E-Mail mit einem Best&auml;tigungslink. 
 								Klicke innerhalb von 14 Tagen auf diesen Link um deinen Konto zu l&ouml;schen, ansonsten verf&auml;llt der Link und der Vorgang muss wiederholt werden.
 							<br>Schaue auch in dein SPAM-Postfach nach.</p>
-							<a class="btn btn-success btn-block" href="./?p=profil">Abbrechen</a>
+							<a class="btn btn-success btn-block" href="?p=profil">Abbrechen</a>
 						</div>
 					</div>
 				</div><!-- /.col-sm-6 -->

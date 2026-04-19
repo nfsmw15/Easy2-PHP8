@@ -1,38 +1,25 @@
 <div class="container">
-    <!-- Page Heading/Breadcrumbs -->
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">
-                <i class="fa fa-plus-circle"></i> Zusatzfelder
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="./">&Uuml;bersicht</a>
-                </li>
-                <li class="active">Verwaltung</li>
-                <li>
-                    <a href="./?p=settings">Einstellungen</a>
-                </li>
-                <li>
-                    <a href="./?p=additional_fields">Zusatzfelder verwalten</a>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <!-- /.row -->
+    <!-- Page header/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Zusatzfelder</h1>
+    <ol class="breadcrumb">
+    	<li class="breadcrumb-item"><a href="?">&Uuml;bersicht</a></li>
+  		<li class="breadcrumb-item active">Verwaltung</li>
+  		<li class="breadcrumb-item"><a href="?p=settings">Einstellungen</a></li>
+  		<li class="breadcrumb-item"><a href="?p=additional_fields">Zusatzfelder verwalten</a></li>
+    </ol>
     <?php echo $error; ?>
 	<div class="row">
-		<div class="col-sm-12">
-			<div class="clearfix">
+		<div class="col-sm-12 mb-4">
+			<div class="clearfix mb-3">
 				<?php if($f != 'new'){ ?>
-					<a class="btn btn-primary pull-right" href="./?p=additional_fields&f=new"><i class="fa fa-plus"></i> Neues Feld anlegen</a>
+					<a class="btn btn-primary pull-right ml-1" href="?p=additional_fields&f=new"><i class="fa fa-plus"></i> Neues Feld anlegen</a>
 					<?php if($f == 'edit' || $f == 'remove' || $f == 'show'){ ?>
-						<a class="btn btn-warning pull-right mr5px" href="./?p=additional_fields"><i class="fa fa-times"></i> Abbrechen</a>
+						<a class="btn btn-warning pull-right ml-1" href="?p=additional_fields"><i class="fa fa-times"></i> Abbrechen</a>
 					<?php } ?>
 				<?php } else { ?>
-					<a class="btn btn-warning pull-right" href="./?p=additional_fields"><i class="fa fa-times"></i> Abbrechen</a>
+					<a class="btn btn-warning pull-right ml-1" href="?p=additional_fields"><i class="fa fa-times"></i> Abbrechen</a>
 				<?php } ?>
-				<a class="btn btn-info pull-right mr5px" href="./?p=settings"><i class="fa fa-arrow-left"></i> zu den Einstellungen</a>
+				<a class="btn btn-info pull-right" href="?p=settings"><i class="fa fa-arrow-left"></i> zu den Einstellungen</a>
 			</div>
 			<?php if(empty($f)){ ?>
 				<div class="table-responsive">
@@ -54,12 +41,12 @@
 					</table>
 				</div><!-- /.table-responsive -->
 			<?php } elseif($f == 'edit' && !empty($id)){ ?>
-				<div class="panel panel-primary mt15px">
-					<div class="panel-heading">
+				<div class="card">
+					<div class="card-header">
 						<i class="fa fa-pencil"></i> Feld bearbeiten
 					</div>
-					<div class="panel-body">
-						<form action="./?p=additional_fields&f=edit&c=edit&id=<?php echo $id; ?>" method="post">
+					<div class="card-body">
+						<form action="?p=additional_fields&f=edit&c=edit&id=<?php echo $id; ?>" method="post">
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-6">
@@ -231,12 +218,12 @@
 					</div>
 				</div>
 			<?php } elseif($f == 'remove' && !empty($id)){ ?>
-				<div class="panel panel-primary mt15px">
-					<div class="panel-heading">
+				<div class="card">
+					<div class="card-header">
 						<i class="fa fa-pencil"></i> Feld l&ouml;schen
 					</div>
-					<div class="panel-body">
-						<form action="./?p=additional_fields&f=remove&c=remove&id=<?php echo $id; ?>" method="post">
+					<div class="card-body">
+						<form action="?p=additional_fields&f=remove&c=remove&id=<?php echo $id; ?>" method="post">
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-6">
@@ -262,11 +249,11 @@
 					</div>
 				</div>
 			<?php } elseif($f == 'show' && !empty($id)){ ?>
-				<div class="panel panel-primary mt15px">
-					<div class="panel-heading">
+				<div class="card">
+					<div class="card-header">
 						<i class="fa fa-eye"></i> Feld ansehen
 					</div>
-					<div class="panel-body">
+					<div class="card-body">
 						<div class="table-responsive">
 							<table class="table table-striped">
 								<tbody>
@@ -324,12 +311,12 @@
 					</div>
 				</div>
 			<?php } elseif($f == 'new'){ ?>
-				<div class="panel panel-primary mt15px">
-					<div class="panel-heading">
+				<div class="card">
+					<div class="card-header">
 						<i class="fa fa-plus"></i> Feld hinzuf&uuml;gen
 					</div>
-					<div class="panel-body">
-						<form action="./?p=additional_fields&f=new&c=new" method="post">
+					<div class="card-body">
+						<form action="?p=additional_fields&f=new&c=new" method="post">
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-6">

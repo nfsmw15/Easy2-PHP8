@@ -1,31 +1,19 @@
 <div class="container full-container">
-    <!-- Page Heading/Breadcrumbs -->
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">
-                <i class="fa fa-users"></i> Benutzer
-                <small>Verwaltung</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="./">&Uuml;bersicht</a>
-                </li>
-                <li class="active">Verwaltung</li>
-                <li>
-                    <a href="./?p=userlist">Benutzer Verwaltung</a>
-                </li>
-            </ol>
-        </div>
-    </div>
-    <!-- /.row -->
+    <!-- Page header/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Benutzer <small>Verwaltung</small></h1>
+    <ol class="breadcrumb">
+    	<li class="breadcrumb-item"><a href="?">&Uuml;bersicht</a></li>
+  		<li class="breadcrumb-item active">Verwaltung</li>
+  		<li class="breadcrumb-item"><a href="?p=userlist">Benutzer Verwaltung</a></li>
+    </ol>
     <?php echo $error; ?>
-	<div class="row">
+	<div class="row mb-4">
     	<div class="col-md-6 col-lg-8">
-        	<div class="panel panel-primary">
-            	<div class="panel-heading">
+        	<div class="card">
+            	<div class="card-header">
                 	<i class="fa fa-users"></i> Benutzer
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
 					<div class="table-responsive">
 						<table class="table table-striped" id="data-table">
 							<thead>
@@ -48,13 +36,13 @@
         </div>
     	<div class="col-md-6 col-lg-4">
         	<?php if(empty($f)){ ?>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
+                <div class="card">
+                    <div class="card-header">
                         <i class="fa fa-user-plus"></i> Benutzer hinzuf&uuml;gen
                     </div>
-                    <div class="panel-body">
+                    <div class="card-body card-form">
 						<?php if($loginsystem->auditRight('user_add')){ ?>
-                            <form action="./?p=userlist&c=new" method="post">
+                            <form action="?p=userlist&c=new" method="post" class="form-horizontal form-bordered">
                                 <div class="form-group">
                                     <label>Benutzername:</label>
                                     <input type="text" class="form-control" value="<?php echo isset($_POST['new-username']) ? $_POST['new-username'] : ''; ?>" name="new-username" maxlength="64" placeholder="Benutzername" required>
@@ -103,36 +91,36 @@
                     </div>
                 </div><!-- /.card -->
         	<?php } elseif($f == 'show' && !empty($id) && $loginsystem->auditRight('user_show')){ ?>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
+                <div class="card">
+                    <div class="card-header">
 						<div class="btn-group pull-right">
 							<button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">Aktionen <span class="caret"></span></button>
 							<ul class="dropdown-menu" role="menu">
                             	<?php if($loginsystem->auditRight('user_edit')){ ?>
-									<li><a href="./?p=userlist&f=edit&id=<?php echo $id; ?>"><i class="fa fa-pencil fa-fw"></i> Bearbeiten</a></li>
+									<li><a href="?p=userlist&f=edit&id=<?php echo $id; ?>"><i class="fa fa-pencil fa-fw"></i> Bearbeiten</a></li>
                                 <?php } ?>
                                 <?php if($loginsystem->getUser('active', $id) == 0){ ?>
                                 	<?php if($loginsystem->auditRight('user_enable') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
-										<li><a href="./?p=userlist&c=activate&id=<?php echo $id; ?>"><i class="fa fa-check fa-fw"></i> Aktivieren</a></li>
+										<li><a href="?p=userlist&c=activate&id=<?php echo $id; ?>"><i class="fa fa-check fa-fw"></i> Aktivieren</a></li>
                                     <?php } ?>
                                 <?php } else { ?>
                                 	<?php if($loginsystem->auditRight('user_disable') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
-										<li><a href="./?p=userlist&c=deactivate&id=<?php echo $id; ?>"><i class="fa fa-ban fa-fw"></i> Deaktivieren</a></li>
+										<li><a href="?p=userlist&c=deactivate&id=<?php echo $id; ?>"><i class="fa fa-ban fa-fw"></i> Deaktivieren</a></li>
                                     <?php } ?>
                                 <?php } ?>
                                 <?php if($loginsystem->auditRight('user_pwreset')){ ?>
-									<li><a href="./?p=userlist&f=pwreset&id=<?php echo $id; ?>"><i class="fa fa-refresh fa-fw"></i> Passwort zur&uuml;cksetzen</a></li>
+									<li><a href="?p=userlist&f=pwreset&id=<?php echo $id; ?>"><i class="fa fa-refresh fa-fw"></i> Passwort zur&uuml;cksetzen</a></li>
                                	<?php } ?>
                                 <?php if($loginsystem->auditRight('user_rm_avatar')){ ?>
-									<li><a href="./?p=userlist&f=rm_avatar&id=<?php echo $id; ?>"><i class="fa fa-eraser fa-fw"></i> Profilbild entfernen</a></li>
+									<li><a href="?p=userlist&f=rm_avatar&id=<?php echo $id; ?>"><i class="fa fa-eraser fa-fw"></i> Profilbild entfernen</a></li>
                                	<?php } ?>
                                 <?php if($loginsystem->auditRight('user_delete') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
                                 	<li class="divider"></li>
-									<li><a href="./?p=userlist&f=delete&id=<?php echo $id; ?>"><i class="fa fa-trash fa-fw"></i> L&ouml;schen</a></li>
+									<li><a href="?p=userlist&f=delete&id=<?php echo $id; ?>"><i class="fa fa-trash fa-fw"></i> L&ouml;schen</a></li>
                                 <?php } ?>
                                 <?php if($loginsystem->auditRight('user_add')){ ?>
                                 	<li class="divider"></li>
-									<li><a href="./?p=userlist"><i class="fa fa-user-plus fa-fw"></i> Benutzer hinzuf&uuml;gen</a></li>
+									<li><a href="?p=userlist"><i class="fa fa-user-plus fa-fw"></i> Benutzer hinzuf&uuml;gen</a></li>
                                 <?php } ?>
 							</ul>
 						</div>
@@ -175,12 +163,12 @@
                         </table>
 				</div><!-- /.card -->
         	<?php } elseif($f == 'edit' && !empty($id) && $loginsystem->auditRight('user_edit')){ ?>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
+                <div class="card">
+                    <div class="card-header">
                         <i class="fa fa-pencil"></i> Benutzer bearbeiten
                     </div>
-                    <div class="panel-body">
-                        <form action="./?p=userlist&c=edit&f=edit&id=<?php echo $id; ?>" method="post">
+                    <div class="card-body card-form">
+                        <form action="?p=userlist&c=edit&f=edit&id=<?php echo $id; ?>" method="post" class="form-horizontal form-bordered">
                             <div class="form-group">
                                 <label>Benutzername:</label>
                                 <input type="text" class="form-control" value="<?php echo isset($_POST['edit-username']) ? $_POST['edit-username'] : $loginsystem->getUser('username', $id); ?>" name="edit-username" maxlength="64" placeholder="Benutzername" required>
@@ -215,12 +203,12 @@
                     </div>
                 </div><!-- /.card -->
         	<?php } elseif($f == 'delete' && !empty($id) && $loginsystem->auditRight('user_delete')){ ?>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
+                <div class="card">
+                    <div class="card-header">
                         <i class="fa fa-trash"></i> Benutzer l&ouml;schen
                     </div>
-                    <div class="panel-body">
-                        <form action="./?p=userlist&c=delete&f=delete&id=<?php echo $id; ?>" method="post">
+                    <div class="card-body card-form">
+                        <form action="?p=userlist&c=delete&f=delete&id=<?php echo $id; ?>" method="post" class="form-horizontal form-bordered">
                             <div class="form-group">
                                 <div class="col-sm-12 text-center f-s-16">
                                 	M&ouml;chtest du den Benutzer "<?php echo $loginsystem->getUser('username', $id); ?>" wirklich l&ouml;schen?
@@ -241,12 +229,12 @@
                     </div>
                 </div><!-- /.card -->
         	<?php } elseif($f == 'pwreset' && !empty($id) && $loginsystem->auditRight('user_pwreset')){ ?>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
+                <div class="card">
+                    <div class="card-header">
                         <i class="fa fa-refresh"></i> Benutzerpasswort zur&uuml;cksetzen
                     </div>
-                    <div class="panel-body">
-                        <form action="./?p=userlist&c=pwreset&f=pwreset&id=<?php echo $id; ?>" method="post">
+                    <div class="card-body card-form">
+                        <form action="?p=userlist&c=pwreset&f=pwreset&id=<?php echo $id; ?>" method="post" class="form-horizontal form-bordered">
                             <div class="form-group">
                                 <div class="col-sm-12 text-center f-s-14">
                                 	M&ouml;chtest du das Passwort von "<?php echo $loginsystem->getUser('username', $id); ?>" wirklich zur&uuml;cksetzen?
@@ -267,12 +255,12 @@
                     </div>
                 </div><!-- /.card -->
         	<?php } elseif($f == 'rm_avatar' && !empty($id) && $loginsystem->auditRight('user_rm_avatar')){ ?>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
+                <div class="card">
+                    <div class="card-header">
                         <i class="fa fa-refresh"></i> Profilbild entfernen
                     </div>
-                    <div class="panel-body">
-                        <form action="./?p=userlist&c=rm_avatar&f=rm_avatar&id=<?php echo $id; ?>" method="post">
+                    <div class="card-body card-form">
+                        <form action="?p=userlist&c=rm_avatar&f=rm_avatar&id=<?php echo $id; ?>" method="post" class="form-horizontal form-bordered">
                             <div class="form-group">
                                 <div class="col-sm-12 text-center f-s-14">
                                 	M&ouml;chtest du das Profilbild von "<?php echo $loginsystem->getUser('username', $id); ?>" wirklich entfernen?
