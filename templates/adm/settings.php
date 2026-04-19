@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="./css/summernote.min.css">
 <div class="container">
     <!-- Page header/Breadcrumbs -->
     <h1 class="mt-4 mb-3">Einstellungen</h1>
@@ -159,7 +160,7 @@
 									<div class="col-sm-12">
 										<label for="impressum_content">Impressumsinhalt (Haftungsausschluss):</label>
 										<div class="form-group">
-											<textarea name="impressum_content" id="impressum_content" class="form-control" rows="6"><?php echo isset($_POST['impressum_content']) ? $_POST['impressum_content'] : $loginsystem->getImpressum(); ?></textarea>
+											<textarea name="impressum_content" id="impressum_content" class="form-control summernote" rows="6"><?php echo isset($_POST['impressum_content']) ? html_entity_decode($_POST['impressum_content'], ENT_QUOTES, 'UTF-8') : html_entity_decode($loginsystem->getImpressum(), ENT_QUOTES, 'UTF-8'); ?></textarea>
 										</div>
 									</div>
 								</div>
@@ -170,7 +171,7 @@
 									<div class="col-sm-12">
 										<label for="privacy_policy">Datenschutzerkl&auml;rung:</label>
 										<div class="form-group">
-											<textarea name="privacy_policy" id="privacy_policy" class="form-control" rows="6"><?php echo isset($_POST['privacy_policy']) ? $_POST['privacy_policy'] : $loginsystem->getPrivacyPolicy(); ?></textarea>
+											<textarea name="privacy_policy" id="privacy_policy" class="form-control summernote" rows="6"><?php echo isset($_POST['privacy_policy']) ? html_entity_decode($_POST['privacy_policy'], ENT_QUOTES, 'UTF-8') : html_entity_decode($loginsystem->getPrivacyPolicy(), ENT_QUOTES, 'UTF-8'); ?></textarea>
 										</div>
 									</div>
 								</div>
@@ -344,3 +345,6 @@
 		</div><!-- /.row -->
 	</form>
 </div><!-- /.container -->
+<script src="./js/summernote/summernote.min.js"></script>
+<script src="./js/summernote/lang/summernote-de-DE.min.js"></script>
+<script src="./js/summernote-init.js"></script>
