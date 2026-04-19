@@ -1,0 +1,10 @@
+# Konfiguration mit echten Zugangsdaten – niemals einchecken!
+system/config.inc.php
+system/config.user.php
+
+# Benutzer-Uploads
+avatare/*
+!avatare/.gitkeep
+
+# Laufzeit / Cache
+*.log

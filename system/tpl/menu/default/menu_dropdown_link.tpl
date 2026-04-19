@@ -1,0 +1,1 @@
+<li><a href="[url]" class="[active]" target="[target]">[icon] [title]</a></li>

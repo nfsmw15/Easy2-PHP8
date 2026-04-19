@@ -1,0 +1,1 @@
+<label><input type="radio" name="{NAME}" id="{ID}{NAME}" title="{DESCRIPTION}" value="{OPTION_VALUE}" {SELECTED}> {OPTION_NAME}</label>

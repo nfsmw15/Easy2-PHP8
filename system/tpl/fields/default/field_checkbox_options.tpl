@@ -1,0 +1,1 @@
+<label><input type="checkbox" name="{NAME}[]" title="{DESCRIPTION}" value="{OPTION_VALUE}" {SELECTED}> {OPTION_NAME}</label>
