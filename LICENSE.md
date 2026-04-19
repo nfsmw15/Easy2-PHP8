@@ -28,9 +28,15 @@ https://www.gnu.org/licenses/agpl-3.0.html
 - **Repository**: https://github.com/summernote/summernote
 - **Verwendung**: WYSIWYG Editor für Impressum und Datenschutzerklärung im Admin-Panel
 
-### Bootstrap 3
+### Bootstrap v3.3.7
+- **Copyright**: Copyright 2011-2016 Twitter, Inc.
 - **Lizenz**: MIT
 - **Repository**: https://github.com/twbs/bootstrap
+
+### Start Bootstrap - Modern Business
+- **Copyright**: Copyright 2013-2016 Start Bootstrap
+- **Lizenz**: MIT
+- **Repository**: https://github.com/BlackrockDigital/startbootstrap-modern-business
 
 ### Font Awesome
 - **Lizenz**: Multiple (CC BY 4.0, MIT, OFL)
