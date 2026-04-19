@@ -1,5 +1,17 @@
 # Changelog — EASY 2.0 PHP8 Fork
 
+## [1.1.1] — 2026-04-19
+
+### Neu
+- `BS_VERSION`-Konstante in `config.inc.php` definiert (Wert: `3`)
+- Summernote-Editor wird jetzt auch auf der `news_add`-Seite geladen
+
+### Bugfixes
+- CSP-Header um `unsafe-eval` ergänzt (Summernote-Editor wurde blockiert)
+- Doppelte Summernote-Script-Einbindung in `settings.php` entfernt
+
+---
+
 ## [1.1.0] — 2026-04-19
 
 ### Neu
