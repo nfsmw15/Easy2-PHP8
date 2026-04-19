@@ -4,9 +4,9 @@
                     <div class="col-lg-12">
                         <h1>Installation - Step 2</h1>
                         <ol class="breadcrumb">
-                            <li><a href="index.php">Einleitung</a></li>
-                            <li><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
-                            <li><a href="index.php?p=step1">Step 1 - Voraussetzungen</a></li>
+                            <li class="breadcrumb-item"><a href="index.php">Einleitung</a></li>
+                            <li class="breadcrumb-item"><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
+                            <li class="breadcrumb-item"><a href="index.php?p=step1">Step 1 - Voraussetzungen</a></li>
                             <li class="breadcrumb-item active actual">Step 2 - MySQL-Daten</li>
                             <li class="breadcrumb-item active">Step 3 - Grundeinstellungen</li>
                             <li class="breadcrumb-item active">Step 4 - Accounts</li>
@@ -17,11 +17,11 @@
 				<?php echo $error; ?>
                 <div class="row">
                 	<div class="col-sm-6">
-                    	<div class="panel panel-primary">
-                        	<div class="panel-heading">
+                    	<div class="card">
+                        	<div class="card-header">
                             	MySQL Daten eingeben
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                                 <form action="index.php?p=step2&c=mysql" method="post">
                                     <div class="form-group <?php echo $install->valid_field["host"]; ?>">
                                         <label>MySQL-Server / Host:</label>
@@ -54,11 +54,11 @@
                         </div>
                     </div>
                 	<div class="col-sm-6">
-                    	<div class="panel panel-primary">
-                        	<div class="panel-heading">
+                    	<div class="card">
+                        	<div class="card-header">
                             	Hilfe
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                             	<p><strong>MySQL-Server:</strong><br> Hier musst du die Adresse deines MySQL-Servers eintragen, befindet sich dieser auf dem gleichen Server wie die Webseite, brauchst du diese nicht zu &auml;ndern (Wenn dieser &uml;ber "localhost" erreichbar ist). Diese findest du meist bei deinem Provider unter "MySQL-Datenbanken" und anschließend unter "Info" oder "Bearbeiten".</p>
                        			<p><strong>MySQL-Benutzer:</strong><br> Damit ist der Benutzername gemeint welchen du eingeben musst um dich auf deinem MySQL Server einzuloggen.</p>
                        			<p><strong>MySQL-Passwort:</strong><br> Damit ist das Passwort gemeint welches du eingeben musst um dich auf deinem MySQL Server einzuloggen.</p>

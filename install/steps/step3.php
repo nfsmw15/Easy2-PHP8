@@ -4,10 +4,10 @@
                     <div class="col-lg-12">
                         <h1>Installation - Step 3</h1>
                         <ol class="breadcrumb">
-                            <li><a href="index.php">Einleitung</a></li>
-                            <li><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
-                            <li><a href="index.php?p=step1">Step 1 - Voraussetzungen</a></li>
-                            <li><a href="index.php?p=step2">Step 2 - MySQL-Daten</a></li>
+                            <li class="breadcrumb-item"><a href="index.php">Einleitung</a></li>
+                            <li class="breadcrumb-item"><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
+                            <li class="breadcrumb-item"><a href="index.php?p=step1">Step 1 - Voraussetzungen</a></li>
+                            <li class="breadcrumb-item"><a href="index.php?p=step2">Step 2 - MySQL-Daten</a></li>
                             <li class="breadcrumb-item active actual">Step 3 - Grundeinstellungen</li>
                             <li class="breadcrumb-item active">Step 4 - Accounts</li>
                          	<li class="breadcrumb-item active">Fertig</li>
@@ -17,11 +17,11 @@
 				<?php echo $error; ?>
                 <div class="row">
                 	<div class="col-sm-12">
-                    	<div class="panel panel-primary">
-                        	<div class="panel-heading">
+                    	<div class="card">
+                        	<div class="card-header">
                             	<i class="fa fa-cogs"></i> Grundeinstellungen
                             </div>
-                            <div class="panel-body">
+                            <div class="card-body">
                                 <form action="index.php?p=step3&c=mainsettings" method="post">
 									<div class="form-group">
 										<div class="row">

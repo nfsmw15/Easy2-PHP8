@@ -4,8 +4,8 @@
                     <div class="col-lg-12">
                         <h1>Step 1 &ndash; Voraussetzungen</h1>
                         <ol class="breadcrumb">
-                            <li><a href="index.php">Einleitung</a></li>
-                            <li><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
+                            <li class="breadcrumb-item"><a href="index.php">Einleitung</a></li>
+                            <li class="breadcrumb-item"><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
                             <li class="breadcrumb-item active actual">Step 1 - Voraussetzungen</li>
                             <li class="breadcrumb-item active">Step 2 - MySQL-Daten</li>
                             <li class="breadcrumb-item active">Step 3 - Grundeinstellungen</li>
