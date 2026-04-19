@@ -16,10 +16,12 @@
 								<label>Passwort:</label>
 								<input type="password" class="form-control" name="login-passwd" maxlength="64" placeholder="Passwort" required />
 							</div>
-							<div class="checkbox">
-								<label>
-									<input type="checkbox" name="login-remember" <?php echo checker(isset($_POST["login-remember"]) ? $_POST["login-remember"] : 0, 1, 1); ?> value="1"/> Eingeloggt bleiben
-								</label>
+							<div class="form-check mb-2">
+								<input type="checkbox" class="form-check-input" id="login-remember" name="login-remember" <?php echo checker(isset($_POST["login-remember"]) ? $_POST["login-remember"] : 0, 1, 1); ?> value="1"/>
+								<label class="form-check-label" for="login-remember">Eingeloggt bleiben</label>
+								<small class="form-text text-muted">
+									Dabei wird ein Cookie auf deinem Gerät gespeichert. Nutze diese Option nur auf vertrauenswürdigen Geräten.
+								</small>
 							</div>
 							<div class="login-buttons">
 								<button type="submit" class="btn btn-success btn-block">Anmelden</button>
