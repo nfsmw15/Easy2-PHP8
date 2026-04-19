@@ -1,5 +1,30 @@
 # Changelog — EASY 2.0 PHP8 Fork
 
+## [1.1.0] — 2026-04-19
+
+### Neu: Bootstrap 4 Branch (main-bs4)
+- Neuer Branch `main-bs4` mit Bootstrap 4.6.2 und Start Bootstrap Modern Business BS4
+- Bootstrap 3.3.7 durch Bootstrap 4.6.2 ersetzt (CSS + JS)
+- Navbar auf BS4-Struktur umgestellt (`navbar-dark bg-dark fixed-top`, `navbar-toggler`)
+- BS3-Klassen migriert: `pull-right/left` → `float-right/left`, `btn-xs` → `btn-sm`, `btn-md` entfernt, `panel` → `card`
+- Glyphicons durch Font Awesome ersetzt
+- Installer-Breadcrumb auf volle Breite umgestellt und `breadcrumb-item` ergänzt
+- Cookie-Hinweis bei "Eingeloggt bleiben" Checkbox hinzugefügt
+
+### SMTP-Mailversand via PHPMailer
+- **PHPMailer 6.9.3** eingebunden (ersetzt PHP `mail()`)
+- SMTP-Einstellungen im Admin-Panel: Host, Port, Benutzer, Passwort, Verschlüsselung (STARTTLS/SSL)
+- Neue Datenbankfelder: `smtp_host`, `smtp_port`, `smtp_user`, `smtp_pass`, `smtp_encryption`
+- `sendMail()` vollständig auf PHPMailer/SMTP umgestellt
+- Kompatibel mit Mailcow und anderen externen Mailservern
+
+### Bugfixes
+- `system/fonts/Captureit.ttf` fehlte — Captcha-Bild wird jetzt korrekt generiert
+- `emailtpl/`-Verzeichnis fehlte im BS4-Branch — Kontaktformular und System-Mails funktionieren jetzt
+- `ini_set()` Session-Warnungen behoben: Guard `session_status() === PHP_SESSION_NONE` in `config.inc.php`
+- MySQL/MariaDB Versionscheck in Installer `mysqlConnection()` ergänzt — zu alte Versionen werden abgelehnt
+- DB-Version wird nach erfolgreichem Connect in Step 2.2 angezeigt
+
 ## [1.0.0] — 2026-04-17
 
 ### Fork-Basis

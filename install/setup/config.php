@@ -22,7 +22,7 @@ $db_config = [
 ];
 
 define('Prefix',       $db_config['prefix']);
-define('EASY_VERSION', '0.9.8.6-php8');
+define('EASY_VERSION', '1.1.0');
 
 // ─── Verschlüsselung (AES-256-GCM) ──────────────────────────────────────────
 // WICHTIG: Diesen Schlüssel nach der Installation durch einen zufälligen
