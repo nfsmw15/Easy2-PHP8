@@ -99,7 +99,7 @@ $sites->includeSite(true);
     <link href="css/modern-business.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="css/mlsystems.css" rel="stylesheet">
-    <?php if (!empty($p) && $p === 'settings'): ?>
+    <?php if (!empty($p) && $p === 'settings' || $p === 'news_add'): ?>
         <link href="css/summernote.min.css" rel="stylesheet">
     <?php endif; ?>
 </head>
@@ -144,7 +144,7 @@ $sites->includeSite(true);
 
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <?php if (!empty($p) && $p === 'settings'): ?>
+    <?php if (!empty($p) && $p === 'settings' || $p === 'news_add'): ?>
         <script src="js/summernote/summernote.min.js"></script>
         <script src="js/summernote/lang/summernote-de-DE.min.js"></script>
         <script src="js/summernote-init.js"></script>
