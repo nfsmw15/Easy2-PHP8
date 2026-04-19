@@ -3,7 +3,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1>Installation</h1>
-                        <ol class="breadcrumb float-right">
+                        <ol class="breadcrumb">
                             <li class="breadcrumb-item active actual">Einleitung</li>
                             <li class="breadcrumb-item active">Lizenz</li>
                             <li class="breadcrumb-item active">Step 1 - Voraussetzungen</li>
