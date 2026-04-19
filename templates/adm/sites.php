@@ -60,7 +60,7 @@
 				</div><!-- /.card -->
 			<?php } elseif($f == 'edit' && !empty($id)){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-pencil"></i> Seite bearbeiten <a class="pull-right btn btn-xs btn-warning" href="?p=sites">Abbrechen</a></div>
+					<div class="card-header"><i class="fa fa-pencil"></i> Seite bearbeiten <a class="float-right btn btn-sm btn-warning" href="?p=sites">Abbrechen</a></div>
 					<div class="card-body">
 						<form action="?p=sites&c=edit&f=edit&id=<?php echo $id; ?>" method="post" enctype="multipart/form-data">
 							<div class="form-group">
@@ -109,7 +109,7 @@
 				</div><!-- /.card -->
 			<?php } elseif($f == 'remove' && !empty($id)){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-pencil"></i> Seite entfernen <a class="pull-right btn btn-xs btn-warning" href="?p=sites">Abbrechen</a></div>
+					<div class="card-header"><i class="fa fa-pencil"></i> Seite entfernen <a class="float-right btn btn-sm btn-warning" href="?p=sites">Abbrechen</a></div>
 					<div class="card-body">
 						<form action="?p=sites&c=remove&f=remove&id=<?php echo $id; ?>" method="post">
 							<div class="form-group">
@@ -131,7 +131,7 @@
 				</div><!-- /.card -->
 			<?php } elseif($f == 'check' && !empty($id)){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-info-circle"></i> Seiten Informationen <a class="pull-right btn btn-xs btn-warning" href="?p=sites">zur&uuml;ck</a></div>
+					<div class="card-header"><i class="fa fa-info-circle"></i> Seiten Informationen <a class="float-right btn btn-sm btn-warning" href="?p=sites">zur&uuml;ck</a></div>
 					<div class="card-body">
 						<?php 
 							$filename = $sites->getSite('complete_filename', $id);

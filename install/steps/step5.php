@@ -3,15 +3,15 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1>Installation - Step 5</h1>
-                        <ol class="breadcrumb pull-right">
+                        <ol class="breadcrumb float-right">
                             <li><a href="index.php">Einleitung</a></li>
                             <li><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
                             <li><a href="index.php?p=step1">Step 1 - Voraussetzungen</a></li>
                             <li><a href="index.php?p=step2">Step 2 - MySQL-Daten</a></li>
 							<li><a href="index.php?p=step3">Step 3 - Grundeinstellungen</a></li>
 							<li><a href="index.php?p=step4">Step 4 - Accounts</a></li>
-							<li class="active actual">Step 5 - Impressum</li>
-                            <li class="active">Fertig</li>
+							<li class="breadcrumb-item active actual">Step 5 - Impressum</li>
+                            <li class="breadcrumb-item active">Fertig</li>
               	        </ol>
                     </div>
 				</div>
@@ -114,7 +114,7 @@
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-6">
-												<input type="submit" class="btn btn-md btn-success btn-block" value="Weiter">
+												<input type="submit" class="btn btn-success btn-block" value="Weiter">
 											</div>
 										</div>
 									</div>

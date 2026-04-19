@@ -38,14 +38,14 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <input type="submit" value="Hinzufügen" class="btn btn-block btn-md btn-success">
+                                <input type="submit" value="Hinzufügen" class="btn btn-block btn-success">
                             </div>
                         </form>
                     </div>
 				</div><!-- /.panel -->
 			<?php } elseif($loginsystem->auditRight('rank_edit') && $f == 'edit_rank' && !empty($id)){ ?>
 				<div class="card">
-                    <div class="card-header">Rang bearbeiten <a class="btn btn-xs btn-warning pull-right mt-2px" href="?p=ranks">zur&uuml;ck</a></div>
+                    <div class="card-header">Rang bearbeiten <a class="btn btn-sm btn-warning float-right mt-2px" href="?p=ranks">zur&uuml;ck</a></div>
                     <div class="card-body">
                         <p>Du kannst nur Rechte vergeben und Seiten freigeben, welche du selbst hast.</p>
                         <form action="?p=ranks&c=edit_rank&f=edit_rank&id=<?php echo $id; ?>" method="post">
@@ -89,14 +89,14 @@
                                     </div>
                             </div>
                             <div class="form-group">
-                                <input type="submit" value="Speichern" class="btn btn-block btn-md btn-success">
+                                <input type="submit" value="Speichern" class="btn btn-block btn-success">
                             </div>
                         </form>
                     </div>
 				</div><!-- /.panel -->
 			<?php } elseif($loginsystem->auditRight('rank_delete') && $f == 'delete_rank' && !empty($id)){ ?>
 				<div class="card">
-                    <div class="card-header">Rang l&ouml;schen <a class="btn btn-xs btn-warning pull-right mt-2px" href="?p=ranks">zur&uuml;ck</a></div>
+                    <div class="card-header">Rang l&ouml;schen <a class="btn btn-sm btn-warning float-right mt-2px" href="?p=ranks">zur&uuml;ck</a></div>
                     <div class="card-body">
                         <form action="?p=ranks&c=delete_rank&f=delete_rank&id=<?php echo $id; ?>" method="post">
                             <div class="form-group">
@@ -114,14 +114,14 @@
                             </div>
                             <?php } ?>
                             <div class="form-group">
-                                <input type="submit" value="L&ouml;schen" class="btn btn-block btn-md btn-danger">
+                                <input type="submit" value="L&ouml;schen" class="btn btn-block btn-danger">
                             </div>
                         </form>
                     </div>
 				</div><!-- /.panel -->
 			<?php } elseif($f == 'view_rank' && !empty($id)){ ?>
 				<div class="card">
-                    <div class="card-header">Rang einsehen <a class="btn btn-xs btn-warning pull-right mt-2px" href="?p=ranks">zur&uuml;ck</a></div>
+                    <div class="card-header">Rang einsehen <a class="btn btn-sm btn-warning float-right mt-2px" href="?p=ranks">zur&uuml;ck</a></div>
                     <?php $rankInfo = $loginsystem->getValue('ranks', 'id', $id); ?>
 					<table class="table table-striped">
                         <tbody>

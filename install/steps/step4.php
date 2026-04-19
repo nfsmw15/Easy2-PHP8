@@ -3,14 +3,14 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1>Installation - Step 4</h1>
-                        <ol class="breadcrumb pull-right">
+                        <ol class="breadcrumb float-right">
                             <li><a href="index.php">Einleitung</a></li>
                             <li><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
                             <li><a href="index.php?p=step1">Step 1 - Voraussetzungen</a></li>
                             <li><a href="index.php?p=step2">Step 2 - MySQL-Daten</a></li>
                             <li><a href="index.php?p=step3">Step 3 - Grundeinstellungen</a></li>
-                            <li class="active actual">Step 4 - Accounts</li>
-                            <li class="active">Fertig</li>
+                            <li class="breadcrumb-item active actual">Step 4 - Accounts</li>
+                            <li class="breadcrumb-item active">Fertig</li>
               	        </ol>
                     </div>
 				</div>
@@ -46,13 +46,13 @@
 										</div>
                                         <div class="form-group">
                                             <a class="btn btn-default" href="index.php?p=step3">zur&uuml;ck</a>
-                                            <input type="submit" class="btn btn-success pull-right" value="Anlegen &amp; Weiter">
+                                            <input type="submit" class="btn btn-success float-right" value="Anlegen &amp; Weiter">
                                         </div>
                                     </form>
                                 <?php } else { ?>
                                 	<p>Es existiert bereits ein Account. Bitte fahre mit dem n&auml;chsten Schritt fort.</p>
 									<a class="btn btn-default" href="index.php?p=step3">zur&uuml;ck</a>
-									<a class="btn btn-success pull-right" href="index.php?p=step5">Weiter</a>
+									<a class="btn btn-success float-right" href="index.php?p=step5">Weiter</a>
                                 <?php } ?>
                        		</div>
                         </div>

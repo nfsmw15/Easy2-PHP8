@@ -3,14 +3,14 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1>Installation - Step 2</h1>
-                        <ol class="breadcrumb pull-right">
+                        <ol class="breadcrumb float-right">
                             <li><a href="index.php">Einleitung</a></li>
                             <li><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
                             <li><a href="index.php?p=step1">Step 1 - Voraussetzungen</a></li>
-                            <li class="active actual">Step 2 - MySQL-Daten</li>
-                            <li class="active">Step 3 - Grundeinstellungen</li>
-                            <li class="active">Step 4 - Accounts</li>
-                           <li class="active">Fertig</li>
+                            <li class="breadcrumb-item active actual">Step 2 - MySQL-Daten</li>
+                            <li class="breadcrumb-item active">Step 3 - Grundeinstellungen</li>
+                            <li class="breadcrumb-item active">Step 4 - Accounts</li>
+                           <li class="breadcrumb-item active">Fertig</li>
               	        </ol>
                     </div>
 				</div>
@@ -46,7 +46,7 @@
                                     <div class="form-group">
                                         <a class="btn btn-default" href="index.php?p=step1">zur&uuml;ck</a>
                                         <?php if($install->condition){ ?>
-                                            <input type="submit" class="btn btn-success pull-right" value="Speichern &amp; Weiter">
+                                            <input type="submit" class="btn btn-success float-right" value="Speichern &amp; Weiter">
                                         <?php } ?>
                                     </div>
                                 </form>

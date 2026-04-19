@@ -3,14 +3,14 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1>Installation Abgeschlossen</h1>
-                        <ol class="breadcrumb pull-right">
+                        <ol class="breadcrumb float-right">
                             <li><a href="index.php">Einleitung</a></li>
                             <li><a href="index.php?p=terms_of_use">Nutzungsbedingungen</a></li>
                             <li><a href="index.php?p=step1">Step 1 - Voraussetzungen</a></li>
                             <li><a href="index.php?p=step2">Step 2 - MySQL-Daten</a></li>
                             <li><a href="index.php?p=step3">Step 3 - Grundeinstellungen</a></li>
                             <li><a href="index.php?p=step4">Step 4 - Accounts</a></li>
-                            <li class="active actual">Fertig</li>
+                            <li class="breadcrumb-item active actual">Fertig</li>
               	        </ol>
                     </div>
 				</div>
