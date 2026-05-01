@@ -1,3 +1,4 @@
+<div class="content-wrapper">
 <div class="container">
     <!-- Page header/Breadcrumbs -->
     <h1 class="mt-4 mb-3">Men&uuml; <small>verwalten</small></h1>
@@ -334,6 +335,4 @@
 		</div>
 	</div><!-- /.row -->
 </div>
-
-
-
+</div><!-- /.content-wrapper -->

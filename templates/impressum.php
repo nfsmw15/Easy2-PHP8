@@ -1,4 +1,4 @@
-<!-- Page Content -->
+<div class="content-wrapper">
 <div class="container">
 
 	<!-- Page Heading/Breadcrumbs -->
@@ -27,3 +27,4 @@
 
 </div>
 <!-- /.container -->
+</div><!-- /.content-wrapper -->

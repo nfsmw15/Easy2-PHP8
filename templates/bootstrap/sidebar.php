@@ -1,5 +1,5 @@
-    <!-- Page Content -->
-    <div class="container">
+<div class="content-wrapper">
+<div class="container">
 
       <!-- Page Heading/Breadcrumbs -->
       <h1 class="mt-4 mb-3">Sidebar Page
@@ -47,3 +47,4 @@
 
     </div>
     <!-- /.container -->
+</div><!-- /.content-wrapper -->

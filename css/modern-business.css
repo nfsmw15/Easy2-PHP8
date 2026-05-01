@@ -58,3 +58,24 @@ body.locked{
     -moz-border-radius: 100px;
     border-radius: 100px;
 }
+
+/* ── Fix: Carousel-Bilder ohne externen Dienst (placehold.it offline) ───────
+   Fallback-Hintergrundfarben damit das Carousel nicht auf 0px kollabiert     */
+.carousel-item:nth-child(1) { background-color: #2c3e50; }
+.carousel-item:nth-child(2) { background-color: #34495e; }
+.carousel-item:nth-child(3) { background-color: #1a252f; }
+
+/* ── Fix: Scroll-to-Top Button immer unten-rechts, nie oben abgeschnitten ───*/
+.scroll-to-top {
+  position: fixed !important;
+  bottom: 15px !important;
+  right: 15px !important;
+  top: auto !important;
+  z-index: 1030;
+}
+
+/* ── Fix: Carousel-Controls nicht von Navbar überlagert ────────────────────── */
+#carouselExampleIndicators .carousel-control-prev,
+#carouselExampleIndicators .carousel-control-next {
+  top: 56px; /* Navbar-Höhe */
+}

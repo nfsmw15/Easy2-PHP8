@@ -1,5 +1,5 @@
-    <!-- Page Content -->
-    <div class="container">
+<div class="content-wrapper">
+<div class="container">
 
       <!-- Page Heading/Breadcrumbs -->
       <h1 class="mt-4 mb-3">Post Title
@@ -21,7 +21,7 @@
         <div class="col-lg-8">
 
           <!-- Preview Image -->
-          <img class="img-fluid rounded" src="./system/placeholder.php?w=900&h=300" alt="">
+          <img class="img-fluid rounded" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='300'%3E%3Crect width='900' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E900x300%3C/text%3E%3C/svg%3E" alt="">
 
           <hr>
 
@@ -65,7 +65,7 @@
 
           <!-- Single Comment -->
           <div class="media mb-4">
-            <img class="d-flex mr-3 rounded-circle" src="./system/placeholder.php?w=50&h=50" alt="">
+            <img class="d-flex mr-3 rounded-circle" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect width='50' height='50' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E50x50%3C/text%3E%3C/svg%3E" alt="">
             <div class="media-body">
               <h5 class="mt-0">Commenter Name</h5>
               Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
@@ -74,13 +74,13 @@
 
           <!-- Comment with nested comments -->
           <div class="media mb-4">
-            <img class="d-flex mr-3 rounded-circle" src="./system/placeholder.php?w=50&h=50" alt="">
+            <img class="d-flex mr-3 rounded-circle" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect width='50' height='50' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E50x50%3C/text%3E%3C/svg%3E" alt="">
             <div class="media-body">
               <h5 class="mt-0">Commenter Name</h5>
               Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
 
               <div class="media mt-4">
-                <img class="d-flex mr-3 rounded-circle" src="./system/placeholder.php?w=50&h=50" alt="">
+                <img class="d-flex mr-3 rounded-circle" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect width='50' height='50' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E50x50%3C/text%3E%3C/svg%3E" alt="">
                 <div class="media-body">
                   <h5 class="mt-0">Commenter Name</h5>
                   Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
@@ -88,7 +88,7 @@
               </div>
 
               <div class="media mt-4">
-                <img class="d-flex mr-3 rounded-circle" src="./system/placeholder.php?w=50&h=50" alt="">
+                <img class="d-flex mr-3 rounded-circle" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50'%3E%3Crect width='50' height='50' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E50x50%3C/text%3E%3C/svg%3E" alt="">
                 <div class="media-body">
                   <h5 class="mt-0">Commenter Name</h5>
                   Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
@@ -166,3 +166,4 @@
 
     </div>
     <!-- /.container -->
+</div><!-- /.content-wrapper -->

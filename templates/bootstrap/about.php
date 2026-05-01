@@ -1,5 +1,5 @@
-    <!-- Page Content -->
-    <div class="container">
+<div class="content-wrapper">
+<div class="container">
 
       <!-- Page Heading/Breadcrumbs -->
       <h1 class="mt-4 mb-3">About
@@ -16,7 +16,7 @@
       <!-- Intro Content -->
       <div class="row">
         <div class="col-lg-6">
-          <img class="img-fluid rounded mb-4" src="./system/placeholder.php?w=750&h=450" alt="">
+          <img class="img-fluid rounded mb-4" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='750' height='450'%3E%3Crect width='750' height='450' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E750x450%3C/text%3E%3C/svg%3E" alt="">
         </div>
         <div class="col-lg-6">
           <h2>About Modern Business</h2>
@@ -33,7 +33,7 @@
       <div class="row">
         <div class="col-lg-4 mb-4">
           <div class="card h-100 text-center">
-            <img class="card-img-top" src="./system/placeholder.php?w=750&h=450" alt="">
+            <img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='750' height='450'%3E%3Crect width='750' height='450' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E750x450%3C/text%3E%3C/svg%3E" alt="">
             <div class="card-body">
               <h4 class="card-title">Team Member</h4>
               <h6 class="card-subtitle mb-2 text-muted">Position</h6>
@@ -46,7 +46,7 @@
         </div>
         <div class="col-lg-4 mb-4">
           <div class="card h-100 text-center">
-            <img class="card-img-top" src="./system/placeholder.php?w=750&h=450" alt="">
+            <img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='750' height='450'%3E%3Crect width='750' height='450' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E750x450%3C/text%3E%3C/svg%3E" alt="">
             <div class="card-body">
               <h4 class="card-title">Team Member</h4>
               <h6 class="card-subtitle mb-2 text-muted">Position</h6>
@@ -59,7 +59,7 @@
         </div>
         <div class="col-lg-4 mb-4">
           <div class="card h-100 text-center">
-            <img class="card-img-top" src="./system/placeholder.php?w=750&h=450" alt="">
+            <img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='750' height='450'%3E%3Crect width='750' height='450' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E750x450%3C/text%3E%3C/svg%3E" alt="">
             <div class="card-body">
               <h4 class="card-title">Team Member</h4>
               <h6 class="card-subtitle mb-2 text-muted">Position</h6>
@@ -77,25 +77,26 @@
       <h2>Our Customers</h2>
       <div class="row">
         <div class="col-lg-2 col-sm-4 mb-4">
-          <img class="img-fluid" src="./system/placeholder.php?w=500&h=300" alt="">
+          <img class="img-fluid" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='300'%3E%3Crect width='500' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E500x300%3C/text%3E%3C/svg%3E" alt="">
         </div>
         <div class="col-lg-2 col-sm-4 mb-4">
-          <img class="img-fluid" src="./system/placeholder.php?w=500&h=300" alt="">
+          <img class="img-fluid" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='300'%3E%3Crect width='500' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E500x300%3C/text%3E%3C/svg%3E" alt="">
         </div>
         <div class="col-lg-2 col-sm-4 mb-4">
-          <img class="img-fluid" src="./system/placeholder.php?w=500&h=300" alt="">
+          <img class="img-fluid" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='300'%3E%3Crect width='500' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E500x300%3C/text%3E%3C/svg%3E" alt="">
         </div>
         <div class="col-lg-2 col-sm-4 mb-4">
-          <img class="img-fluid" src="./system/placeholder.php?w=500&h=300" alt="">
+          <img class="img-fluid" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='300'%3E%3Crect width='500' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E500x300%3C/text%3E%3C/svg%3E" alt="">
         </div>
         <div class="col-lg-2 col-sm-4 mb-4">
-          <img class="img-fluid" src="./system/placeholder.php?w=500&h=300" alt="">
+          <img class="img-fluid" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='300'%3E%3Crect width='500' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E500x300%3C/text%3E%3C/svg%3E" alt="">
         </div>
         <div class="col-lg-2 col-sm-4 mb-4">
-          <img class="img-fluid" src="./system/placeholder.php?w=500&h=300" alt="">
+          <img class="img-fluid" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='300'%3E%3Crect width='500' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E500x300%3C/text%3E%3C/svg%3E" alt="">
         </div>
       </div>
       <!-- /.row -->
 
     </div>
     <!-- /.container -->
+</div><!-- /.content-wrapper -->

@@ -1,5 +1,5 @@
-    <!-- Page Content -->
-    <div class="container">
+<div class="content-wrapper">
+<div class="container">
 
       <!-- Page Heading/Breadcrumbs -->
       <h1 class="mt-4 mb-3">Services
@@ -14,7 +14,7 @@
       </ol>
 
       <!-- Image Header -->
-      <img class="img-fluid rounded mb-4" src="./system/placeholder.php?w=1200&h=300" alt="">
+      <img class="img-fluid rounded mb-4" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='300'%3E%3Crect width='1200' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E1200x300%3C/text%3E%3C/svg%3E" alt="">
 
       <!-- Marketing Icons Section -->
       <div class="row">
@@ -56,3 +56,4 @@
 
     </div>
     <!-- /.container -->
+</div><!-- /.content-wrapper -->

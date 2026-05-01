@@ -1,5 +1,5 @@
-    <!-- Page Content -->
-    <div class="container">
+<div class="content-wrapper">
+<div class="container">
 
       <!-- Page Heading/Breadcrumbs -->
       <h1 class="mt-4 mb-3">Blog Home Two
@@ -19,7 +19,7 @@
           <div class="row">
             <div class="col-lg-6">
               <a href="#">
-                <img class="img-fluid rounded" src="./system/placeholder.php?w=750&h=300" alt="">
+                <img class="img-fluid rounded" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='750' height='300'%3E%3Crect width='750' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E750x300%3C/text%3E%3C/svg%3E" alt="">
               </a>
             </div>
             <div class="col-lg-6">
@@ -41,7 +41,7 @@
           <div class="row">
             <div class="col-lg-6">
               <a href="#">
-                <img class="img-fluid rounded" src="./system/placeholder.php?w=750&h=300" alt="">
+                <img class="img-fluid rounded" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='750' height='300'%3E%3Crect width='750' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E750x300%3C/text%3E%3C/svg%3E" alt="">
               </a>
             </div>
             <div class="col-lg-6">
@@ -63,7 +63,7 @@
           <div class="row">
             <div class="col-lg-6">
               <a href="#">
-                <img class="img-fluid rounded" src="./system/placeholder.php?w=750&h=300" alt="">
+                <img class="img-fluid rounded" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='750' height='300'%3E%3Crect width='750' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E750x300%3C/text%3E%3C/svg%3E" alt="">
               </a>
             </div>
             <div class="col-lg-6">
@@ -85,7 +85,7 @@
           <div class="row">
             <div class="col-lg-6">
               <a href="#">
-                <img class="img-fluid rounded" src="./system/placeholder.php?w=750&h=300" alt="">
+                <img class="img-fluid rounded" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='750' height='300'%3E%3Crect width='750' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E750x300%3C/text%3E%3C/svg%3E" alt="">
               </a>
             </div>
             <div class="col-lg-6">
@@ -115,3 +115,4 @@
 
   </div>
   <!-- /.container -->
+</div><!-- /.content-wrapper -->

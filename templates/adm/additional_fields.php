@@ -1,3 +1,4 @@
+<div class="content-wrapper">
 <div class="container">
     <!-- Page header/Breadcrumbs -->
     <h1 class="mt-4 mb-3">Zusatzfelder</h1>
@@ -491,3 +492,4 @@
 		</div>
 	</div>
 </div>
+</div><!-- /.content-wrapper -->

@@ -1,3 +1,4 @@
+<div class="content-wrapper">
 <div class="container">
     <!-- Page header/Breadcrumbs -->
     <h1 class="mt-4 mb-3">Regeln <small>verwalten</small></h1>
@@ -103,6 +104,4 @@
 				</div><!-- /.col-lg-12 -->
             </div><!-- /.row -->
 </div>
-
-
-
+</div><!-- /.content-wrapper -->
