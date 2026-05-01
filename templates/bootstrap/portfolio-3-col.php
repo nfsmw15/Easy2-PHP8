@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-md-4 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Name</a>
@@ -31,7 +31,7 @@
             </div>
             <div class="col-md-4 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Name</a>
@@ -40,7 +40,7 @@
             </div>
             <div class="col-md-4 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Name</a>
@@ -54,7 +54,7 @@
         <div class="row">
             <div class="col-md-4 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Name</a>
@@ -63,7 +63,7 @@
             </div>
             <div class="col-md-4 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Name</a>
@@ -72,7 +72,7 @@
             </div>
             <div class="col-md-4 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Name</a>
@@ -85,7 +85,7 @@
         <div class="row">
             <div class="col-md-4 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Name</a>
@@ -94,7 +94,7 @@
             </div>
             <div class="col-md-4 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Name</a>
@@ -103,7 +103,7 @@
             </div>
             <div class="col-md-4 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Name</a>

@@ -27,7 +27,7 @@
             </div>
             <div class="col-md-5">
                 <a href="blog-post.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/600x300" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=600&h=300" alt="">
                 </a>
             </div>
             <div class="col-md-6">
@@ -53,7 +53,7 @@
             </div>
             <div class="col-md-5">
                 <a href="blog-post.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/600x300" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=600&h=300" alt="">
                 </a>
             </div>
             <div class="col-md-6">
@@ -78,7 +78,7 @@
             </div>
             <div class="col-md-5">
                 <a href="blog-post.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/600x300" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=600&h=300" alt="">
                 </a>
             </div>
             <div class="col-md-6">

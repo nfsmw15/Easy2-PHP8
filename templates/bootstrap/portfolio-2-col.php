@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-md-6 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project One</a>
@@ -31,7 +31,7 @@
             </div>
             <div class="col-md-6 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Two</a>
@@ -45,7 +45,7 @@
         <div class="row">
             <div class="col-md-6 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Three</a>
@@ -54,7 +54,7 @@
             </div>
             <div class="col-md-6 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Four</a>
@@ -68,7 +68,7 @@
         <div class="row">
             <div class="col-md-6 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Five</a>
@@ -77,7 +77,7 @@
             </div>
             <div class="col-md-6 img-portfolio">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-hover" src="http://placehold.it/700x400" alt="">
+                    <img class="img-responsive img-hover" src="./system/placeholder.php?w=700&h=400" alt="">
                 </a>
                 <h3>
                     <a href="portfolio-item.html">Project Six</a>

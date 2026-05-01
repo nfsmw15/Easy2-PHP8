@@ -21,7 +21,7 @@
         <!-- Intro Content -->
         <div class="row">
             <div class="col-md-6">
-                <img class="img-responsive" src="http://placehold.it/750x450" alt="">
+                <img class="img-responsive" src="./system/placeholder.php?w=750&h=450" alt="">
             </div>
             <div class="col-md-6">
                 <h2>About Modern Business</h2>
@@ -39,7 +39,7 @@
             </div>
             <div class="col-md-4 text-center">
                 <div class="thumbnail">
-                    <img class="img-responsive" src="http://placehold.it/750x450" alt="">
+                    <img class="img-responsive" src="./system/placeholder.php?w=750&h=450" alt="">
                     <div class="caption">
                         <h3>John Smith<br>
                             <small>Job Title</small>
@@ -58,7 +58,7 @@
             </div>
             <div class="col-md-4 text-center">
                 <div class="thumbnail">
-                    <img class="img-responsive" src="http://placehold.it/750x450" alt="">
+                    <img class="img-responsive" src="./system/placeholder.php?w=750&h=450" alt="">
                     <div class="caption">
                         <h3>John Smith<br>
                             <small>Job Title</small>
@@ -77,7 +77,7 @@
             </div>
             <div class="col-md-4 text-center">
                 <div class="thumbnail">
-                    <img class="img-responsive" src="http://placehold.it/750x450" alt="">
+                    <img class="img-responsive" src="./system/placeholder.php?w=750&h=450" alt="">
                     <div class="caption">
                         <h3>John Smith<br>
                             <small>Job Title</small>
@@ -96,7 +96,7 @@
             </div>
             <div class="col-md-4 text-center">
                 <div class="thumbnail">
-                    <img class="img-responsive" src="http://placehold.it/750x450" alt="">
+                    <img class="img-responsive" src="./system/placeholder.php?w=750&h=450" alt="">
                     <div class="caption">
                         <h3>John Smith<br>
                             <small>Job Title</small>
@@ -115,7 +115,7 @@
             </div>
             <div class="col-md-4 text-center">
                 <div class="thumbnail">
-                    <img class="img-responsive" src="http://placehold.it/750x450" alt="">
+                    <img class="img-responsive" src="./system/placeholder.php?w=750&h=450" alt="">
                     <div class="caption">
                         <h3>John Smith<br>
                             <small>Job Title</small>
@@ -134,7 +134,7 @@
             </div>
             <div class="col-md-4 text-center">
                 <div class="thumbnail">
-                    <img class="img-responsive" src="http://placehold.it/750x450" alt="">
+                    <img class="img-responsive" src="./system/placeholder.php?w=750&h=450" alt="">
                     <div class="caption">
                         <h3>John Smith<br>
                             <small>Job Title</small>
@@ -160,22 +160,22 @@
                 <h2 class="page-header">Our Customers</h2>
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6">
-                <img class="img-responsive customer-img" src="http://placehold.it/500x300" alt="">
+                <img class="img-responsive customer-img" src="./system/placeholder.php?w=500&h=300" alt="">
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6">
-                <img class="img-responsive customer-img" src="http://placehold.it/500x300" alt="">
+                <img class="img-responsive customer-img" src="./system/placeholder.php?w=500&h=300" alt="">
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6">
-                <img class="img-responsive customer-img" src="http://placehold.it/500x300" alt="">
+                <img class="img-responsive customer-img" src="./system/placeholder.php?w=500&h=300" alt="">
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6">
-                <img class="img-responsive customer-img" src="http://placehold.it/500x300" alt="">
+                <img class="img-responsive customer-img" src="./system/placeholder.php?w=500&h=300" alt="">
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6">
-                <img class="img-responsive customer-img" src="http://placehold.it/500x300" alt="">
+                <img class="img-responsive customer-img" src="./system/placeholder.php?w=500&h=300" alt="">
             </div>
             <div class="col-md-2 col-sm-4 col-xs-6">
-                <img class="img-responsive customer-img" src="http://placehold.it/500x300" alt="">
+                <img class="img-responsive customer-img" src="./system/placeholder.php?w=500&h=300" alt="">
             </div>
         </div>
         <!-- /.row -->

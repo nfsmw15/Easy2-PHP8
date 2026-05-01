@@ -10,19 +10,19 @@
         <!-- Wrapper for slides -->
         <div class="carousel-inner">
             <div class="item active">
-                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=EASY 2.0');"></div>
+                <div class="fill" style="background-image:url('./system/placeholder.php?w=1900&h=1080&text=EASY 2.0');"></div>
                 <div class="carousel-caption">
                     <h2>EASY 2.0 System</h2>
                 </div>
             </div>
             <div class="item">
-                <div class="fill" style="background-image:url('http://placehold.it/1900x1080&text=Version <?php echo EASY_VERSION; ?>');"></div>
+                <div class="fill" style="background-image:url('./system/placeholder.php?w=1900&h=1080&text=Version <?php echo EASY_VERSION; ?>');"></div>
                 <div class="carousel-caption">
                     <h2>Aktuelle Version</h2>
                 </div>
             </div>
             <div class="item">
-                <div class="fill" style="background-image:url('http://placehold.it/1900x1080');"></div>
+                <div class="fill" style="background-image:url('./system/placeholder.php?w=1900&h=1080');"></div>
                 <div class="carousel-caption">
                     <h2>Mehr M&ouml;glichkeiten</h2>
                 </div>
@@ -91,32 +91,32 @@
             </div>
             <div class="col-md-4 col-sm-6">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-portfolio img-hover" src="http://placehold.it/700x450" alt="">
+                    <img class="img-responsive img-portfolio img-hover" src="./system/placeholder.php?w=700&h=450" alt="">
                 </a>
             </div>
             <div class="col-md-4 col-sm-6">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-portfolio img-hover" src="http://placehold.it/700x450" alt="">
+                    <img class="img-responsive img-portfolio img-hover" src="./system/placeholder.php?w=700&h=450" alt="">
                 </a>
             </div>
             <div class="col-md-4 col-sm-6">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-portfolio img-hover" src="http://placehold.it/700x450" alt="">
+                    <img class="img-responsive img-portfolio img-hover" src="./system/placeholder.php?w=700&h=450" alt="">
                 </a>
             </div>
             <div class="col-md-4 col-sm-6">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-portfolio img-hover" src="http://placehold.it/700x450" alt="">
+                    <img class="img-responsive img-portfolio img-hover" src="./system/placeholder.php?w=700&h=450" alt="">
                 </a>
             </div>
             <div class="col-md-4 col-sm-6">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-portfolio img-hover" src="http://placehold.it/700x450" alt="">
+                    <img class="img-responsive img-portfolio img-hover" src="./system/placeholder.php?w=700&h=450" alt="">
                 </a>
             </div>
             <div class="col-md-4 col-sm-6">
                 <a href="portfolio-item.html">
-                    <img class="img-responsive img-portfolio img-hover" src="http://placehold.it/700x450" alt="">
+                    <img class="img-responsive img-portfolio img-hover" src="./system/placeholder.php?w=700&h=450" alt="">
                 </a>
             </div>
         </div>
@@ -141,7 +141,7 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis, omnis doloremque non cum id reprehenderit, quisquam totam aspernatur tempora minima unde aliquid ea culpa sunt. Reiciendis quia dolorum ducimus unde.</p>
             </div>
             <div class="col-md-6">
-                <img class="img-responsive" src="http://placehold.it/700x450" alt="">
+                <img class="img-responsive" src="./system/placeholder.php?w=700&h=450" alt="">
             </div>
         </div>
         <!-- /.row -->

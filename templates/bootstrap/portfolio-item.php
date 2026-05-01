@@ -33,13 +33,13 @@
                     <!-- Wrapper for slides -->
                     <div class="carousel-inner">
                         <div class="item active">
-                            <img class="img-responsive" src="http://placehold.it/750x500" alt="">
+                            <img class="img-responsive" src="./system/placeholder.php?w=750&h=500" alt="">
                         </div>
                         <div class="item">
-                            <img class="img-responsive" src="http://placehold.it/750x500" alt="">
+                            <img class="img-responsive" src="./system/placeholder.php?w=750&h=500" alt="">
                         </div>
                         <div class="item">
-                            <img class="img-responsive" src="http://placehold.it/750x500" alt="">
+                            <img class="img-responsive" src="./system/placeholder.php?w=750&h=500" alt="">
                         </div>
                     </div>
 
@@ -77,25 +77,25 @@
 
             <div class="col-sm-3 col-xs-6">
                 <a href="#">
-                    <img class="img-responsive img-hover img-related" src="http://placehold.it/500x300" alt="">
+                    <img class="img-responsive img-hover img-related" src="./system/placeholder.php?w=500&h=300" alt="">
                 </a>
             </div>
 
             <div class="col-sm-3 col-xs-6">
                 <a href="#">
-                    <img class="img-responsive img-hover img-related" src="http://placehold.it/500x300" alt="">
+                    <img class="img-responsive img-hover img-related" src="./system/placeholder.php?w=500&h=300" alt="">
                 </a>
             </div>
 
             <div class="col-sm-3 col-xs-6">
                 <a href="#">
-                    <img class="img-responsive img-hover img-related" src="http://placehold.it/500x300" alt="">
+                    <img class="img-responsive img-hover img-related" src="./system/placeholder.php?w=500&h=300" alt="">
                 </a>
             </div>
 
             <div class="col-sm-3 col-xs-6">
                 <a href="#">
-                    <img class="img-responsive img-hover img-related" src="http://placehold.it/500x300" alt="">
+                    <img class="img-responsive img-hover img-related" src="./system/placeholder.php?w=500&h=300" alt="">
                 </a>
             </div>
 
