@@ -1,3 +1,4 @@
+<div class="content-wrapper">
 <div class="container full-container">
     <!-- Page header/Breadcrumbs -->
     <h1 class="mt-4 mb-3">Benutzer <small>Verwaltung</small></h1>
@@ -284,3 +285,4 @@
         </div><!-- /.col-lg-4 -->
     </div>
 </div>
+</div><!-- /.content-wrapper -->

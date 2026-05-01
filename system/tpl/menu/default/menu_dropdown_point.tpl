@@ -1,6 +1,6 @@
-							<li class="nav-item dropdown[active]">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBlog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">[icon] [title]</a>
-								<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
+							<li class="nav-item[active]">
+								<a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapse_[id]" data-parent="#mainAccordion">[icon] <span class="nav-link-text">[title]</span></a>
+								<ul class="sidenav-second-level collapse" id="collapse_[id]">
 									[list]
-								</div>
+								</ul>
 							</li>

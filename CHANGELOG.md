@@ -1,188 +1,49 @@
-# Changelog — EASY 2.0 PHP8 Fork
+# Changelog – Branch `loginsystem-php8`
 
-## [1.1.1] — 2026-04-19
-
-### Neu
-- `BS_VERSION`-Konstante in `config.inc.php` definiert (Wert: `4`)
-- Summernote-Editor wird jetzt auch auf der `news_add`-Seite geladen
-
-### Bugfixes
-- Summernote BS4-Build (`summernote-bs4.min.js`) statt BS3-Build verwendet
-- jQuery 1.11.1 → **3.7.1** (Pflicht für Bootstrap 4 und Summernote BS4)
-- Bootstrap 4.6.2 **Bundle** (inkl. Popper.js) ersetzt standalone-Version
-- CSP-Header um `unsafe-eval` ergänzt (Summernote wurde blockiert)
-- Doppelte Summernote-Einbindung in `settings.php` entfernt
+Basis: **EASY 2.0 Loginsystem 0.9.8.6 – Dashboard**  
+PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
 
 ---
 
-## [1.1.0] — 2026-04-19
+## [1.0.0] – 2026-05 – Initiale PHP 8 Portierung
 
-### Neu: Bootstrap 4 Branch (main-bs4)
-- Neuer Branch `main-bs4` mit Bootstrap 4.6.2 und Start Bootstrap Modern Business BS4
-- Bootstrap 3.3.7 durch Bootstrap 4.6.2 ersetzt (CSS + JS)
-- Navbar auf BS4-Struktur umgestellt (`navbar-dark bg-dark fixed-top`, `navbar-toggler`)
-- BS3-Klassen migriert: `pull-right/left` → `float-right/left`, `btn-xs` → `btn-sm`, `btn-md` entfernt, `panel` → `card`
-- Glyphicons durch Font Awesome ersetzt
-- Installer-Breadcrumb auf volle Breite umgestellt und `breadcrumb-item` ergänzt
-- Cookie-Hinweis bei "Eingeloggt bleiben" Checkbox hinzugefügt
+### PHP 8 Kompatibilität (`system/functions.inc.php`)
+- `mcrypt_encrypt/decrypt` → `openssl_encrypt/decrypt` (AES-256-GCM)
+- `each()` → `foreach` (in PHP 8 entfernt)
+- `generate()`: `(double)microtime()` + `mt_srand` → `random_int()` (kryptografisch sicher)
+- `encodeRand/decodeRand`: unsicheres mt_rand-XOR → HMAC-SHA256 Base64-Token
+- `return_bytes()`: Switch-Fallthrough → `match`-Ausdruck
+- `printarray/printobject` entfernt (Debug-Werkzeuge ohne Produktionswert)
+- `declare(strict_types=1)` ergänzt
 
-### SMTP-Mailversand via PHPMailer
-- **PHPMailer 6.9.3** eingebunden (ersetzt PHP `mail()`)
-- SMTP-Einstellungen im Admin-Panel: Host, Port, Benutzer, Passwort, Verschlüsselung (STARTTLS/SSL)
-- Neue Datenbankfelder: `smtp_host`, `smtp_port`, `smtp_user`, `smtp_pass`, `smtp_encryption`
-- `sendMail()` vollständig auf PHPMailer/SMTP umgestellt
-- Kompatibel mit Mailcow und anderen externen Mailservern
+### Sicherheit (`index.php`)
+- Security-HTTP-Header: `X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection`, `Referrer-Policy`, `Content-Security-Policy`, `Permissions-Policy`
+- Session-Härtung: `cookie_httponly=1`, `cookie_samesite=Strict`, `use_strict_mode=1`, `use_only_cookies=1`, `cookie_secure` dynamisch (HTTPS-aware)
+- `display_errors=0` (Produktionsstandard)
+- CSRF-Token in Logout-Link korrekt via `htmlspecialchars()` maskiert
 
-### Bugfixes
-- `system/fonts/Captureit.ttf` fehlte — Captcha-Bild wird jetzt korrekt generiert
-- `emailtpl/`-Verzeichnis fehlte im BS4-Branch — Kontaktformular und System-Mails funktionieren jetzt
-- `ini_set()` Session-Warnungen behoben: Guard `session_status() === PHP_SESSION_NONE` in `config.inc.php`
-- MySQL/MariaDB Versionscheck in Installer `mysqlConnection()` ergänzt — zu alte Versionen werden abgelehnt
-- DB-Version wird nach erfolgreichem Connect in Step 2.2 angezeigt
+### Assets (`index.php`, `css/`, `js/`)
+- `vendor/`-Abhängigkeit aufgelöst (war nicht im Repository enthalten)
+- Bootstrap 4, jQuery, Font Awesome → lokal
+- SB Admin CSS/JS aus Original übernommen → lokal
+- Chart.js → CDN (`cdnjs.cloudflare.com/Chart.js/3.9.1`)
+- DataTables → CDN (`cdnjs.cloudflare.com/datatables/1.10.21`)
+- CSP-Header erlaubt `cdnjs.cloudflare.com`
 
-## [1.0.0] — 2026-04-17
+### Templates (`templates/`)
+- `content-wrapper` in allen Templates ergänzt (Layout-Fix für SB Admin Sidebar)
+- Menü-Templates (`system/tpl/menu/default/`) auf SB-Admin Accordion-Stil umgestellt:
+  - `menu_dropdown_point.tpl`: Bootstrap-Dropdown → `sidenav-second-level collapse`
+  - `menu_point.tpl`: `[title]` in `<span class="nav-link-text">` gewrapped (Sidebar-Toggle)
+- Alle `placehold.it` und `unsplash.it` URLs (externe Dienste offline) → dimensionsgenaue inline SVG-Platzhalter
+- `bootstrap/contact.php`: englische Demo-Kontaktdaten → deutsche Platzhalter
 
-### Fork-Basis
-- Fork von **EASY 2.0 Loginsystem** (GPLv3) von Marius Rasche / Marlight Systems
-- Lizenz geändert zu **GNU Affero General Public License v3.0 (AGPLv3)**
+### CSS (`css/mlsystems.css`)
+- Fallback-Hintergrundfarben für Carousel-Slides (ohne externe Bild-URLs)
+- `scroll-to-top` Button: `top: auto` fix
+- SB Admin Accordion Untermenü: Textfarbe, Hintergrund, Padding explizit gesetzt
+- `nav-link-collapse:after` Pfeil-Icon via FontAwesome
 
-### PHP 8 Migration
-- `mysqli` vollständig durch **PDO mit Exceptions** ersetzt
-- Alle Klassen auf PHP 8 Typisierung umgestellt (`declare(strict_types=1)`)
-- `short_open_tag`-Abhängigkeit entfernt
-- Deprecated-Funktionen ersetzt
-
-### Sicherheit
-- Session-Härtung: `HttpOnly`, `Secure` (HTTPS-aware), `SameSite=Strict`, `use_strict_mode`
-- Sicherheitsheader: `X-Content-Type-Options`, `X-Frame-Options: DENY`, `Cache-Control: no-store`
-- CSP-Header hinzugefügt
-- AES-256-GCM Verschlüsselung (ersetzt alte Methode)
-- CSRF-Token-Schutz verbessert
-- Passwort-Hashing mit `password_hash()` / `password_verify()`
-- Path-Traversal-Schutz in Datei-Operationen
-
-### Installer
-- `dirname()`-Bug behoben (Schreibrechte-Check zeigte falschen Pfad)
-- Step 4 invertierte Bedingung (`is_user()`) behoben
-- PHP-Versionscheck auf 8.0 aktualisiert
-- `short_open_tag`-Zeile entfernt
-- `pdo_mysql`-Extension-Check hinzugefügt
-- MySQL/MariaDB-Version wird live aus PDO angezeigt
-- Marlight-Nutzungsbedingungen durch **AGPLv3-Lizenztext** ersetzt
-- Marlight-Supportlinks entfernt, GitHub-Link hinzugefügt
-- Tote Menüeinträge entfernt (Tables, Charts, Cards — Seiten existierten nie)
-
-### Templates & UI
-- Neue Seiten: **Impressum**, **Datenschutz**
-- Header aller Templates vereinheitlicht (`mt-4 mb-3`, Font Awesome Icons, Breadcrumb)
-- `contact.php` überarbeitet
-- `404.php` überarbeitet
-- **Summernote WYSIWYG Editor** für Impressum und Datenschutzerklärung in Admin-Einstellungen integriert
-- Cookie-Notice auf Login-Seite hinzugefügt
-- Font-Dateien für Summernote und Bootstrap Glyphicons optimiert (`css/font/`)
-
-### Admin-Panel
-- Bearbeitbare Felder für Impressum und Datenschutzerklärung mit Rich-Text-Editor
-- HTML-Export möglich für beide Seiten
-
-### Konfiguration
-- `session.cookie_secure` wird nur gesetzt wenn noch keine Session aktiv (`session_status()` Check)
-- `EASY_VERSION` auf `1.0.0` gesetzt
-- `config.example.inc.php` als Vorlage mit Platzhaltern hinzugefügt
-
-### Externe Links
-- GitHub-URLs durch **nfsmw15.de** ersetzt
-
----
-
-# Ursprüngliches EASY 2.0 Loginsystem — Versionshistorie bis 0.9.8.6
-
-*Diese Fork basiert auf EASY 2.0 von Marius Rasche / Marlight Systems (ursprüngliche Lizenz: GPLv3). Die folgende Versionshistorie dokumentiert die Entwicklung des ursprünglichen Projekts bis Version 0.9.8.6.*
-
-## [0.9.8.6]
-
-- **Gefixt**: In der Dashboard Version haben die Berechtigungen für normale Mitglieder nach der Installation nicht gestimmt
-- **Gefixt**: Die DSGVO E-Mail-Adresse wurde als default Wert entfernt bei der Installation
-
-## [0.9.8.5]
-
-- **Verbessert**: Die Höhe der Multiselects wurde erhöht für bessere Bedienbarkeit
-- **Gefixt**: Mit PHP8 sind ein paar alte Features von PHP deprecated gesetzt worden
-- **Gefixt**: Ein Fehler der erst mit PHP8 auftritt, verhindert das nutzen der Rangverwaltung
-- ⚠️ Für dieses Update mussten folgende Dateien angepasst werden: `loginsystem.php`, `functions.inc.php`, `ranks.php`, `mlsystems.css`
-
-## [0.9.8.4]
-
-- **Gefixt**: Es kam ein Hinweis, wenn die Fehlerausgabe aktiviert ist, wenn überprüft wurde ob der Benutzer gerade die Oberfläche gesperrt hat
-- **Gefixt**: Registrierung funktionierte nicht mehr bei Nutzung eines MySQL Servers (nicht bei MariaDB)
-- ⚠️ Update erforderte Änderung in `loginsystem.php`
-
-## [0.9.8.3]
-
-- **Gefixt**: Bei der PHP-Version 7.2 und höher konnte es dazu kommen, dass das Captcha nicht generiert wurde
-- **Gefixt**: Bei der Bootstrap 3 Version, fehlte der Haken für die Akzeptierung der Datenschutzbestimmungen
-- ⚠️ Update erforderte Änderung in `captcha.php` und `regist.php`
-
-## [0.9.8.2]
-
-- **Neuerung**: Die Funktion `getValue()` kann jetzt auch mehrere Spalten zurückgeben
-- **Gefixt**: Die Funktion `getValue()` gab keine Werte zurück, wenn die Parameter 2-4 als NULL angegeben waren
-- ⚠️ Update erforderte Änderung in `database.php`
-
-## [0.9.8.1] — HOTFIX
-
-- **Gefixt**: Benutzer mit einem niedrigerem Rang konnten keine Benutzer mit einem höheren Rang mehr deaktivieren oder löschen
-- **Gefixt**: Wenn der Benutzer keine Berechtigung aufgrund eines zu niedrigen Rangs hat, sieht er auch nur noch die entsprechenden Möglichkeiten
-- ⚠️ Update erforderte Änderung in `userlist.php`
-
-## [0.9.8]
-
-- **Neuerung**: Neue Funktion `rankPosition` zur Klasse `loginsystem` hinzugefügt
-- **Gefixt**: Ab PHP 7.3 funktionierte die Funktion `check_filename` nicht mehr
-- **Gefixt**: Einstellung für "Neu registrierte Benutzer" wurde nicht übernommen
-- **Gefixt**: Bug in der Funktion `timediv`
-- **Änderung**: Wer das Recht erhält, Ränge vergeben zu dürfen, kann nur noch Ränge gleich oder unter seinem Rang vergeben
-- **Änderung**: Autoload für Klassen gegen SPL Autoload ausgetauscht
-
-## [0.9.7] — DSGVO Update
-
-- **Neuerung**: Checkbox dem Kontaktformular hinzugefügt (bzgl. DSGVO)
-- **Neuerung**: Checkbox zur Bestätigung der Datenschutzerklärung bei der Registrierung hinzugefügt
-- **Neuerung**: Seite für die Datenschutzerklärung hinzugefügt
-- **Neuerung**: Impressum und Datenschutz kann in den Einstellungen eingetragen werden
-- **Verbessert**: User Löschfunktion DSGVO konform erweitert
-- **Gefixt**: Problem bei fehlender DirectoryIndex Einstellung behoben
-- **Gefixt**: Fehler bei entfernen des Benutzerbildes (Administrator seitens)
-- **Gefixt**: Bei Zusatzfeldern vom Typ "Select" wurde nicht die richtige Option ausgewählt
-- **Gefixt**: Rechtschreibfehler behoben
-- **Gefixt**: Mögliche Probleme mit `getUser()` bei Eingabe von "0" behoben
-- **Gefixt**: Bei `timeformer()` Funktion, Aufruf von nicht vorhandenen Funktionen behoben
-- ⚠️ Ab der nächsten Version sollte `timeformer()` und `timediv()` durch neue Funktionen ersetzt werden
-
-## [0.9.6.1]
-
-- **Verbessert**: Autoload Funktion unterstützt nun auch namespaces (sofern diese die gleiche Struktur wie die Ordner haben)
-- **Gefixt**: Keine MySQL-Fehler-Ausgabe bei der Installation, Step Benutzer anlegen
-- **Gefixt**: Auf manchen Server gab es Probleme mit den Schreibrechten auf die config.php in der Installation
-- **Gefixt**: Alle Tabellen haben Standardwerte erhalten
-- **Gefixt**: Fehler beim Rang erstellen behoben (MySQL-Fehler wurde nicht ausgegeben)
-- **Gefixt**: Fehler beim Löschen einer Seite mit Datei behoben (falls die Datei nicht existierte wurde ein PHP-Fehler erzeugt)
-
-## [0.9.6]
-
-- **Neuerung**: Blacklist für Benutzernamen hinzugefügt (Statisch in der loginsystem Klasse)
-- **Neuerung**: htaccess Datei im "templates" Verzeichnis hinzugefügt, zum Schutz vor äußeren Aufrufen
-- **Verbessert**: `getCode()` Funktion prüft jetzt nur noch für die angegeben Tabellen/Spalten ob der Code schon verwendet wird
-- **Änderung**: Verwendung einer anderen Kodierung des E-Mail Betreffs
-- **Änderung**: Rechtschreibfehler behoben
-- **Änderung**: Installation Links hinzugefügt
-- **Änderung**: Installation (Step 5) - Beschreibung für Vor-/Nachname geändert
-- **Gefixt**: Passwort zurücksetzen Seite nicht erreichbar
-- **Gefixt**: Änderung der minimalen Passwortlänge hatten keine Auswirkung
-- **Gefixt**: Bei der Installation muss kein DB-Passwort mehr eingegeben werden
-- **Gefixt**: Bei der Installation sind mehr Zeichen im Datenbankname sowie Benutzername erlaubt
-- **Gefixt**: Bei der Installation (Step 5) werden jetzt Zeilenumbrüche bei dem Adressfeld hinzugefügt
-- **Gefixt**: War bei Zusatzfeldern ein Regex angegeben, war es automatisch ein Pflichtfeld
-- **Gefixt**: `getUser()` Funktion hat bei Übergabe von "fullname" und nur einen angegeben Vornamen nichts zurückgegeben
-- **Entfernt**: Version aus dem Footer
-- **Entfernt**: Nicht benötigte Spalten aus der MySQL-Benutzer-Tabelle entfernt
+### Installer (`install/`)
+- MySQL-Benutzername: Limit von `{4,16}` auf `{1,32}` erhöht (MySQL/MariaDB Standard)
+- HTML `maxlength="16"` → `maxlength="32"` im Formularfeld

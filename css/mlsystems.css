@@ -1,4 +1,34 @@
 /* CSS Document */
+.btn{
+	cursor: pointer;
+}
+
+.row-fullheight{
+	height: 600px!important;
+	height: -moz-calc(100% - 168px)!important;/* Nav: 48px + Footer: 120px*/
+    height: -webkit-calc(100% - 168px)!important;/* Nav: 48px + Footer: 120px*/
+    height: calc(100% - 168px)!important;	/* Nav: 48px + Footer: 120px*/
+}
+
+.row-100{
+	height: 100%;
+}
+
+body.locked{
+	background-color: #333;
+}
+
+.round_pic{
+    width: 200px;
+    height: 200px;
+    -webkit-border-radius: 100px;
+    -moz-border-radius: 100px;
+    border-radius: 100px;
+}
+
+.big-multiple{
+  height:			250px!important;
+}
 
 .captcha-img{
 	margin-right: 10px;
@@ -14,10 +44,6 @@
 
 .box-center {
     margin: 0 auto;
-}
-
-.big-multiple{
-  height:			250px!important;
 }
 
 .carousel-inner>.item>a>img, .carousel-inner>.item>img, .img-responsive, .thumbnail a>img, .thumbnail>img {
@@ -70,6 +96,10 @@
 }
 
 /*********** Buttons ***********/
+
+.btn{
+	cursor: pointer;
+}
 
 .btn-xs,
 .btn-group-xs > .btn {
@@ -210,4 +240,62 @@
     left: 0;
     right: auto;
   }
+}
+
+/* ── Fix: SB-Admin Sidebar-Accordion Untermenü ─────────────────────────────
+   sidenav-second-level: korrekte Farben auf allen Breakpoints               */
+
+/* Textfarbe der Untermenü-Links */
+.navbar-sidenav .sidenav-second-level > li > a,
+.navbar-sidenav .sidenav-third-level > li > a {
+  color: #868e96;
+  display: block;
+  padding: 0.75em 1em 0.75em 2.75em;
+  text-decoration: none;
+}
+
+.navbar-sidenav .sidenav-second-level > li > a:hover,
+.navbar-sidenav .sidenav-second-level > li > a:focus,
+.navbar-sidenav .sidenav-third-level > li > a:hover,
+.navbar-sidenav .sidenav-third-level > li > a:focus {
+  color: #adb5bd;
+}
+
+/* Hintergrundfarbe Accordion-Panel */
+.navbar-sidenav .sidenav-second-level,
+.navbar-sidenav .sidenav-third-level {
+  background-color: #343a40;
+  list-style: none;
+  padding-left: 0;
+}
+
+/* Pfeil-Indikator für aufklappbare Menüpunkte */
+.nav-link-collapse:after {
+  float: right;
+  content: '\f107';
+  font-family: 'FontAwesome';
+}
+
+.nav-link-collapse.collapsed:after {
+  content: '\f105';
+}
+
+/* ── Fix: Scroll-to-Top Button ──────────────────────────────────────────── */
+.scroll-to-top {
+  position: fixed !important;
+  bottom: 15px !important;
+  right: 15px !important;
+  top: auto !important;
+  z-index: 1030;
+}
+
+/* ── Fix: Carousel ohne externe Bilder ──────────────────────────────────── */
+.carousel-item:nth-child(1) { background-color: #2c3e50; }
+.carousel-item:nth-child(2) { background-color: #34495e; }
+.carousel-item:nth-child(3) { background-color: #1a252f; }
+
+/* Carousel-Controls unterhalb der Navbar */
+#carouselExampleIndicators .carousel-control-prev,
+#carouselExampleIndicators .carousel-control-next {
+  top: 56px;
 }

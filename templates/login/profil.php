@@ -1,3 +1,4 @@
+<div class="content-wrapper">
 <div class="container">
 
 	<!-- Page Heading/Breadcrumbs -->
@@ -201,3 +202,4 @@
 			</div><!-- /.row -->
 		<?php } ?>
 </div><!-- /.content -->
+</div><!-- /.content-wrapper -->

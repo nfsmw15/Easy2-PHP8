@@ -1,3 +1,4 @@
+<div class="content-wrapper">
 <div class="container">
     <!-- Page header/Breadcrumbs -->
     <h1 class="mt-4 mb-3">Einstellungen</h1>
@@ -344,3 +345,4 @@
 		</div><!-- /.row -->
 	</form>
 </div><!-- /.container -->
+</div><!-- /.content-wrapper -->

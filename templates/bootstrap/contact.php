@@ -1,5 +1,5 @@
-    <!-- Page Content -->
-    <div class="container">
+<div class="content-wrapper">
+<div class="container">
 
       <!-- Page Heading/Breadcrumbs -->
       <h1 class="mt-4 mb-3">Contact
@@ -24,20 +24,20 @@
         <div class="col-lg-4 mb-4">
           <h3>Contact Details</h3>
           <p>
-            3481 Melrose Place
-            <br>Beverly Hills, CA 90210
+            Musterstraße 1
+            <br>D-12345 Musterstadt
             <br>
           </p>
           <p>
-            <abbr title="Phone">P</abbr>: (123) 456-7890
+            <abbr title="Phone">P</abbr>: +49 (0) 123 456789
           </p>
           <p>
             <abbr title="Email">E</abbr>:
-            <a href="mailto:name@example.com">name@example.com
+            <a href="mailto:info@example.com">info@example.com
             </a>
           </p>
           <p>
-            <abbr title="Hours">H</abbr>: Monday - Friday: 9:00 AM to 5:00 PM
+            <abbr title="Hours">H</abbr>: Mo–Fr: 9:00–17:00 Uhr
           </p>
         </div>
       </div>
@@ -99,3 +99,4 @@
 
     </div>
     <!-- /.container -->
+</div><!-- /.content-wrapper -->

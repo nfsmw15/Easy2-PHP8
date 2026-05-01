@@ -1,5 +1,5 @@
-    <!-- Page Content -->
-    <div class="container">
+<div class="content-wrapper">
+<div class="container">
 
       <!-- Page Heading/Breadcrumbs -->
       <h1 class="mt-4 mb-3">Portfolio 4
@@ -16,7 +16,7 @@
       <div class="row">
         <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='400'%3E%3Crect width='700' height='400' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E700x400%3C/text%3E%3C/svg%3E" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project One</a>
@@ -27,7 +27,7 @@
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='400'%3E%3Crect width='700' height='400' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E700x400%3C/text%3E%3C/svg%3E" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project Two</a>
@@ -38,7 +38,7 @@
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='400'%3E%3Crect width='700' height='400' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E700x400%3C/text%3E%3C/svg%3E" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project Three</a>
@@ -49,7 +49,7 @@
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='400'%3E%3Crect width='700' height='400' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E700x400%3C/text%3E%3C/svg%3E" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project Four</a>
@@ -60,7 +60,7 @@
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='400'%3E%3Crect width='700' height='400' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E700x400%3C/text%3E%3C/svg%3E" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project Five</a>
@@ -71,7 +71,7 @@
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='400'%3E%3Crect width='700' height='400' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E700x400%3C/text%3E%3C/svg%3E" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project Six</a>
@@ -82,7 +82,7 @@
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='400'%3E%3Crect width='700' height='400' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E700x400%3C/text%3E%3C/svg%3E" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project Seven</a>
@@ -93,7 +93,7 @@
         </div>
         <div class="col-lg-3 col-md-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='700' height='400'%3E%3Crect width='700' height='400' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E700x400%3C/text%3E%3C/svg%3E" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project Eight</a>
@@ -131,3 +131,4 @@
 
     </div>
     <!-- /.container -->
+</div><!-- /.content-wrapper -->

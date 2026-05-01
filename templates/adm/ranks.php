@@ -1,3 +1,4 @@
+<div class="content-wrapper">
 <div class="container">
     <!-- Page header/Breadcrumbs -->
     <h1 class="mt-4 mb-3">Rang <small>Verwaltung</small></h1>
@@ -225,6 +226,4 @@
 		</div><!-- /.col-md-8 -->
 	</div><!-- /.row -->
 </div>
-
-
-
+</div><!-- /.content-wrapper -->

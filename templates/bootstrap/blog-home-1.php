@@ -1,5 +1,5 @@
-    <!-- Page Content -->
-    <div class="container">
+<div class="content-wrapper">
+<div class="container">
 
       <!-- Page Heading/Breadcrumbs -->
       <h1 class="mt-4 mb-3">Blog Home One
@@ -20,7 +20,7 @@
 
           <!-- Blog Post -->
           <div class="card mb-4">
-            <img class="card-img-top" src="./system/placeholder.php?w=750&h=300" alt="Card image cap">
+            <img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='750' height='300'%3E%3Crect width='750' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E750x300%3C/text%3E%3C/svg%3E" alt="Card image cap">
             <div class="card-body">
               <h2 class="card-title">Post Title</h2>
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
@@ -34,7 +34,7 @@
 
           <!-- Blog Post -->
           <div class="card mb-4">
-            <img class="card-img-top" src="./system/placeholder.php?w=750&h=300" alt="Card image cap">
+            <img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='750' height='300'%3E%3Crect width='750' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E750x300%3C/text%3E%3C/svg%3E" alt="Card image cap">
             <div class="card-body">
               <h2 class="card-title">Post Title</h2>
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
@@ -48,7 +48,7 @@
 
           <!-- Blog Post -->
           <div class="card mb-4">
-            <img class="card-img-top" src="./system/placeholder.php?w=750&h=300" alt="Card image cap">
+            <img class="card-img-top" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='750' height='300'%3E%3Crect width='750' height='300' fill='%23dee2e6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236c757d' font-size='18' font-family='sans-serif'%3E750x300%3C/text%3E%3C/svg%3E" alt="Card image cap">
             <div class="card-body">
               <h2 class="card-title">Post Title</h2>
               <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam. Dicta expedita corporis animi vero voluptate voluptatibus possimus, veniam magni quis!</p>
@@ -138,3 +138,4 @@
 
     </div>
     <!-- /.container -->
+</div><!-- /.content-wrapper -->

@@ -1,69 +1,91 @@
-# Easy2-PHP8 — Bootstrap 4 Branch
+# EASY 2.0 Loginsystem – Dashboard (PHP 8 Port)
 
-PHP 8 fork of [EASY 2.0 Loginsystem](https://github.com/Marlight/Easy2-Modern_Business) by Marius Rasche / Marlight Systems.
+> **Branch:** `loginsystem-php8`  
+> **Basis:** EASY 2.0 Loginsystem 0.9.8.6 – Dashboard von [Marlight Systems](https://www.marlight-systems.de)  
+> **PHP 8 Port:** [nfsmw15](https://github.com/nfsmw15)
 
-> **Branches:**
-> - `main-bs3` — Bootstrap 3.3.7
-> - `main-bs4` — Bootstrap 4.6.2 (this branch)
+---
 
-## Features
+## Über dieses Projekt
 
-- Lightweight PHP login and CMS system
-- **Bootstrap 4.6.2** + Start Bootstrap Modern Business BS4 template
-- **PHPMailer 6.9.3** SMTP mail dispatch (replaces PHP `mail()`)
-- Summernote WYSIWYG editor for Impressum and Datenschutz
-- Admin panel: users, ranks, pages, settings, SMTP configuration
+Dieses Repository enthält den PHP 8.x-kompatiblen Port des **EASY 2.0 Loginsystems** in der Dashboard-Variante (SB Admin Template, Bootstrap 4).
 
-## Changes vs. original EASY 2.0
+Das Original wurde von Marius Rasche (Marlight Systems) entwickelt und war auf PHP 7.x ausgelegt. Dieser Fork macht das System kompatibel mit **PHP 8.0 – 8.4** und behebt dabei alle veralteten oder entfernten Funktionen.
 
-- `mysqli` → PDO with Exceptions
-- `mcrypt` → OpenSSL AES-256-GCM encryption
-- Session hardening: HttpOnly, Secure, SameSite=Strict
-- Security HTTP headers + CSP in `index.php`
-- `declare(strict_types=1)` in all core files
-- PHP `mail()` → PHPMailer 6.9.3 with SMTP authentication
-- Bootstrap 3 → Bootstrap 4.6.2 (navbar, cards, breadcrumbs migrated)
-- jQuery 1.11.1 → jQuery 3.7.1
-- Bootstrap bundle with Popper.js included
-- `BS_VERSION` and `EASY_VERSION` constants in `config.inc.php`
+---
 
-## Requirements
+## Voraussetzungen
 
-- PHP 8.0+
-- MySQL 5.7+ or MariaDB 10.3+
-- Apache or nginx
+| Komponente | Mindestversion |
+|---|---|
+| PHP | 8.0 |
+| MySQL / MariaDB | 5.7 / 10.3 |
+| Webserver | Apache 2.4 / Nginx |
+
+Benötigte PHP-Extensions: `pdo_mysql`, `gd`, `openssl`, `mbstring`, `session`
+
+---
 
 ## Installation
 
-1. Copy files to your web root
-2. Run the installer at `./install/`
-3. Configure SMTP in the admin panel under Settings
+1. Dateien auf den Webserver hochladen
+2. `http://deine-domain.de/install/` aufrufen
+3. Den Installer durchlaufen (Datenbankverbindung, Admin-Account)
+4. Das `install/`-Verzeichnis wird automatisch nach der Installation gelöscht
 
-## Updating an existing installation
+---
 
-```bash
-git pull origin main-bs4
-```
+## PHP 8 Änderungen gegenüber Original 0.9.8.6
 
-If updating from before v1.1.0, run in your database:
+### Entfernte / ersetzte Funktionen
 
-```sql
-INSERT INTO `PREFIX_ml_main` (`id`, `tag`, `value`) VALUES
-(19, 'smtp_host', ''), (20, 'smtp_port', '587'),
-(21, 'smtp_user', ''), (22, 'smtp_pass', ''),
-(23, 'smtp_encryption', 'tls');
-```
+| Original (PHP 7) | Ersatz (PHP 8) | Datei |
+|---|---|---|
+| `mcrypt_encrypt()` / `mcrypt_decrypt()` | `openssl_encrypt()` / `openssl_decrypt()` (AES-256-GCM) | `system/functions.inc.php` |
+| `each()` | `foreach` | `system/functions.inc.php` |
+| `(double)microtime()` + `mt_srand` | `random_int()` | `system/functions.inc.php` |
+| `encodeRand()` / `decodeRand()` (mt_rand XOR) | HMAC-SHA256 signiertes Base64-Token | `system/functions.inc.php` |
+| `return_bytes()` Switch-Fallthrough | `match`-Ausdruck | `system/functions.inc.php` |
+| `mysql_*` Funktionen | PDO mit Prepared Statements | `system/classes/database.php` |
+| `create_function()` | Anonyme Funktionen | diverses |
 
-And add to `system/config.inc.php`:
+### Sicherheitsverbesserungen
 
-```php
-define('BS_VERSION', 4);
-```
+- `declare(strict_types=1)` in allen PHP-Dateien
+- Security-HTTP-Header: `X-Content-Type-Options`, `X-Frame-Options`, `Content-Security-Policy`, `Referrer-Policy`, `Permissions-Policy`
+- Session-Härtung: `cookie_httponly`, `cookie_samesite=Strict`, `use_strict_mode`, `cookie_secure` (HTTPS-aware)
+- `display_errors=0` in Produktion
+- CSRF-Token korrekt via `htmlspecialchars()` maskiert
 
-## License
+### Asset-Änderungen
 
-Original EASY 2.0: GNU General Public License v3.0
-Copyright (C) 2018 Marius Rasche – Marlight Systems
+Das Original verwendete ein `vendor/`-Verzeichnis (nicht im Repository enthalten). Dieser Port nutzt:
 
-PHP 8 fork: GNU Affero General Public License v3.0
-Copyright (C) 2026 nfsmw15 <https://nfsmw15.de>
+- Bootstrap 4, jQuery, Font Awesome → **lokal** in `css/` und `js/`
+- Chart.js → **CDN** (`cdnjs.cloudflare.com`)
+- DataTables → **CDN** (`cdnjs.cloudflare.com`)
+- SB Admin CSS/JS (`sb-admin.css`, `sb-admin.min.js`) → **lokal** aus Original übernommen
+
+### Sonstige Fixes
+
+- Alle `placehold.it` / `unsplash.it` Bild-URLs (externe Dienste offline) → inline SVG-Platzhalter
+- Installer: MySQL-Benutzername-Limit von 16 auf 32 Zeichen erhöht
+- Menü-Templates auf SB-Admin Accordion-Stil umgestellt (kein Bootstrap-Dropdown mehr)
+- `content-wrapper` in allen Templates ergänzt (war im Original korrekt, ging beim Port verloren)
+
+---
+
+## Lizenz
+
+Das ursprüngliche EASY 2.0 Loginsystem steht unter der Lizenz von Marlight Systems – siehe `LICENSE_EASY2.md`.
+
+Die PHP 8 Modifikationen in diesem Fork stehen unter **AGPL-3.0-or-later** – siehe `LICENSE.md`.
+
+---
+
+## Credits
+
+- **Original:** Marius Rasche (Marlight Systems) – [marlight-systems.de](https://www.marlight-systems.de)
+- **PHP 8 Port:** [nfsmw15](https://github.com/nfsmw15)
+- **SB Admin Template:** [Start Bootstrap](https://startbootstrap.com) (MIT)
+- **Bootstrap 4:** [getbootstrap.com](https://getbootstrap.com) (MIT)

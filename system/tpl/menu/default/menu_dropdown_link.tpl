@@ -1,1 +1,1 @@
-<a href="[url]" class="dropdown-item[active]" target="[target]">[icon] [title]</a>
+									<li><a href="[url]" class="[active]" target="[target]">[icon] [title]</a></li>
