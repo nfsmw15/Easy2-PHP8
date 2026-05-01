@@ -7,21 +7,21 @@
         </ol>
         <div class="carousel-inner" role="listbox">
           <!-- Slide One - Set the background image for this slide in the line below -->
-          <div class="carousel-item active" style="background-image: url('http://placehold.it/1900x1080?text=EASY 2.0')">
+          <div class="carousel-item active" style="background-image: url('./system/placeholder.php?w=1900&h=1080&text=EASY+2.0')">
             <div class="carousel-caption d-none d-md-block">
               <h3>EASY 2.0 System</h3>
               <p>Das neue Loginsystem</p>
             </div>
           </div>
           <!-- Slide Two - Set the background image for this slide in the line below -->
-          <div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080?text=Version <?php echo EASY_VERSION; ?>')">
+          <div class="carousel-item" style="background-image: url('./system/placeholder.php?w=1900&h=1080&text=Version+<?php echo EASY_VERSION; ?>')">
             <div class="carousel-caption d-none d-md-block">
               <h3>Aktuelle Version</h3>
               <p>Entdecke neues...</p>
             </div>
           </div>
           <!-- Slide Three - Set the background image for this slide in the line below -->
-          <div class="carousel-item" style="background-image: url('http://placehold.it/1900x1080')">
+          <div class="carousel-item" style="background-image: url('./system/placeholder.php?w=1900&h=1080')">
             <div class="carousel-caption d-none d-md-block">
               <h3>Mehr M&ouml;glichkeiten</h3>
               <p>Viele neue Funktionen</p>
@@ -87,7 +87,7 @@
       <div class="row">
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project One</a>
@@ -98,7 +98,7 @@
         </div>
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project Two</a>
@@ -109,7 +109,7 @@
         </div>
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project Three</a>
@@ -120,7 +120,7 @@
         </div>
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project Four</a>
@@ -131,7 +131,7 @@
         </div>
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project Five</a>
@@ -142,7 +142,7 @@
         </div>
         <div class="col-lg-4 col-sm-6 portfolio-item">
           <div class="card h-100">
-            <a href="#"><img class="card-img-top" src="http://placehold.it/700x400" alt=""></a>
+            <a href="#"><img class="card-img-top" src="./system/placeholder.php?w=700&h=400" alt=""></a>
             <div class="card-body">
               <h4 class="card-title">
                 <a href="#">Project Six</a>
@@ -171,7 +171,7 @@
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis, omnis doloremque non cum id reprehenderit, quisquam totam aspernatur tempora minima unde aliquid ea culpa sunt. Reiciendis quia dolorum ducimus unde.</p>
         </div>
         <div class="col-lg-6">
-          <img class="img-fluid rounded" src="http://placehold.it/700x450" alt="">
+          <img class="img-fluid rounded" src="./system/placeholder.php?w=700&h=450" alt="">
         </div>
       </div>
       <!-- /.row -->
