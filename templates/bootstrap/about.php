@@ -16,7 +16,7 @@
       <!-- Intro Content -->
       <div class="row">
         <div class="col-lg-6">
-          <img class="img-fluid rounded mb-4" src="http://placehold.it/750x450" alt="">
+          <img class="img-fluid rounded mb-4" src="./system/placeholder.php?w=750&h=450" alt="">
         </div>
         <div class="col-lg-6">
           <h2>About Modern Business</h2>
@@ -33,7 +33,7 @@
       <div class="row">
         <div class="col-lg-4 mb-4">
           <div class="card h-100 text-center">
-            <img class="card-img-top" src="http://placehold.it/750x450" alt="">
+            <img class="card-img-top" src="./system/placeholder.php?w=750&h=450" alt="">
             <div class="card-body">
               <h4 class="card-title">Team Member</h4>
               <h6 class="card-subtitle mb-2 text-muted">Position</h6>
@@ -46,7 +46,7 @@
         </div>
         <div class="col-lg-4 mb-4">
           <div class="card h-100 text-center">
-            <img class="card-img-top" src="http://placehold.it/750x450" alt="">
+            <img class="card-img-top" src="./system/placeholder.php?w=750&h=450" alt="">
             <div class="card-body">
               <h4 class="card-title">Team Member</h4>
               <h6 class="card-subtitle mb-2 text-muted">Position</h6>
@@ -59,7 +59,7 @@
         </div>
         <div class="col-lg-4 mb-4">
           <div class="card h-100 text-center">
-            <img class="card-img-top" src="http://placehold.it/750x450" alt="">
+            <img class="card-img-top" src="./system/placeholder.php?w=750&h=450" alt="">
             <div class="card-body">
               <h4 class="card-title">Team Member</h4>
               <h6 class="card-subtitle mb-2 text-muted">Position</h6>
@@ -77,22 +77,22 @@
       <h2>Our Customers</h2>
       <div class="row">
         <div class="col-lg-2 col-sm-4 mb-4">
-          <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          <img class="img-fluid" src="./system/placeholder.php?w=500&h=300" alt="">
         </div>
         <div class="col-lg-2 col-sm-4 mb-4">
-          <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          <img class="img-fluid" src="./system/placeholder.php?w=500&h=300" alt="">
         </div>
         <div class="col-lg-2 col-sm-4 mb-4">
-          <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          <img class="img-fluid" src="./system/placeholder.php?w=500&h=300" alt="">
         </div>
         <div class="col-lg-2 col-sm-4 mb-4">
-          <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          <img class="img-fluid" src="./system/placeholder.php?w=500&h=300" alt="">
         </div>
         <div class="col-lg-2 col-sm-4 mb-4">
-          <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          <img class="img-fluid" src="./system/placeholder.php?w=500&h=300" alt="">
         </div>
         <div class="col-lg-2 col-sm-4 mb-4">
-          <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          <img class="img-fluid" src="./system/placeholder.php?w=500&h=300" alt="">
         </div>
       </div>
       <!-- /.row -->

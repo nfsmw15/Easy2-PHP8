@@ -14,7 +14,7 @@
       </ol>
 
       <!-- Image Header -->
-      <img class="img-fluid rounded mb-4" src="http://placehold.it/1200x300" alt="">
+      <img class="img-fluid rounded mb-4" src="./system/placeholder.php?w=1200&h=300" alt="">
 
       <!-- Marketing Icons Section -->
       <div class="row">
