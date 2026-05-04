@@ -16,7 +16,7 @@ if (PHP_SAPI === 'cli-server') {
  * Basis:    EASY_2.0_Loginsystem_0.9.8.6 (Dashboard) – PHP8-Port
  *
  * Änderungen gegenüber Original 0.9.8.6:
- *   - vendor/ entfernt → lokale Assets (css/, js/) + CDN für Chart.js / DataTables
+ *   - vendor/ entfernt → lokale Assets (css/, js/)
  *   - Security-HTTP-Header ergänzt
  *   - Session sicher konfiguriert (httponly, SameSite, strict mode)
  *   - display_errors deaktiviert (Produktionseinstellung)
@@ -32,8 +32,7 @@ header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: SAMEORIGIN');
 header('X-XSS-Protection: 1; mode=block');
 header('Referrer-Policy: strict-origin-when-cross-origin');
-// CSP: chart.js & DataTables von cdnjs erlaubt
-header("Content-Security-Policy: default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com 'unsafe-eval'; style-src 'self' https://cdnjs.cloudflare.com 'unsafe-inline'; img-src 'self' data:; font-src 'self' https://cdnjs.cloudflare.com");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'");
 header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
 
 // ─── Session sicher konfigurieren ────────────────────────────────────────────
@@ -118,8 +117,8 @@ $_csrfToken = htmlspecialchars((string)$loginsystem->getData('csrfToken'), ENT_Q
     <!-- ML Systems Custom CSS -->
     <link href="css/mlsystems.css" rel="stylesheet">
     <?php if ($loginsystem->login_session() === true): ?>
-    <!-- DataTables CSS (CDN) -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <!-- DataTables CSS (lokal) -->
+    <link href="css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <?php endif; ?>
 </head>
 <body class="<?php if (!$_locked && $_loggedIn) echo 'fixed-nav sticky-footer'; ?> bg-dark" id="page-top">
@@ -213,15 +212,15 @@ $_csrfToken = htmlspecialchars((string)$loginsystem->getData('csrfToken'), ENT_Q
 
 <?php if ($_loggedIn): ?>
 <?php if (empty($p) || $p === 'home' || $p === 'charts'): ?>
-<!-- Chart.js (CDN) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-<!-- DataTables (CDN) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<!-- Chart.js (lokal) -->
+<script src="js/chart.min.js"></script>
+<!-- DataTables (lokal) -->
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap4.min.js"></script>
 <?php elseif ($p === 'tables'): ?>
-<!-- DataTables (CDN) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<!-- DataTables (lokal) -->
+<script src="js/jquery.dataTables.min.js"></script>
+<script src="js/dataTables.bootstrap4.min.js"></script>
 <?php endif; ?>
 <?php endif; ?>
 
