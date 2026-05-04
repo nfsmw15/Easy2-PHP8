@@ -1,11 +1,8 @@
 # Blockt externe zugriffe
 deny from all
 
-
-
-
-
-
-
-
-
+# Ausnahme: placeholder.php darf öffentlich aufgerufen werden
+<Files "placeholder.php">
+    Order allow,deny
+    Allow from all
+</Files>
