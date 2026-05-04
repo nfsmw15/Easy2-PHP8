@@ -144,8 +144,6 @@ $sites->includeSite(true);
         <script src="js/summernote/lang/summernote-de-DE.min.js"></script>
         <script src="js/summernote-init.js"></script>
     <?php endif; ?>
-    <script>
-        $('.carousel').carousel({ interval: 5000 });
-    </script>
+    <script src="js/app.js"></script>
 </body>
 </html>
