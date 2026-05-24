@@ -1,5 +1,16 @@
 # Changelog — EASY 2.0 PHP8 Fork
 
+## [1.1.2] — 2026-05-24
+
+### Neu
+- Plugin-Loader: `system/run.user.php` lädt automatisch alle `system/plugins/*/run.php`
+- `system/classes.run.user.php` geleert — Plugin-Initialisierung liegt in der jeweiligen `run.php`
+- `system/plugins/` Verzeichnis angelegt
+- Konstante `EASY_WEBROOT` definiert (Pfad zum Webroot, nutzbar in Plugins)
+- Fehler in Plugins werden per `\Throwable`-catch isoliert — kein Plugin-Fehler zerstört die Seite
+
+---
+
 ## [1.1.1] — 2026-04-19
 
 ### Neu
