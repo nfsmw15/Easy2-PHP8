@@ -5,6 +5,34 @@ PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
 
 ---
 
+## [1.1.1] – 2026-05 – Plugin-Loader
+
+### Plugin-System (`system/`)
+- `system/run.user.php` → Plugin-Loader: lädt automatisch alle `system/plugins/*/run.php`
+- `system/classes.run.user.php` geleert — Plugin-Initialisierung liegt jetzt in der jeweiligen `run.php`
+- `system/plugins/` Verzeichnis angelegt (via `.gitkeep`)
+- Konstante `EASY_WEBROOT` definiert (Pfad zum Webroot, nutzbar in Plugins)
+
+---
+
+## [1.1.0] – 2026-05 – Asset-Lokalisierung & Bugfixes
+
+### Assets (`index.php`, `css/`, `js/`)
+- Chart.js 3.9.1 (CDN) → Chart.js 2.9.4 (lokal) — behebt `Chart.defaults.global`-Fehler in `sb-admin-charts.min.js`
+- DataTables 1.10.21 + Bootstrap4-Plugin + CSS → lokal
+- Cloudflare CDN komplett entfernt; CSP-Header angepasst
+
+### Inline-Script (`js/app.js`)
+- `$('.carousel').carousel({interval:5000})` aus inline `<script>` → `js/app.js` (CSP-Compliance)
+
+### Sicherheit (`system/.htaccess`)
+- `system/.htaccess`: `deny from all` + Ausnahme für `placeholder.php`
+
+### Platzhalter-Bilder (`system/placeholder.php`)
+- Lokaler PHP/GD-Bildgenerator ersetzt offline-Dienste `placehold.it` / `unsplash.it`
+
+---
+
 ## [1.0.0] – 2026-05 – Initiale PHP 8 Portierung
 
 ### PHP 8 Kompatibilität (`system/functions.inc.php`)
