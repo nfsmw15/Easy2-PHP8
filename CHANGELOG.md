@@ -8,6 +8,11 @@
 - `system/plugins/` Verzeichnis angelegt
 - Konstante `EASY_WEBROOT` definiert (Pfad zum Webroot, nutzbar in Plugins)
 - Fehler in Plugins werden per `\Throwable`-catch isoliert — kein Plugin-Fehler zerstört die Seite
+- `js/app.js` — Inline-Carousel-Script aus `index.php` ausgelagert (CSP-Compliance)
+
+### Bugfixes
+- `system/.htaccess` angelegt: `deny from all` + Ausnahme für `placeholder.php`
+- Gast-Rang: Site 18 (Menüverwaltung) aus den Standard-Berechtigungen entfernt (`install/sql/_ml_ranks.sql`)
 
 ---
 
