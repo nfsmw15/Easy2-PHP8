@@ -1,13 +1,10 @@
 <?php
-/******************
- *
- * Eigene Funktionen
- *
- ******************/
-
-
-
-
-
-
-
+declare(strict_types=1);
+define('EASY_WEBROOT', dirname(__DIR__));
+foreach (glob(__DIR__ . '/plugins/*/functions.php') as $plugin) {
+    try {
+        include $plugin;
+    } catch (\Throwable $e) {
+        error_log('Plugin error in ' . $plugin . ': ' . $e->getMessage());
+    }
+}
