@@ -1,5 +1,14 @@
 # Changelog — EASY 2.0 PHP8 Fork
 
+## [1.1.3] — 2026-05-24
+
+### Neu
+- `functions.user.php` → Plugin-Loader: lädt automatisch alle `system/plugins/*/functions.php`
+- `classes.run.user.php` → Plugin-Loader: lädt automatisch alle `system/plugins/*/classes.php`
+- `EASY_WEBROOT`-Konstante nach `functions.user.php` verschoben — in allen Loader-Stufen verfügbar
+
+---
+
 ## [1.1.2] — 2026-05-24
 
 ### Neu
