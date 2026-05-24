@@ -5,6 +5,13 @@ PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
 
 ---
 
+## [1.1.2] – 2026-05-24 – Bugfixes
+
+### Bugfixes
+- Gast-Rang: Site 18 (Menüverwaltung) aus den Standard-Berechtigungen entfernt (`install/sql/_ml_ranks.sql`)
+
+---
+
 ## [1.1.1] – 2026-05 – Plugin-Loader
 
 ### Plugin-System (`system/`)
@@ -12,6 +19,7 @@ PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
 - `system/classes.run.user.php` geleert — Plugin-Initialisierung liegt jetzt in der jeweiligen `run.php`
 - `system/plugins/` Verzeichnis angelegt (via `.gitkeep`)
 - Konstante `EASY_WEBROOT` definiert (Pfad zum Webroot, nutzbar in Plugins)
+- Fehler in Plugins werden per `\Throwable`-catch isoliert — kein Plugin-Fehler zerstört die Seite
 
 ---
 
