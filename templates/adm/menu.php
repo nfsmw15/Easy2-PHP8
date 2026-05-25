@@ -76,14 +76,14 @@
 								</label>
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-block btn-success"><i class="fa fa-plus"></i> Hinzuf&uuml;gen</button>
+								<button type="submit" class="btn w-100 btn-success"><i class="fa fa-plus"></i> Hinzuf&uuml;gen</button>
 							</div>
 						</form>
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'edit' && !empty($id)){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-pencil"></i> Men&uuml;punkt bearbeiten <a class="float-right btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
+					<div class="card-header"><i class="fa fa-pencil"></i> Men&uuml;punkt bearbeiten <a class="float-end btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
 					<div class="card-body">
 						<form action="?p=menu&c=edit&f=edit&id=<?php echo $id; ?>" method="post">
 							<div class="form-group">
@@ -148,28 +148,28 @@
 								</label>
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-block btn-success"><i class="fa fa-check"></i> Speichern</button>
+								<button type="submit" class="btn w-100 btn-success"><i class="fa fa-check"></i> Speichern</button>
 							</div>
 						</form>
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'remove' && !empty($id)){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-trash"></i> Men&uuml;punkt l&ouml;schen <a class="float-right btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
+					<div class="card-header"><i class="fa fa-trash"></i> Men&uuml;punkt l&ouml;schen <a class="float-end btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
 					<div class="card-body">
 						<form action="?p=menu&c=remove&f=remove&id=<?php echo $id; ?>" method="post">
 							<div class="form-group">
 								<h5>Soll der Men&uuml;punkt "<?php echo $menu->getValue('menu', 'id', $id, 'title'); ?>" wirklich gel&ouml;scht werden?</h5>
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-block btn-danger"><i class="fa fa-trash"></i> Entfernen</button>
+								<button type="submit" class="btn w-100 btn-danger"><i class="fa fa-trash"></i> Entfernen</button>
 							</div>
 						</form>
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'reset_positions'){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-eraser"></i> Men&uuml;positionen resetten <a class="float-right btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
+					<div class="card-header"><i class="fa fa-eraser"></i> Men&uuml;positionen resetten <a class="float-end btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
 					<div class="card-body">
 						<form action="?p=menu&c=reset_positions&f=reset_positions" method="post">
 							<div class="form-group">
@@ -191,14 +191,14 @@
 								<input type="password" name="passwd" maxlength="64" class="form-control" placeholder="Passwort zur Best&auml;tigung">
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-block btn-danger"><i class="fa fa-eraser"></i> Resetten</button>
+								<button type="submit" class="btn w-100 btn-danger"><i class="fa fa-eraser"></i> Resetten</button>
 							</div>
 						</form>
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'view' && !empty($id)){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-info-circle"></i> Men&uuml; Informationen <a class="float-right btn btn-sm btn-warning" href="?p=menu">zur&uuml;ck</a></div>
+					<div class="card-header"><i class="fa fa-info-circle"></i> Men&uuml; Informationen <a class="float-end btn btn-sm btn-warning" href="?p=menu">zur&uuml;ck</a></div>
 					<div class="card-body">
 						<table class="table table-bordered">
 							<tbody>
@@ -276,10 +276,10 @@
 					<div class="card-header"><i class="fa fa-bullseye"></i> Weitere Aktionen</div>
 					<div class="card-body">
 						<?php if($loginsystem->auditRight('menu_reset_pos')){ ?>
-							<a class="btn btn-block btn-danger" href="?p=menu&f=reset_positions"><i class="fa fa-eraser"></i> Positionen zur&uuml;cksetzen</a>
+							<a class="btn w-100 btn-danger" href="?p=menu&f=reset_positions"><i class="fa fa-eraser"></i> Positionen zur&uuml;cksetzen</a>
 						<?php } ?>
 						<?php if($loginsystem->auditRight('menu_fill_gaps')){ ?>
-							<a class="btn btn-block btn-warning" href="?p=menu&c=fill_gaps"><i class="fa fa-arrows-v"></i> Positionen pr&uuml;fen und beheben</a>
+							<a class="btn w-100 btn-warning" href="?p=menu&c=fill_gaps"><i class="fa fa-arrows-v"></i> Positionen pr&uuml;fen und beheben</a>
 						<?php } ?>
 					</div>
 				</div>

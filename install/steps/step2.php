@@ -46,7 +46,7 @@
                                     <div class="form-group">
                                         <a class="btn btn-default" href="index.php?p=step1">zur&uuml;ck</a>
                                         <?php if($install->condition){ ?>
-                                            <input type="submit" class="btn btn-success float-right" value="Speichern &amp; Weiter">
+                                            <input type="submit" class="btn btn-success float-end" value="Speichern &amp; Weiter">
                                         <?php } ?>
                                     </div>
                                 </form>

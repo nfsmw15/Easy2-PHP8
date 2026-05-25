@@ -15,7 +15,7 @@
                    		<input type="password" class="form-control input-lg input-special" name="locked-passwd" placeholder="Passwort" required />
                     </div>
                     <div class="login-buttons">
-                        <button type="submit" class="btn btn-success btn-block">Entsperren</button>
+                        <button type="submit" class="btn btn-success w-100">Entsperren</button>
                     </div>
                     <div class="mt-1">
 						<a href="?c=logout&csrf=<?php echo $loginsystem->getData('csrfToken'); ?>" class="text-success">Nicht <?php echo $loginsystem->getUser('fullname'); ?>?</a>

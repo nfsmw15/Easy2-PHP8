@@ -14,7 +14,7 @@
             <div class="col-sm-3">
 				<img src="<?php echo $loginsystem->getUserAvatar(); ?>" alt="avatar" class="img-responsive box-center">
 				<br>
-				<a class="btn btn-block btn-danger" href="?p=profil&f=remove_self">Konto l&ouml;schen</a>
+				<a class="btn w-100 btn-danger" href="?p=profil&f=remove_self">Konto l&ouml;schen</a>
             </div><!-- /.col-sm-3 -->
             <div class="col-sm-9 mb-2">
 				<div class="card">
@@ -179,7 +179,7 @@
 									<input type="password" name="password-actual" class="form-control" placeholder="Aktuelles Passwort" required="">
 								</div>
 								<div class="form-group">
-									<button type="submit" class="btn btn-danger btn-block">Konto wirklich l&ouml;schen</button>
+									<button type="submit" class="btn btn-danger w-100">Konto wirklich l&ouml;schen</button>
 								</div>
 							</form>
 						</div>
@@ -194,7 +194,7 @@
 							<p>Nach dem eingeben des Passwortes und absenden des Formulares, erh&auml;lst du eine E-Mail mit einem Best&auml;tigungslink. 
 								Klicke innerhalb von 14 Tagen auf diesen Link um deinen Konto zu l&ouml;schen, ansonsten verf&auml;llt der Link und der Vorgang muss wiederholt werden.
 							<br>Schaue auch in dein SPAM-Postfach nach.</p>
-							<a class="btn btn-success btn-block" href="?p=profil">Abbrechen</a>
+							<a class="btn btn-success w-100" href="?p=profil">Abbrechen</a>
 						</div>
 					</div>
 				</div><!-- /.col-sm-6 -->

@@ -64,32 +64,32 @@
           </div>
 
           <!-- Single Comment -->
-          <div class="media mb-4">
-            <img class="d-flex me-3 rounded-circle" src="./system/placeholder.php?w=50&h=50" alt="">
-            <div class="media-body">
+          <div class="d-flex mb-4">
+            <img class="flex-shrink-0 me-3 rounded-circle" src="./system/placeholder.php?w=50&h=50" alt="">
+            <div class="flex-grow-1">
               <h5 class="mt-0">Commenter Name</h5>
               Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
             </div>
           </div>
 
           <!-- Comment with nested comments -->
-          <div class="media mb-4">
-            <img class="d-flex me-3 rounded-circle" src="./system/placeholder.php?w=50&h=50" alt="">
-            <div class="media-body">
+          <div class="d-flex mb-4">
+            <img class="flex-shrink-0 me-3 rounded-circle" src="./system/placeholder.php?w=50&h=50" alt="">
+            <div class="flex-grow-1">
               <h5 class="mt-0">Commenter Name</h5>
               Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
 
-              <div class="media mt-4">
-                <img class="d-flex me-3 rounded-circle" src="./system/placeholder.php?w=50&h=50" alt="">
-                <div class="media-body">
+              <div class="d-flex mt-4">
+                <img class="flex-shrink-0 me-3 rounded-circle" src="./system/placeholder.php?w=50&h=50" alt="">
+                <div class="flex-grow-1">
                   <h5 class="mt-0">Commenter Name</h5>
                   Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
                 </div>
               </div>
 
-              <div class="media mt-4">
-                <img class="d-flex me-3 rounded-circle" src="./system/placeholder.php?w=50&h=50" alt="">
-                <div class="media-body">
+              <div class="d-flex mt-4">
+                <img class="flex-shrink-0 me-3 rounded-circle" src="./system/placeholder.php?w=50&h=50" alt="">
+                <div class="flex-grow-1">
                   <h5 class="mt-0">Commenter Name</h5>
                   Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
                 </div>
@@ -109,9 +109,7 @@
             <div class="card-body">
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Search for...">
-                <span class="input-group-btn">
-                  <button class="btn btn-secondary" type="button">Go!</button>
-                </span>
+                <button class="btn btn-secondary" type="button">Go!</button>
               </div>
             </div>
           </div>

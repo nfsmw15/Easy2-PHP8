@@ -25,7 +25,7 @@
 								<input type="text" name="pwr_captcha" maxlength="4" class="form-control captcha-field" placeholder="Code">
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-success btn-block">Passwort zur&uuml;cksetzen</button>
+								<button type="submit" class="btn btn-success w-100">Passwort zur&uuml;cksetzen</button>
 							</div>
 						</form>
 					</div>

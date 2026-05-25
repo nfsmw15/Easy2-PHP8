@@ -28,7 +28,7 @@
 													<input type="text" class="form-control" name="description" placeholder="Beschreibung" maxlength="256" value="<?php echo $_POST['description'] ?? ''; ?>">
 												</div>
 												<div class="form-group">
-													<input type="submit" value="Hinzuf&uuml;gen" class="btn btn-block btn-success">
+													<input type="submit" value="Hinzuf&uuml;gen" class="btn w-100 btn-success">
 												</div>
 											</form>
 										</div>
@@ -48,7 +48,7 @@
 													<input type="text" class="form-control" name="description" placeholder="Beschreibung" maxlength="256" value="<?php echo $_POST['description'] ?? $rules->getValue('rules', 'id', $id, 'description'); ?>">
 												</div>
 												<div class="form-group">
-													<input type="submit" value="Speichern" class="btn btn-block btn-success">
+													<input type="submit" value="Speichern" class="btn w-100 btn-success">
 												</div>
 											</form>
 										</div>
@@ -62,7 +62,7 @@
 													Soll diese Regel wirklich entfernt werden?
 												</div>
 												<div class="form-group">
-													<input type="submit" value="Entfernen" class="btn btn-block btn-danger">
+													<input type="submit" value="Entfernen" class="btn w-100 btn-danger">
 												</div>
 											</form>
 										</div>
