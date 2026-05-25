@@ -19,8 +19,18 @@
       <div class="row">
         <!-- Map Column -->
         <div class="col-lg-8 mb-4">
-          <!-- Embedded Google Map -->
-          <iframe width="100%" height="400px" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="//maps.google.com/maps?hl=en&amp;ie=UTF8&amp;ll=37.0625,-95.677068&amp;spn=56.506174,79.013672&amp;t=m&amp;z=4&amp;output=embed"></iframe>
+          <!-- OpenStreetMap (DSGVO-konform, kein Tracking) -->
+          <!-- Koordinaten anpassen: openstreetmap.org → Ort suchen → "Teilen" → "HTML einbetten" -->
+          <iframe
+            width="100%"
+            height="400px"
+            frameborder="0"
+            allowfullscreen
+            src="https://www.openstreetmap.org/export/embed.html?bbox=8.5821%2C50.0109%2C8.7821%2C50.2109&amp;layer=mapnik&amp;marker=50.1109%2C8.6821">
+          </iframe>
+          <small class="text-muted">
+            <a href="https://www.openstreetmap.org/?mlat=50.1109&amp;mlon=8.6821#map=13/50.1109/8.6821" target="_blank" rel="noopener">Größere Karte anzeigen</a>
+          </small>
         </div>
         <!-- Contact Details Column -->
         <div class="col-lg-4 mb-4">
