@@ -22,7 +22,6 @@ $db_config = [
 ];
 
 define('Prefix',       $db_config['prefix']);
-define('EASY_VERSION', '1.1.0');
 define('BS_VERSION',   4);
 
 // ─── Verschlüsselung (AES-256-GCM) ──────────────────────────────────────────
