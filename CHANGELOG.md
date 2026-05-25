@@ -11,7 +11,7 @@
 
 ### Bugfixes (CSP)
 - `userlist.php`: 4× `onClick="window.history.back();"` → `data-history-back`-Attribut (CSP-Verletzung behoben)
-- `regist.php`: Captcha-`onClick` entfernt (CSP-Verletzung behoben)
+- `regist.php`, `pw_reset.php`, `pwv.php`: Captcha-`onClick` entfernt (CSP-Verletzung behoben)
 - `app.js`: jQuery-Handler für `.captcha-img` und `[data-history-back]` ergänzt
 
 ---
