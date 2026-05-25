@@ -1883,7 +1883,7 @@ class loginsystem extends database
         $smtp_pass   = length($_POST['smtp_pass'] ?? '', 256);
         $smtp_enc    = length($_POST['smtp_encryption'] ?? 'tls', 3);
         $layout      = in_array($_POST['layout'] ?? 'navbar', ['navbar', 'dashboard']) ? ($_POST['layout'] ?? 'navbar') : 'navbar';
-        $osm_url     = length($_POST['osm_embed_url'] ?? '', 512, null, 'none');
+        $osm_url     = html_entity_decode(length($_POST['osm_embed_url'] ?? '', 512, null, 'none'), ENT_QUOTES, 'UTF-8');
         $impress	= length($_POST['impressum_info'] ?? NULL, 4096, null, "sql");
         $imp_cont	= length($_POST['impressum_content'] ?? NULL, 9999999, null, "none");
         $privacy	= length($_POST['privacy_policy'] ?? NULL, 9999999, null, "none");
