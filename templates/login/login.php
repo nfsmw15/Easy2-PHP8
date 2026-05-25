@@ -24,7 +24,7 @@
 								</small>
 							</div>
 							<div class="login-buttons">
-								<button type="submit" class="btn btn-success btn-block">Anmelden</button>
+								<button type="submit" class="btn btn-success w-100">Anmelden</button>
 							</div>
 						</form>
 					</div>

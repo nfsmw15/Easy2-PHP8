@@ -38,7 +38,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <input type="submit" value="Hinzufügen" class="btn btn-block btn-success">
+                                <input type="submit" value="Hinzufügen" class="btn w-100 btn-success">
                             </div>
                         </form>
                     </div>
@@ -89,7 +89,7 @@
                                     </div>
                             </div>
                             <div class="form-group">
-                                <input type="submit" value="Speichern" class="btn btn-block btn-success">
+                                <input type="submit" value="Speichern" class="btn w-100 btn-success">
                             </div>
                         </form>
                     </div>
@@ -114,7 +114,7 @@
                             </div>
                             <?php } ?>
                             <div class="form-group">
-                                <input type="submit" value="L&ouml;schen" class="btn btn-block btn-danger">
+                                <input type="submit" value="L&ouml;schen" class="btn w-100 btn-danger">
                             </div>
                         </form>
                     </div>

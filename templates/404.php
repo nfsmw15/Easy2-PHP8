@@ -13,11 +13,10 @@
         <li class="breadcrumb-item active">404</li>
       </ol>
 
-      <div class="jumbotron">
+      <div class="p-5 mb-4 bg-body-tertiary rounded-3">
         <h1 class="display-1">404</h1>
         <p>The page you're looking for could not be found.</p>
 	  </div>
-      <!-- /.jumbotron -->
 
     </div>
     <!-- /.container -->

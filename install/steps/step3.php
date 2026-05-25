@@ -28,7 +28,7 @@
 											<div class="col-sm-6">
 												<label for="title">Seitentitel:</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-font fa-fw"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-font fa-fw"></i></span>
 													<input type="text" name="title" require class="form-control" value="<?php echo isset($_POST['title']) ? $_POST['title'] : getMainData('site_title'); ?>" id="title" maxlength="64" placeholder="Seitentitel">
 												</div>
 											</div>
@@ -43,7 +43,7 @@
 											<div class="col-sm-6">
 												<label for="title_short">Seitentitel (kurz):</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-font fa-fw"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-font fa-fw"></i></span>
 													<input type="text" name="title_short" require class="form-control" value="<?php echo isset($_POST['title_short']) ? $_POST['title_short'] : getMainData('short_site_title'); ?>" id="title_short" maxlength="16" placeholder="Seitentitel (kurz)">
 												</div>
 											</div>
@@ -58,7 +58,7 @@
 											<div class="col-sm-6">
 												<label for="email">Administrator E-Mail:</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-envelope fa-fw"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-envelope fa-fw"></i></span>
 													<input type="email" name="email" require class="form-control" value="<?php echo isset($_POST['email']) ? $_POST['email'] : getMainData('administrator_mail'); ?>" id="email" maxlength="128" placeholder="Administrator E-Mail">
 												</div>
 											</div>
@@ -73,7 +73,7 @@
 											<div class="col-sm-6">
 												<label for="from">Absender E-Mail: (System E-Mails)</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-envelope fa-fw"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-envelope fa-fw"></i></span>
 													<input type="email" name="from" require class="form-control" value="<?php echo isset($_POST['from']) ? $_POST['from'] : getMainData('mail_sender'); ?>" id="from" maxlength="128" placeholder="Sender E-Mail">
 												</div>
 											</div>
@@ -88,7 +88,7 @@
 											<div class="col-sm-6">
 												<label for="to">Empf&auml;nger E-Mail: (Antworten auf System E-Mails)</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-envelope fa-fw"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-envelope fa-fw"></i></span>
 													<input type="email" name="to" require class="form-control" value="<?php echo isset($_POST['to']) ? $_POST['to'] : getMainData('mail_receiver'); ?>" id="to" maxlength="128" placeholder="Empf&auml;nger E-Mail">
 												</div>
 											</div>
@@ -105,7 +105,7 @@
 											<div class="col-sm-6">
 												<label for="regist_ac">Registration:</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-edit"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-edit"></i></span>
 													<?php $regist_ac = isset($_POST['regist_ac']) ? $_POST['regist_ac'] : getMainData('regist_active'); ?>
 													<select name="regist_ac" id="regist_ac" class="form-control">
 														<option <?php echo checker($regist_ac, 1, 0); ?> value="1">aktiviert</option>
@@ -124,7 +124,7 @@
 											<div class="col-sm-6">
 												<label for="reg_mode">Neu registrierte Benutzer:</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-check"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-check"></i></span>
 													<?php $reg_mode = isset($_POST['reg_mode']) ? $_POST['reg_mode'] : getMainData('user_activation_mode'); ?>
 													<select name="reg_mode" id="reg_mode" class="form-control">
 														<option <?php echo checker($reg_mode, 2, 0); ?> value="2">m&uuml;ssen durch den den Admin freigeschaltet werden</option>
@@ -144,7 +144,7 @@
 											<div class="col-sm-6">
 												<label for="pwlength">Passwort min. L&auml;nge:</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-lock"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-lock"></i></span>
 													<input type="number" class="form-control" id="pwlength" name="pwlength" placeholder="PW min. length" min="3" max="32" maxlength="2" value="<?php echo isset($_POST['password_length']) ? $_POST['password_length'] : getMainData('password_length'); ?>">
 												</div>
 											</div>
@@ -160,7 +160,7 @@
 											<div class="col-sm-6">
 												<label for="pwv_ac">Passwort vergessen Formular:</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-edit"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-edit"></i></span>
 													<?php $pwv_ac = isset($_POST['pwv_ac']) ? $_POST['pwv_ac'] : getMainData('pwv_active'); ?>
 													<select name="pwv_ac" id="pwv_ac" class="form-control">
 														<option <?php echo checker($pwv_ac, 1, 0); ?> value="1">aktiviert</option>
@@ -179,7 +179,7 @@
 											<div class="col-sm-6">
 												<label for="useradministration_share">Benutzer informieren?</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-user fa-fw"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-user fa-fw"></i></span>
 													<select class="form-control" name="useradministration_share" id="useradministration_share">
 														<?php $user_share = isset($_POST['useradministration_share']) ? $_POST['useradministration_share'] : getMainData('useradministration_share'); ?>
 														<option <?php echo checker($user_share, 1, 0); ?> value="1">Ja</option>
@@ -198,7 +198,7 @@
 											<div class="col-sm-6">
 												<label for="restore">Wiederherstellung von Benutzerdaten:</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-undo fa-fw"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-undo fa-fw"></i></span>
 													<select class="form-control" name="restore" id="restore">
 														<?php $restore = isset($_POST['restore']) ? $_POST['restore'] : getMainData('restore'); ?>
 														<option <?php echo checker($restore, 0, 0); ?> value="0">Aus</option>
@@ -222,7 +222,7 @@
 											<div class="col-sm-6">
 												<label for="cookie_lifetime">"Eingeloggt bleiben" Luftzeit (in Sekunden):</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-clock-o"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-clock-o"></i></span>
 													<input type="number" class="form-control" id="cookie_lifetime" name="cookie_lifetime" placeholder="Zeit in Sekunden" min="86400" max="9999999999999999" maxlength="16" value="<?php echo isset($_POST['cookie_lifetime']) ? $_POST['cookie_lifetime'] : getMainData('cookielifetime'); ?>">
 												</div>
 												<div id="cookietime">entspricht: <?php echo number_format(getMainData('cookielifetime') / 86400, 2, ',', '.');?> Tagen</div>
@@ -237,10 +237,10 @@
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-6">
-												<input type="reset" class="btn btn-warning btn-block" value="Abbrechen">
+												<input type="reset" class="btn btn-warning w-100" value="Abbrechen">
 											</div>
 											<div class="col-sm-6">
-												<input type="submit" class="btn btn-success btn-block" value="Speichern">
+												<input type="submit" class="btn btn-success w-100" value="Speichern">
 											</div>
 										</div>
 									</div>

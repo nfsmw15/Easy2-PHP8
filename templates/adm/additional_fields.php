@@ -147,9 +147,9 @@
 									<div class="col-sm-6">
 										<label for="regex">Regex-Code</label>
 										<div class="input-group">
-											<span class="input-group-addon">#</span>
+											<span class="input-group-text">#</span>
 											<textarea name="regex" id="regex" class="form-control" placeholder="Regex-Code"><?php echo isset($_POST['regex']) ? $_POST['regex'] : $additional_fields->getValue('fields', 'id', $id, 'regex'); ?></textarea>
-											<span class="input-group-addon">#</span>
+											<span class="input-group-text">#</span>
 										</div>
 									</div>
 									<div class="col-sm-6"><br>
@@ -209,7 +209,7 @@
 										</label>
 									</div>
 									<div class="col-sm-6">
-										<button type="submit" class="btn btn-block btn-success mt-3"><i class="fa fa-check"></i> Speichern</button>
+										<button type="submit" class="btn w-100 btn-success mt-3"><i class="fa fa-check"></i> Speichern</button>
 									</div>
 								</div><!-- /.row -->
 							</div><!-- /.form-group -->
@@ -240,7 +240,7 @@
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-6">
-										<button type="submit" class="btn btn-block btn-danger mt-3"><i class="fa fa-trash"></i> L&ouml;schen</button>
+										<button type="submit" class="btn w-100 btn-danger mt-3"><i class="fa fa-trash"></i> L&ouml;schen</button>
 									</div>
 								</div><!-- /.row -->
 							</div><!-- /.form-group -->
@@ -417,9 +417,9 @@
 									<div class="col-sm-6">
 										<label for="regex">Regex-Code</label>
 										<div class="input-group">
-											<span class="input-group-addon">#</span>
+											<span class="input-group-text">#</span>
 											<textarea name="regex" id="regex" class="form-control" placeholder="Regex-Code"><?php echo isset($_POST['regex']) ? $_POST['regex'] : ''; ?></textarea>
-											<span class="input-group-addon">#</span>
+											<span class="input-group-text">#</span>
 										</div>
 									</div>
 									<div class="col-sm-6"><br>
@@ -479,7 +479,7 @@
 										</label>
 									</div>
 									<div class="col-sm-6">
-										<button type="submit" class="btn btn-block btn-success mt-3"><i class="fa fa-plus"></i> Anlegen</button>
+										<button type="submit" class="btn w-100 btn-success mt-3"><i class="fa fa-plus"></i> Anlegen</button>
 									</div>
 								</div><!-- /.row -->
 							</div><!-- /.form-group -->

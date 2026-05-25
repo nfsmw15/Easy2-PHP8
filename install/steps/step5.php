@@ -42,7 +42,7 @@
 											<div class="col-sm-6">
 												<label for="company">Firma:</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-building fa-fw"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-building fa-fw"></i></span>
 													<input type="text" name="company" class="form-control" id="company" maxlength="64" placeholder="Firma">
 												</div>
 											</div>
@@ -57,7 +57,7 @@
 											<div class="col-sm-6">
 												<label for="name">Vollst&auml;ndiger Name:</label>
 												<div class="form-group input-group">
-													<span class="input-group-addon"><i class="fa fa-fw fa-font fa-fw"></i></span>
+													<span class="input-group-text"><i class="fa fa-fw fa-font fa-fw"></i></span>
 													<input type="text" name="name" require class="form-control" id="name" maxlength="16" placeholder="Vor-/ Nachname">
 												</div>
 											</div>
@@ -114,7 +114,7 @@
 									<div class="form-group">
 										<div class="row">
 											<div class="col-sm-6">
-												<input type="submit" class="btn btn-success btn-block" value="Weiter">
+												<input type="submit" class="btn btn-success w-100" value="Weiter">
 											</div>
 										</div>
 									</div>

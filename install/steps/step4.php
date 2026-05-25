@@ -46,13 +46,13 @@
 										</div>
                                         <div class="form-group">
                                             <a class="btn btn-default" href="index.php?p=step3">zur&uuml;ck</a>
-                                            <input type="submit" class="btn btn-success float-right" value="Anlegen &amp; Weiter">
+                                            <input type="submit" class="btn btn-success float-end" value="Anlegen &amp; Weiter">
                                         </div>
                                     </form>
                                 <?php } else { ?>
                                 	<p>Es existiert bereits ein Account. Bitte fahre mit dem n&auml;chsten Schritt fort.</p>
 									<a class="btn btn-default" href="index.php?p=step3">zur&uuml;ck</a>
-									<a class="btn btn-success float-right" href="index.php?p=step5">Weiter</a>
+									<a class="btn btn-success float-end" href="index.php?p=step5">Weiter</a>
                                 <?php } ?>
                        		</div>
                         </div>
