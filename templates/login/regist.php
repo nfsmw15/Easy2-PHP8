@@ -52,7 +52,6 @@
                                 <div><label>Sicherheitscode*:</label></div>
                                 <div class="form-group">
                                     <img class="captcha-img" src="./?captcha=img"
-                                         onClick="this.src = './?captcha=img&generate=' + Math.random()"
                                          title="Klicke um neuen Code zu erhalten">
                                     <input type="text" name="regist-captcha" maxlength="4"
                                            class="form-control captcha-field" placeholder="Code" required>
