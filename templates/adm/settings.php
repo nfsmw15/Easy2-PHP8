@@ -14,7 +14,31 @@
 					<a class="btn btn-primary float-end" href="?p=additional_fields"><i class="fa fa-cog"></i> Zusatzfelder verwalten</a>
 				</div>
            		<div class="card mt-3">
-               		<div class="card-header"><i class="fa fa-cogs"></i> Einstellungen <span class="float-right">Version: <?php echo EASY_VERSION; ?></span></div>
+               		<div class="card-header d-flex justify-content-between align-items-center">
+               			<span><i class="fa fa-cogs"></i> Einstellungen</span>
+               			<span><?php
+               				$_gh_version = '';
+               				$_gh_cache_key = 'easy2_gh_version';
+               				if (!empty($_SESSION[$_gh_cache_key . '_time']) && (time() - $_SESSION[$_gh_cache_key . '_time']) < 3600) {
+               					$_gh_version = $_SESSION[$_gh_cache_key] ?? '';
+               				} else {
+               					$_gh_ctx = stream_context_create(['http' => ['header' => "User-Agent: Easy2-PHP8\r\n", 'timeout' => 3]]);
+               					$_gh_json = @file_get_contents('https://api.github.com/repos/nfsmw15/Easy2-PHP8/releases/latest', false, $_gh_ctx);
+               					if ($_gh_json !== false) {
+               						$_gh_data = json_decode($_gh_json, true);
+               						$_gh_version = ltrim($_gh_data['tag_name'] ?? '', 'v');
+               						$_SESSION[$_gh_cache_key] = $_gh_version;
+               						$_SESSION[$_gh_cache_key . '_time'] = time();
+               					}
+               				}
+               				echo 'Version: <strong>' . htmlspecialchars(EASY_VERSION) . '</strong>';
+               				if ($_gh_version !== '' && $_gh_version !== EASY_VERSION) {
+               					echo ' <a href="https://github.com/nfsmw15/Easy2-PHP8/releases" target="_blank" class="badge bg-warning text-dark ms-1"><i class="fa fa-arrow-up"></i> ' . htmlspecialchars($_gh_version) . ' verfügbar</a>';
+               				} elseif ($_gh_version !== '') {
+               					echo ' <span class="badge bg-success ms-1"><i class="fa fa-check"></i> aktuell</span>';
+               				}
+               			?></span>
+               		</div>
 					<div class="card-body">
 						<div class="form-group">
 							<div class="row">
