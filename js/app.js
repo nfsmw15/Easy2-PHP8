@@ -3,6 +3,22 @@ document.addEventListener('DOMContentLoaded', function () {
         new bootstrap.Carousel(el, { interval: 5000 });
     });
 
+    // Captcha refresh on click
+    document.querySelectorAll('.captcha-img').forEach(function (img) {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', function () {
+            this.src = '?captcha=img&generate=' + Math.random();
+        });
+    });
+
+    // History back buttons
+    document.querySelectorAll('[data-history-back]').forEach(function (el) {
+        el.addEventListener('click', function (e) {
+            e.preventDefault();
+            window.history.back();
+        });
+    });
+
     // Dark Mode Toggle
     var toggle = document.getElementById('theme-toggle');
     var icon   = document.getElementById('theme-icon');
