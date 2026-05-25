@@ -10,6 +10,16 @@
 - `install/index.php`: Font-Awesome-Pfad auf FA 7.2.0-Struktur aktualisiert
 - Portfolio-Templates: `sr-only` → `visually-hidden` (BS5-konforme Accessibility-Klasse)
 
+### Bootstrap 5 Kompatibilität (vollständige Bereinigung)
+- `btn-block` → `w-100` in allen Templates und Installer-Schritten (Klasse in BS5 entfernt)
+- `input-group-addon` → `input-group-text` in `settings.php`, `additional_fields.php`, `step3.php`, `step5.php`
+- `float-right` → `float-end` in `menu.php`, `sites.php`, `step2.php`, `step4.php`
+- `input-group-btn`-Wrapper entfernt — Buttons liegen direkt im `input-group` (BS5-konform)
+- `jumbotron` → `p-5 bg-body-tertiary rounded-3` in `404.php` (Klasse in BS5 entfernt)
+- `media` / `media-body` → `d-flex` / `flex-shrink-0` / `flex-grow-1` in `blog-post.php` (Komponente in BS5 entfernt)
+- `data-dismiss` → `data-bs-dismiss`, `class="close"` → `class="btn-close"` in `install/index.php`
+- `data-parent` → `data-bs-parent` in `faq.php` (Accordion)
+
 ---
 
 ## [1.2.0] — 2026-05-25
