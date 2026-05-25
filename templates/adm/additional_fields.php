@@ -1,12 +1,14 @@
 <div class="container">
     <!-- Page header/Breadcrumbs -->
     <h1 class="mt-4 mb-3">Zusatzfelder</h1>
-    <ol class="breadcrumb">
+    <div class="bg-body-tertiary rounded-2 px-3 py-2 mb-3">
+<ol class="breadcrumb mb-0">
     	<li class="breadcrumb-item"><a href="?">&Uuml;bersicht</a></li>
   		<li class="breadcrumb-item">Verwaltung</li>
   		<li class="breadcrumb-item"><a href="?p=settings">Einstellungen</a></li>
   		<li class="breadcrumb-item active">Zusatzfelder verwalten</li>
     </ol>
+</div>
     <?php echo $error; ?>
 	<div class="row">
 		<div class="col-sm-12 mb-4">

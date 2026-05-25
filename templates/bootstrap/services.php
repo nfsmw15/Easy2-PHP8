@@ -6,12 +6,14 @@
         <small>Subheading</small>
       </h1>
 
-      <ol class="breadcrumb">
+      <div class="bg-body-tertiary rounded-2 px-3 py-2 mb-3">
+<ol class="breadcrumb mb-0">
         <li class="breadcrumb-item">
           <a href="?">Home</a>
         </li>
         <li class="breadcrumb-item active">Services</li>
       </ol>
+</div>
 
       <!-- Image Header -->
       <img class="img-fluid rounded mb-4" src="./system/placeholder.php?w=1200&h=300" alt="">

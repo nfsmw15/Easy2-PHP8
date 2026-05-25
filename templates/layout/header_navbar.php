@@ -8,6 +8,9 @@
             <ul class="navbar-nav ms-auto">
                 <?php echo $menu->getMenu(); ?>
             </ul>
+            <button class="btn btn-link nav-link text-white ms-2 px-2" id="theme-toggle" type="button" title="Dark Mode umschalten" aria-label="Dark Mode umschalten">
+                <i class="fa fa-moon" id="theme-icon"></i>
+            </button>
         </div>
     </div>
 </nav>

@@ -96,6 +96,7 @@ $_layout = in_array($loginsystem->getMainData('layout'), ['navbar', 'dashboard']
     <meta name="description" content="">
     <meta name="author" content="">
     <title><?php echo htmlspecialchars((string)$sites->getSiteName(), ENT_QUOTES, 'UTF-8'); ?></title>
+    <script>(function(){var t=localStorage.getItem('easy2_theme')||'light';document.documentElement.setAttribute('data-bs-theme',t);})();</script>
     <link rel="shortcut icon" href="favicon.ico">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/all.min.css" rel="stylesheet">

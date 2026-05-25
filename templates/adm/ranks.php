@@ -1,11 +1,13 @@
 <div class="container">
     <!-- Page header/Breadcrumbs -->
     <h1 class="mt-4 mb-3">Rang <small>Verwaltung</small></h1>
-    <ol class="breadcrumb">
+    <div class="bg-body-tertiary rounded-2 px-3 py-2 mb-3">
+<ol class="breadcrumb mb-0">
     	<li class="breadcrumb-item"><a href="?">&Uuml;bersicht</a></li>
   		<li class="breadcrumb-item">Verwaltung</li>
   		<li class="breadcrumb-item active">Rangverwaltung</li>
     </ol>
+</div>
 
 	<?php echo $error; ?>
 	<div class="row mb-4">

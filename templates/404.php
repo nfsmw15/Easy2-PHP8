@@ -6,12 +6,14 @@
         <small>Page Not Found</small>
       </h1>
 
-      <ol class="breadcrumb">
+      <div class="bg-body-tertiary rounded-2 px-3 py-2 mb-3">
+<ol class="breadcrumb mb-0">
         <li class="breadcrumb-item">
           <a href="index.php">Home</a>
         </li>
         <li class="breadcrumb-item active">404</li>
       </ol>
+</div>
 
       <div class="p-5 mb-4 bg-body-tertiary rounded-3">
         <h1 class="display-1">404</h1>
