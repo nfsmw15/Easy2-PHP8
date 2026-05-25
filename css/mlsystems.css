@@ -77,3 +77,54 @@ body.locked {
 .text-bold {
     font-weight: bold;
 }
+
+/* ── Dashboard Layout ──────────────────────────────────────────── */
+body.layout-dashboard {
+    padding-top: 0;
+}
+
+.layout-dashboard .sidebar {
+    height: 100vh;
+    position: sticky;
+    top: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-top: 0.5rem;
+    padding-bottom: 3rem;
+}
+
+.layout-dashboard .sidebar .nav-link {
+    color: rgba(255, 255, 255, .75);
+    padding: .5rem 1rem;
+    font-size: .9rem;
+}
+
+.layout-dashboard .sidebar .nav-link:hover,
+.layout-dashboard .sidebar .nav-link.active {
+    color: #fff;
+}
+
+.layout-dashboard .sidebar .nav-link i {
+    width: 1.2em;
+}
+
+.layout-dashboard .sidebar-submenu .nav-link {
+    padding: .35rem .75rem;
+    font-size: .85rem;
+    color: rgba(255, 255, 255, .55);
+}
+
+.layout-dashboard .sidebar-submenu .nav-link:hover,
+.layout-dashboard .sidebar-submenu .nav-link.active {
+    color: #fff;
+}
+
+.layout-dashboard .sidebar-footer {
+    position: sticky;
+    bottom: 0;
+    background: #212529;
+}
+
+.layout-dashboard main {
+    min-height: calc(100vh - 48px);
+}
