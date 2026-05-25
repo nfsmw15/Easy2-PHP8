@@ -31,11 +31,25 @@ INSERT INTO `[prefix]_ml_sites` (`id`, `filename`, `dir`, `title`, `start_site`,
 (18, 'menu', 'adm/', 'Menüverwaltung', 0, 0, 0, 'php', 0),
 (19, 'additional_fields', 'adm/', 'Zusatzfelder', 0, 0, 0, 'php', 0),
 (20, 'pw_reset', 'login/', 'Passwort zurücksetzen', 0, 0, 0, 'php', 0),
-(21, 'privacy_policy', '', 'Datenschutz', 0, 0, 0, 'php', 0);
+(21, 'privacy_policy', '', 'Datenschutz', 0, 0, 0, 'php', 0),
+(22, 'about', 'bootstrap/', 'Über uns', 0, 0, 0, 'php', 0),
+(23, 'blog-home-1', 'bootstrap/', 'Blog (1-spaltig)', 0, 0, 0, 'php', 0),
+(24, 'blog-home-2', 'bootstrap/', 'Blog (2-spaltig)', 0, 0, 0, 'php', 0),
+(25, 'blog-post', 'bootstrap/', 'Blog-Artikel', 0, 0, 0, 'php', 0),
+(26, 'faq', 'bootstrap/', 'FAQ', 0, 0, 0, 'php', 0),
+(27, 'full-width', 'bootstrap/', 'Vollbreite', 0, 0, 0, 'php', 0),
+(28, 'portfolio-1-col', 'bootstrap/', 'Portfolio (1-spaltig)', 0, 0, 0, 'php', 0),
+(29, 'portfolio-2-col', 'bootstrap/', 'Portfolio (2-spaltig)', 0, 0, 0, 'php', 0),
+(30, 'portfolio-3-col', 'bootstrap/', 'Portfolio (3-spaltig)', 0, 0, 0, 'php', 0),
+(31, 'portfolio-4-col', 'bootstrap/', 'Portfolio (4-spaltig)', 0, 0, 0, 'php', 0),
+(32, 'portfolio-item', 'bootstrap/', 'Portfolio-Detail', 0, 0, 0, 'php', 0),
+(33, 'pricing', 'bootstrap/', 'Preise', 0, 0, 0, 'php', 0),
+(34, 'services', 'bootstrap/', 'Leistungen', 0, 0, 0, 'php', 0),
+(35, 'sidebar', 'bootstrap/', 'Sidebar-Seite', 0, 0, 0, 'php', 0);
 
 ALTER TABLE `[prefix]_ml_sites`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `[prefix]_ml_sites`
-  MODIFY `id` bigint(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 COMMIT;
