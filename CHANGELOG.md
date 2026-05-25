@@ -1,5 +1,17 @@
 # Changelog — EASY 2.0 PHP8 Fork (Bootstrap 5)
 
+## [1.2.1] — 2026-05-25
+
+### Verbesserungen
+- Font Awesome **4.5.0 → 7.2.0 Free** (webfonts-only, kein less/scss mehr)
+  - `v4-shims.min.css` eingebunden — alle bestehenden `fa fa-*` Klassen bleiben kompatibel
+  - `v4-compatibility.woff2` enthält die Glyphen für den Shim
+- `home.php`: Outdated Features-Liste (Bootstrap v4, jQuery) durch EASY 2.0 / BS5-Beschreibung ersetzt
+- `install/index.php`: Font-Awesome-Pfad auf FA 7.2.0-Struktur aktualisiert
+- Portfolio-Templates: `sr-only` → `visually-hidden` (BS5-konforme Accessibility-Klasse)
+
+---
+
 ## [1.2.0] — 2026-05-25
 
 ### Bootstrap 5 Migration (main-bs5)
