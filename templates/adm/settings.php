@@ -9,10 +9,8 @@
                 <li>
                     <a href="./">&Uuml;bersicht</a>
                 </li>
-                <li class="active">Verwaltung</li>
-                <li>
-                    <a href="./?p=settings">Einstellungen</a>
-                </li>
+                <li>Verwaltung</li>
+                <li class="active">Einstellungen</li>
             </ol>
         </div>
     </div>

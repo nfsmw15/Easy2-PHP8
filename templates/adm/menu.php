@@ -10,10 +10,8 @@
                 <li>
                     <a href="./">&Uuml;bersicht</a>
                 </li>
-                <li class="active">Verwaltung</li>
-                <li>
-                    <a href="./?p=menu">Men&uuml; verwalten</a>
-                </li>
+                <li>Verwaltung</li>
+                <li class="active">Men&uuml; verwalten</li>
             </ol>
         </div>
     </div>

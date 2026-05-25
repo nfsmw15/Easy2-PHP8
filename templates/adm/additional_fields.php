@@ -9,13 +9,11 @@
                 <li>
                     <a href="./">&Uuml;bersicht</a>
                 </li>
-                <li class="active">Verwaltung</li>
+                <li>Verwaltung</li>
                 <li>
                     <a href="./?p=settings">Einstellungen</a>
                 </li>
-                <li>
-                    <a href="./?p=additional_fields">Zusatzfelder verwalten</a>
-                </li>
+                <li class="active">Zusatzfelder verwalten</li>
             </ol>
         </div>
     </div>

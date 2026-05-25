@@ -10,10 +10,8 @@
                 <li>
                     <a href="./">&Uuml;bersicht</a>
                 </li>
-                <li class="active">Verwaltung</li>
-                <li>
-                    <a href="./?p=userlist">Benutzer Verwaltung</a>
-                </li>
+                <li>Verwaltung</li>
+                <li class="active">Benutzer Verwaltung</li>
             </ol>
         </div>
     </div>
