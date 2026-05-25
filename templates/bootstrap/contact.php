@@ -20,17 +20,24 @@
         <!-- Map Column -->
         <div class="col-lg-8 mb-4">
           <!-- OpenStreetMap (DSGVO-konform, kein Tracking) -->
-          <!-- Koordinaten anpassen: openstreetmap.org → Ort suchen → "Teilen" → "HTML einbetten" -->
+          <!-- URL wird in ?p=settings unter "Karte" konfiguriert -->
+          <?php
+            $osm_url = (string)$loginsystem->getMainData('osm_embed_url');
+            if (!empty($osm_url) && str_starts_with($osm_url, 'https://www.openstreetmap.org/')):
+          ?>
           <iframe
             width="100%"
             height="400px"
             frameborder="0"
             allowfullscreen
-            src="https://www.openstreetmap.org/export/embed.html?bbox=8.5821%2C50.0109%2C8.7821%2C50.2109&amp;layer=mapnik&amp;marker=50.1109%2C8.6821">
+            src="<?php echo htmlspecialchars($osm_url); ?>">
           </iframe>
           <small class="text-muted">
-            <a href="https://www.openstreetmap.org/?mlat=50.1109&amp;mlon=8.6821#map=13/50.1109/8.6821" target="_blank" rel="noopener">Größere Karte anzeigen</a>
+            <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">Größere Karte anzeigen</a>
           </small>
+          <?php else: ?>
+          <div class="alert alert-info">Keine Karte konfiguriert. Bitte die OSM-URL in den <a href="?p=settings">Einstellungen</a> hinterlegen.</div>
+          <?php endif; ?>
         </div>
         <!-- Contact Details Column -->
         <div class="col-lg-4 mb-4">

@@ -374,6 +374,25 @@
 							</div>
 						</div>
 						<hr>
+						<h4>Karte (Kontaktseite)</h4>
+						<hr>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-6">
+									<label for="osm_embed_url">OpenStreetMap Embed-URL:</label>
+									<input type="url" class="form-control" id="osm_embed_url" name="osm_embed_url"
+										maxlength="512"
+										placeholder="https://www.openstreetmap.org/export/embed.html?..."
+										value="<?php echo isset($_POST['osm_embed_url']) ? htmlspecialchars($_POST['osm_embed_url']) : htmlspecialchars((string)$loginsystem->getMainData('osm_embed_url')); ?>">
+								</div>
+								<div class="col-sm-6"><br>
+									URL aus dem OpenStreetMap-Share-Dialog. Auf
+									<a href="https://www.openstreetmap.org" target="_blank" rel="noopener">openstreetmap.org</a>
+									den Ort suchen → rechts auf <strong>„Teilen"</strong> klicken → <strong>„HTML einbetten"</strong> → die URL aus dem <code>src=""</code> des iframes kopieren.
+								</div>
+							</div>
+						</div>
+						<hr>
 						<div class="form-group">
                             <div class="row">
 								<div class="col-sm-6">

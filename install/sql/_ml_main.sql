@@ -30,11 +30,12 @@ INSERT INTO `[prefix]_ml_main` (`id`, `tag`, `value`) VALUES
 (21, 'smtp_user', ''),
 (22, 'smtp_pass', ''),
 (23, 'smtp_encryption', 'tls'),
-(24, 'layout', 'navbar');
+(24, 'layout', 'navbar'),
+(25, 'osm_embed_url', 'https://www.openstreetmap.org/export/embed.html?bbox=8.5821%2C50.0109%2C8.7821%2C50.2109&layer=mapnik&marker=50.1109%2C8.6821');
 
 ALTER TABLE `[prefix]_ml_main`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `[prefix]_ml_main`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 COMMIT;
