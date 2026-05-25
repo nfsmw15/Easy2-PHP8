@@ -1,5 +1,25 @@
 # Changelog — EASY 2.0 PHP8 Fork (Bootstrap 5)
 
+## [1.2.2] — 2026-05-26
+
+### Neu
+- **Dark Mode**: Native Bootstrap 5.3 `data-bs-theme`-Umschaltung; Präferenz in Cookie gespeichert (seitenübergreifend persistent)
+- **Breadcrumb**: BS5.3-konformer `bg-body-tertiary`-Wrapper in allen 26 Templates ergänzt
+- `contact.php`: Google Maps durch **OpenStreetMap** ersetzt (DSGVO-konform, kein Tracking, kein Consent-Banner nötig)
+- `settings.php`: OSM Embed-URL im Admin-Bereich konfigurierbar (`?p=settings` → "Karte")
+- `loginsystem.php`: `osm_embed_url` wird gespeichert; `html_entity_decode()` normalisiert `&amp;` → `&` vor DB-Speicherung (OSM Share-Dialog liefert HTML-kodierte URLs)
+- `install/sql/_ml_main.sql`: `osm_embed_url` als Standardwert hinterlegt
+- `header_navbar.php`: Dark-Mode-Toggle-Button in Navbar
+
+### Bugfixes (CSP)
+- `index.php`: Inline-Script für Dark Mode → PHP-Cookie-Auslesen server-seitig (CSP blockiert Inline-Scripts in Firefox)
+- `index.php`: `frame-src https://www.openstreetmap.org` in Content-Security-Policy ergänzt (OSM-Iframe)
+- `userlist.php`: 4× `onClick="window.history.back();"` → `data-history-back`-Attribut
+- `contact.php`, `regist.php`, `pwv.php`, `pw_reset.php`: Captcha-`onClick` entfernt
+- `app.js`: Vanilla-JS-Handler für `.captcha-img`, `[data-history-back]` und Dark-Mode-Toggle
+
+---
+
 ## [1.2.1] — 2026-05-25
 
 ### Verbesserungen
