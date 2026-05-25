@@ -11,7 +11,7 @@
 		<div class="row mb-4">
 			<div class="col-sm-12 mb-2">
 				<div class="clearfix">
-					<a class="btn btn-primary float-right" href="?p=additional_fields"><i class="fa fa-cog"></i> Zusatzfelder verwalten</a>
+					<a class="btn btn-primary float-end" href="?p=additional_fields"><i class="fa fa-cog"></i> Zusatzfelder verwalten</a>
 				</div>
            		<div class="card mt-3">
                		<div class="card-header"><i class="fa fa-cogs"></i> Einstellungen <span class="float-right">Version: <?php echo EASY_VERSION; ?></span></div>

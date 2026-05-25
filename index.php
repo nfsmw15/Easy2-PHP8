@@ -89,18 +89,16 @@ $sites->includeSite(true);
 <html lang="de">
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
     <title><?php echo htmlspecialchars((string)$sites->getSiteName(), ENT_QUOTES, 'UTF-8'); ?></title>
     <link rel="shortcut icon" href="favicon.ico">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/modern-business.css" rel="stylesheet">
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
     <link href="css/mlsystems.css" rel="stylesheet">
-    <?php if (!empty($p) && $p === 'settings' || $p === 'news_add'): ?>
-        <link href="css/summernote-bs4.min.css" rel="stylesheet">
+    <?php if (!empty($p) && ($p === 'settings' || $p === 'news_add')): ?>
+        <link href="css/summernote-bs5.min.css" rel="stylesheet">
     <?php endif; ?>
 </head>
 <body <?php if ($loginsystem->is_locked()) echo 'class="locked"'; ?>>
@@ -109,11 +107,11 @@ $sites->includeSite(true);
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="./"><?php echo htmlspecialchars((string)$loginsystem->getMainData('site_title'), ENT_QUOTES, 'UTF-8'); ?></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="bs-navbar">
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav ms-auto">
                     <?php echo $menu->getMenu(); ?>
                 </ul>
             </div>
@@ -137,10 +135,10 @@ $sites->includeSite(true);
     <?php require_once './templates/login/locked.php'; ?>
 <?php endif; ?>
 
-    <script src="js/jquery.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <?php if (!empty($p) && $p === 'settings' || $p === 'news_add'): ?>
-        <script src="js/summernote/summernote-bs4.min.js"></script>
+    <?php if (!empty($p) && ($p === 'settings' || $p === 'news_add')): ?>
+        <script src="js/jquery.js"></script>
+        <script src="js/summernote/summernote-bs5.min.js"></script>
         <script src="js/summernote/lang/summernote-de-DE.min.js"></script>
         <script src="js/summernote-init.js"></script>
     <?php endif; ?>
