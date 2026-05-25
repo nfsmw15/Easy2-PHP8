@@ -3,9 +3,9 @@
     <h1 class="mt-4 mb-3">Zusatzfelder</h1>
     <ol class="breadcrumb">
     	<li class="breadcrumb-item"><a href="?">&Uuml;bersicht</a></li>
-  		<li class="breadcrumb-item active">Verwaltung</li>
+  		<li class="breadcrumb-item">Verwaltung</li>
   		<li class="breadcrumb-item"><a href="?p=settings">Einstellungen</a></li>
-  		<li class="breadcrumb-item"><a href="?p=additional_fields">Zusatzfelder verwalten</a></li>
+  		<li class="breadcrumb-item active">Zusatzfelder verwalten</li>
     </ol>
     <?php echo $error; ?>
 	<div class="row">
