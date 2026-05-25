@@ -98,7 +98,8 @@ $_layout = in_array($loginsystem->getMainData('layout'), ['navbar', 'dashboard']
     <title><?php echo htmlspecialchars((string)$sites->getSiteName(), ENT_QUOTES, 'UTF-8'); ?></title>
     <link rel="shortcut icon" href="favicon.ico">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="font-awesome/css/all.min.css" rel="stylesheet">
+    <link href="font-awesome/css/v4-shims.min.css" rel="stylesheet">
     <link href="css/mlsystems.css" rel="stylesheet">
     <?php if (!empty($p) && ($p === 'settings' || $p === 'news_add')): ?>
         <link href="css/summernote-bs5.min.css" rel="stylesheet">

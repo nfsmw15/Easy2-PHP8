@@ -157,18 +157,16 @@
       <!-- Features Section -->
       <div class="row">
         <div class="col-lg-6">
-          <h2>Modern Business Features</h2>
-          <p>The Modern Business template by Start Bootstrap includes:</p>
+          <h2>EASY 2.0 Features</h2>
+          <p>EASY 2.0 Loginsystem basiert auf:</p>
           <ul>
-            <li>
-              <strong>Bootstrap v4</strong>
-            </li>
-            <li>jQuery</li>
-            <li>Font Awesome</li>
-            <li>Working contact form with validation</li>
-            <li>Unstyled page elements for easy customization</li>
+            <li><strong>Bootstrap 5</strong> – jQuery-frei, modern responsive</li>
+            <li>PHP 8 mit PDO und strict_types</li>
+            <li>Font Awesome Icons</li>
+            <li>Plugin-System (functions, classes, run)</li>
+            <li>Dual-Layout: Navbar oder Dashboard (Sidebar)</li>
           </ul>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis, omnis doloremque non cum id reprehenderit, quisquam totam aspernatur tempora minima unde aliquid ea culpa sunt. Reiciendis quia dolorum ducimus unde.</p>
+          <p>EASY 2.0 bietet ein flexibles Loginsystem mit Benutzerverwaltung, Rollensystem, DSGVO-konformen Registrierungsoptionen und einfacher Erweiterbarkeit durch Plugins.</p>
         </div>
         <div class="col-lg-6">
           <img class="img-fluid rounded" src="./system/placeholder.php?w=700&h=450" alt="">
