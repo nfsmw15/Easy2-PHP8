@@ -5,6 +5,23 @@ PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
 
 ---
 
+## [1.1.4] – 2026-05-26 – OpenStreetMap & CSP-Fixes
+
+### Neu
+- `contact.php`: Google Maps durch **OpenStreetMap** ersetzt (DSGVO-konform, kein Tracking, kein Consent-Banner nötig)
+- `settings.php`: OSM Embed-URL im Admin-Bereich konfigurierbar (`?p=settings` → "Karte")
+- `loginsystem.php`: `osm_embed_url` wird gespeichert; `html_entity_decode()` normalisiert `&amp;` → `&` vor DB-Speicherung
+- `install/sql/_ml_main.sql`: `osm_embed_url` als Standardwert hinterlegt
+- `index.php`: `frame-src https://www.openstreetmap.org` in Content-Security-Policy ergänzt
+- `js/app.js`: neu erstellt — jQuery-Handler für `.captcha-img` (Refresh) und `[data-history-back]` (Browser-Back)
+- `index.php`: `app.js` nach `sb-admin.min.js` eingebunden
+
+### Bugfixes (CSP)
+- `userlist.php`: 4× `onClick="window.history.back();"` → `data-history-back`-Attribut (CSP-Verletzung behoben)
+- `regist.php`: Captcha-`onClick` entfernt (CSP-Verletzung behoben)
+
+---
+
 ## [1.1.3] – 2026-05-24 – Plugin-Loader Erweiterung
 
 ### Neu
