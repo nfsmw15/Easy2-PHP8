@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function applyTheme(theme) {
         document.documentElement.setAttribute('data-bs-theme', theme);
-        localStorage.setItem('easy2_theme', theme);
+        document.cookie = 'easy2_theme=' + theme + '; path=/; SameSite=Strict; max-age=31536000';
         if (icon) {
             icon.className = theme === 'dark' ? 'fa fa-sun' : 'fa fa-moon';
         }

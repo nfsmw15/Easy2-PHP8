@@ -89,14 +89,14 @@ $_layout = in_array($loginsystem->getMainData('layout'), ['navbar', 'dashboard']
     : 'navbar';
 ?>
 <!DOCTYPE html>
-<html lang="de">
+<?php $_bs_theme = ($_COOKIE['easy2_theme'] ?? 'light') === 'dark' ? 'dark' : 'light'; ?>
+<html lang="de" data-bs-theme="<?php echo $_bs_theme; ?>">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
     <title><?php echo htmlspecialchars((string)$sites->getSiteName(), ENT_QUOTES, 'UTF-8'); ?></title>
-    <script>(function(){var t=localStorage.getItem('easy2_theme')||'light';document.documentElement.setAttribute('data-bs-theme',t);})();</script>
     <link rel="shortcut icon" href="favicon.ico">
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/all.min.css" rel="stylesheet">
