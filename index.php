@@ -84,6 +84,9 @@ require_once './system/run.user.php';
 require_once './system/error_handling.php';
 
 $sites->includeSite(true);
+$_layout = in_array($loginsystem->getMainData('layout'), ['navbar', 'dashboard'])
+    ? $loginsystem->getMainData('layout')
+    : 'navbar';
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -101,35 +104,14 @@ $sites->includeSite(true);
         <link href="css/summernote-bs5.min.css" rel="stylesheet">
     <?php endif; ?>
 </head>
-<body <?php if ($loginsystem->is_locked()) echo 'class="locked"'; ?>>
+<body class="layout-<?php echo $_layout; ?><?php if ($loginsystem->is_locked()) echo ' locked'; ?>">
 
 <?php if (!$loginsystem->is_locked()): ?>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="./"><?php echo htmlspecialchars((string)$loginsystem->getMainData('site_title'), ENT_QUOTES, 'UTF-8'); ?></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#bs-navbar" aria-controls="bs-navbar" aria-expanded="false" aria-label="Navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="bs-navbar">
-                <ul class="navbar-nav ms-auto">
-                    <?php echo $menu->getMenu(); ?>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php include './templates/layout/header_' . $_layout . '.php'; ?>
 
     <?php $siteFile = $sites->includeSite(); if ($siteFile) include $siteFile; ?>
 
-    <div class="container">
-        <hr>
-        <footer>
-            <div class="row">
-                <div class="col-lg-12">
-                    <p>Copyright &copy; <?php echo date('Y'); ?></p>
-                </div>
-            </div>
-        </footer>
-    </div>
+    <?php include './templates/layout/footer_' . $_layout . '.php'; ?>
 
 <?php else: ?>
     <?php require_once './templates/login/locked.php'; ?>

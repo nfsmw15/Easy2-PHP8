@@ -143,6 +143,25 @@
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-6">
+										<label>Layout:</label>
+										<div class="d-flex gap-3 mt-1">
+											<div class="form-check">
+												<input class="form-check-input" type="radio" name="layout" id="layout_navbar" value="navbar" <?php echo checker(isset($_POST['layout']) ? $_POST['layout'] : $loginsystem->getMainData('layout'), 'navbar'); ?>>
+												<label class="form-check-label" for="layout_navbar"><i class="fa fa-bars"></i> Navbar (oben)</label>
+											</div>
+											<div class="form-check">
+												<input class="form-check-input" type="radio" name="layout" id="layout_dashboard" value="dashboard" <?php echo checker(isset($_POST['layout']) ? $_POST['layout'] : $loginsystem->getMainData('layout'), 'dashboard'); ?>>
+												<label class="form-check-label" for="layout_dashboard"><i class="fa fa-columns"></i> Dashboard (Sidebar)</label>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6"><br>W&auml;hle zwischen einer klassischen Navbar oben oder einem Dashboard-Layout mit Sidebar links.</div>
+								</div>
+							</div>
+							<hr>
+							<div class="form-group">
+								<div class="row">
+									<div class="col-sm-6">
 										<label for="impressum_info">Impressums Angaben:</label>
 										<div class="form-group">
 											<textarea name="impressum_info" id="impressum_info" class="form-control" rows="6"><?php echo isset($_POST['impressum_info']) ? $_POST['impressum_info'] : $loginsystem->getMainData('impressum_info'); ?></textarea>

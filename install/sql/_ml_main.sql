@@ -29,11 +29,12 @@ INSERT INTO `[prefix]_ml_main` (`id`, `tag`, `value`) VALUES
 (20, 'smtp_port', '587'),
 (21, 'smtp_user', ''),
 (22, 'smtp_pass', ''),
-(23, 'smtp_encryption', 'tls');
+(23, 'smtp_encryption', 'tls'),
+(24, 'layout', 'navbar');
 
 ALTER TABLE `[prefix]_ml_main`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `[prefix]_ml_main`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 COMMIT;
