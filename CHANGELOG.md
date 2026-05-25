@@ -1,5 +1,21 @@
 # Changelog — EASY 2.0 PHP8 Fork
 
+## [1.1.4] — 2026-05-26
+
+### Neu
+- `contact.php`: Google Maps durch **OpenStreetMap** ersetzt (DSGVO-konform, kein Tracking, kein Consent-Banner nötig)
+- `settings.php`: OSM Embed-URL im Admin-Bereich konfigurierbar (`?p=settings` → "Karte")
+- `loginsystem.php`: `osm_embed_url` wird gespeichert; `html_entity_decode()` normalisiert `&amp;` → `&` vor DB-Speicherung (OSM Share-Dialog liefert HTML-kodierte URLs)
+- `install/sql/_ml_main.sql`: `osm_embed_url` als Standardwert hinterlegt
+- `index.php`: `frame-src https://www.openstreetmap.org` in Content-Security-Policy ergänzt
+
+### Bugfixes (CSP)
+- `userlist.php`: 4× `onClick="window.history.back();"` → `data-history-back`-Attribut (CSP-Verletzung behoben)
+- `regist.php`: Captcha-`onClick` entfernt (CSP-Verletzung behoben)
+- `app.js`: jQuery-Handler für `.captcha-img` und `[data-history-back]` ergänzt
+
+---
+
 ## [1.1.3] — 2026-05-24
 
 ### Neu

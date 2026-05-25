@@ -196,7 +196,7 @@
 								echo $additional_fields->showFields(0, 'edit-', $id);
 							?>
                            <div class="form-group">
-                                <a class="btn btn-warning float-left" href="#" onClick="window.history.back();"><i class="fa fa-times"></i> Abbrechen</a>
+                                <a class="btn btn-warning float-left" href="#" data-history-back><i class="fa fa-times"></i> Abbrechen</a>
                                 <button class="btn btn-success float-right" type="submit"><i class="fa fa-floppy-o"></i> Speichern</button>
                             </div>
                         </form>
@@ -222,7 +222,7 @@
                                 <input type="password" class="form-control" name="delete-password" maxlength="64" placeholder="Passwort" required>
                             </div>
                             <div class="form-group">
-                                <a class="btn btn-success float-left" href="#" onClick="window.history.back();"><i class="fa fa-times"></i> Abbrechen</a>
+                                <a class="btn btn-success float-left" href="#" data-history-back><i class="fa fa-times"></i> Abbrechen</a>
                                 <button class="btn btn-danger float-right" type="submit"><i class="fa fa-trash"></i> L&ouml;schen</button>
                             </div>
                         </form>
@@ -248,7 +248,7 @@
                                 <input type="password" class="form-control" name="reset-password" maxlength="64" placeholder="Passwort" required>
                             </div>
                             <div class="form-group">
-                               	<a class="btn btn-success float-left" href="#" onClick="window.history.back();"><i class="fa fa-times"></i> Abbrechen</a>
+                               	<a class="btn btn-success float-left" href="#" data-history-back><i class="fa fa-times"></i> Abbrechen</a>
                                 <button class="btn btn-danger float-right" type="submit"><i class="fa fa-refresh"></i> Zur&uuml;cksetzen</button>
                             </div>
                         </form>
@@ -274,7 +274,7 @@
                                 <input type="password" class="form-control" name="reset-password" maxlength="64" placeholder="Passwort" required>
                             </div>
                             <div class="form-group">
-                                <a class="btn btn-success float-left" href="#" onClick="window.history.back();"><i class="fa fa-times"></i> Abbrechen</a>
+                                <a class="btn btn-success float-left" href="#" data-history-back><i class="fa fa-times"></i> Abbrechen</a>
                                 <button class="btn btn-danger float-right" type="submit"><i class="fa fa-eraser"></i> Entfernen</button>
                             </div>
                         </form>
