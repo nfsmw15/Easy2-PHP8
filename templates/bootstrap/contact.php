@@ -21,8 +21,25 @@
       <div class="row">
         <!-- Map Column -->
         <div class="col-lg-8 mb-4">
-          <!-- Embedded Google Map -->
-          <iframe width="100%" height="400px" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="//maps.google.com/maps?hl=en&amp;ie=UTF8&amp;ll=37.0625,-95.677068&amp;spn=56.506174,79.013672&amp;t=m&amp;z=4&amp;output=embed"></iframe>
+          <!-- OpenStreetMap (DSGVO-konform, kein Tracking) -->
+          <!-- URL wird in ?p=settings unter "Karte" konfiguriert -->
+          <?php
+            $osm_url = (string)$loginsystem->getMainData('osm_embed_url');
+            if (!empty($osm_url) && str_starts_with($osm_url, 'https://www.openstreetmap.org/')):
+          ?>
+          <iframe
+            width="100%"
+            height="400px"
+            frameborder="0"
+            allowfullscreen
+            src="<?php echo htmlspecialchars($osm_url); ?>">
+          </iframe>
+          <small class="text-muted">
+            <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener">Größere Karte anzeigen</a>
+          </small>
+          <?php else: ?>
+          <div class="alert alert-info">Keine Karte konfiguriert. Bitte die OSM-URL in den <a href="?p=settings">Einstellungen</a> hinterlegen.</div>
+          <?php endif; ?>
         </div>
         <!-- Contact Details Column -->
         <div class="col-lg-4 mb-4">
@@ -81,7 +98,7 @@
             </div>
   			<div><label>Sicherheitscode: *</label></div>
 			<div class="form-group">
-				<img class="captcha-img" src="?captcha=img" onClick="this.src = '?captcha=img&generate=' + Math.random()" title="Klicke um neuen Code zu erhalten">
+				<img class="captcha-img" src="?captcha=img" title="Klicke um neuen Code zu erhalten">
 				<input type="text" name="captcha" maxlength="4" class="form-control captcha-field" placeholder="Code">
 			</div>
 				<div class="form-group">

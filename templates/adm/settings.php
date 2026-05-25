@@ -374,6 +374,22 @@
 								</div>
 							</div>
 						</div>
+						<h4>Karte (Kontaktseite)</h4>
+						<hr>
+						<div class="form-group">
+							<div class="row">
+								<div class="col-sm-6">
+									<label for="osm_embed_url">OpenStreetMap Embed-URL:</label>
+									<input type="url" class="form-control" id="osm_embed_url" name="osm_embed_url"
+										maxlength="512"
+										placeholder="https://www.openstreetmap.org/export/embed.html?..."
+										value="<?php echo isset($_POST['osm_embed_url']) ? htmlspecialchars($_POST['osm_embed_url']) : htmlspecialchars((string)$loginsystem->getMainData('osm_embed_url')); ?>">
+								</div>
+								<div class="col-sm-6"><br>
+									URL aus dem OpenStreetMap-Share-Dialog (Reiter "HTML"). Muss mit <code>https://www.openstreetmap.org/</code> beginnen.
+								</div>
+							</div>
+						</div>
 						<hr>
 						<div class="form-group">
                             <div class="row">

@@ -1882,6 +1882,7 @@ class loginsystem extends database
         $smtp_user   = length($_POST['smtp_user'] ?? '', 128);
         $smtp_pass   = length($_POST['smtp_pass'] ?? '', 256);
         $smtp_enc    = length($_POST['smtp_encryption'] ?? 'tls', 3);
+        $osm_url     = html_entity_decode(length($_POST['osm_embed_url'] ?? '', 512, null, 'none'), ENT_QUOTES, 'UTF-8');
         $impress	= length($_POST['impressum_info'] ?? NULL, 4096, null, "sql");
         $imp_cont	= length($_POST['impressum_content'] ?? NULL, 9999999, null, "none");
         $privacy	= length($_POST['privacy_policy'] ?? NULL, 9999999, null, "none");
@@ -1945,7 +1946,8 @@ class loginsystem extends database
                 $update['smtp_user'] = $smtp_user;
                 $update['smtp_pass'] = $smtp_pass;
                 $update['smtp_encryption'] = $smtp_enc;
-                
+                $update['osm_embed_url'] = $osm_url;
+
                 foreach($update as $key => $val){
                     $sql = $this->mysql->query("Update ".Prefix."_main Set value = '$val' Where tag = '$key'");
                     if($sql === false)
