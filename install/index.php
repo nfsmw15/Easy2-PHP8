@@ -143,7 +143,8 @@ if (!empty($error)) {
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/simple-sidebar.css" rel="stylesheet">
     <link href="css/loginsystem.css" rel="stylesheet">
-    <link rel="stylesheet" href="../font-awesome/css/font-awesome.min.css" type="text/css">
+    <link rel="stylesheet" href="../font-awesome/css/all.min.css">
+    <link rel="stylesheet" href="../font-awesome/css/v4-shims.min.css">
 </head>
 <body>
 <div id="wrapper">
