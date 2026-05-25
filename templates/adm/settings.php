@@ -4,8 +4,8 @@
     <h1 class="mt-4 mb-3">Einstellungen</h1>
     <ol class="breadcrumb">
     	<li class="breadcrumb-item"><a href="?">&Uuml;bersicht</a></li>
-  		<li class="breadcrumb-item active">Verwaltung</li>
-  		<li class="breadcrumb-item"><a href="?p=settings">Einstellungen</a></li>
+  		<li class="breadcrumb-item">Verwaltung</li>
+  		<li class="breadcrumb-item active">Einstellungen</li>
     </ol>
     <?php echo $error; ?>
 	<form action="?p=settings&c=mainsave" method="post" enctype="multipart/form-data">
