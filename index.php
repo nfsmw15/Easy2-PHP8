@@ -234,6 +234,7 @@ $_csrfToken = htmlspecialchars((string)$loginsystem->getData('csrfToken'), ENT_Q
 
 <!-- SB Admin Custom JS (lokal) -->
 <script src="js/sb-admin.min.js"></script>
+<script src="js/app.js"></script>
 
 <?php if ($_loggedIn && (empty($p) || $p === 'home' || $p === 'charts')): ?>
 <script src="js/sb-admin-datatables.min.js"></script>
