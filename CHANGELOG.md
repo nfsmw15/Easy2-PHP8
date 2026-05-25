@@ -18,7 +18,7 @@ PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
 
 ### Bugfixes (CSP)
 - `userlist.php`: 4× `onClick="window.history.back();"` → `data-history-back`-Attribut (CSP-Verletzung behoben)
-- `regist.php`: Captcha-`onClick` entfernt (CSP-Verletzung behoben)
+- `regist.php`, `pw_reset.php`, `pwv.php`: Captcha-`onClick` entfernt (CSP-Verletzung behoben)
 
 ---
 
