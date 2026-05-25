@@ -57,7 +57,7 @@
 						</div>
 						<div class="card-footer">
 							<a href="?p=login" class="btn btn-primary">oder einloggen</a>
-							<button type="submit" class="btn btn-success float-right">Registrieren</button>
+							<button type="submit" class="btn btn-success float-end">Registrieren</button>
 						</div>
 					</form>
 				</div>

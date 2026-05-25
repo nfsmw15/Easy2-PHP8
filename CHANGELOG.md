@@ -1,4 +1,20 @@
-# Changelog — EASY 2.0 PHP8 Fork
+# Changelog — EASY 2.0 PHP8 Fork (Bootstrap 5)
+
+## [1.2.0] — 2026-05-25
+
+### Bootstrap 5 Migration (main-bs5)
+- Bootstrap 4.6.2 → **Bootstrap 5.3.8** (CSS + JS Bundle, kein separates Popper.js nötig)
+- jQuery entfernt — Bootstrap 5 ist Vanilla JS; jQuery bleibt nur für Summernote geladen (nur auf settings/news_add-Seiten)
+- Summernote BS4-Build → **Summernote 0.9.1 BS5-Build**
+- `modern-business.css` entfernt — durch BS5-Utilities und `mlsystems.css` ersetzt
+- `mlsystems.css` bereinigt: BS3-Dropdown-Overrides und btn-xs-Hacks entfernt (BS5 hat das nativ)
+- Navbar: `data-toggle` → `data-bs-toggle`, `data-target` → `data-bs-target`, `ml-auto` → `ms-auto`
+- Templates: BS4-Klassen migriert (`ml-*` → `ms-*`, `mr-*` → `me-*`, `float-right` → `float-end` etc.)
+- `js/app.js`: Carousel-Initialisierung von jQuery auf Vanilla JS (`bootstrap.Carousel`) umgestellt
+- `BS_VERSION`-Konstante auf `5` gesetzt
+- IE-Kompatibilitäts-Meta (`X-UA-Compatible`) entfernt (BS5 unterstützt kein IE)
+
+---
 
 ## [1.1.3] — 2026-05-24
 
