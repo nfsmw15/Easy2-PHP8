@@ -52,7 +52,7 @@ echo "System wird aktualisiert..." > index.php
 cp -r /path/to/easy2 /path/to/easy2_backup
 
 # Neue Dateien hochladen (via Git Clone oder manuell)
-git clone https://github.com/yourusername/easy2-php8.git /path/to/easy2_new
+git clone https://github.com/nfsmw15/Easy2-PHP8.git /path/to/easy2_new
 ```
 
 ### Schritt 3: Verzeichnisse & Berechtigungen
@@ -113,7 +113,7 @@ Die Installation sollte erkennen, dass die Datenbank bereits existiert und die V
 ### Option A: Benutzer müssen Passwort zurücksetzen
 Benutzer erhalten eine E-Mail zum Zurücksetzen des Passworts:
 ```
-https://ihre-domain.de/?p=password_reset
+https://ihre-domain.de/?p=pwv
 ```
 
 ### Option B: Passwörter-Batch-Migration (nur Administrator)
@@ -140,7 +140,6 @@ js/summernote-init.js            ← WYSIWYG Editor für Impressum/Datenschutz
 
 ### Entfernte/Umgestellte Dateien:
 ```
-font-awesome/     ← Jetzt über CDN oder lokal (je nach config)
 fonts/glyphicons  ← Umgezogen nach css/font/
 ```
 
@@ -245,8 +244,8 @@ Falls es Probleme gibt:
 
 1. **Fehler-Logs prüfen**:
    ```bash
-   tail -f system/error_handling.php
-   php error_log
+   tail -f /var/log/apache2/error.log   # Apache
+   tail -f /var/log/nginx/error.log     # Nginx
    ```
 
 2. **PHP-Version prüfen**:
@@ -260,7 +259,7 @@ Falls es Probleme gibt:
    php install/setup/config.php
    ```
 
-4. **GitHub Issues**: https://github.com/nfsmw15/easy2-php8/issues
+4. **GitHub Issues**: https://github.com/nfsmw15/Easy2-PHP8/issues
 
 ---
 
