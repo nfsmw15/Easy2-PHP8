@@ -308,6 +308,7 @@ class loginsystem extends database
                 if($captchaClass->check_captcha($captcha)){
                     if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
     
+                    // Kein unterschiedliches Verhalten je nachdem ob E-Mail existiert (verhindert Enumeration)
                     if(database::getAmount('user', 'email', $email) == 1){
                         $code = getCode(32, 'codes', 'code');
                         $expiry = time() + 172800;
@@ -321,15 +322,13 @@ class loginsystem extends database
                             $data["fullname"] = self::getUser('fullname', $email, 'email');
                             $data["code"] = '?p=pw_reset&a='.$code;
                             self::sendMail("password_forget.html", self::getUser('id', $email, 'email'), $data, $email);
-                            header('Location: '.$_SERVER["SCRIPT_NAME"].'?h=pwv_success');
-                            exit();
                         } else {
-                            $error = 'Fehler beim erstellen des Links zum zur&uuml;cksetzen des Passwortes! Bitte versuche es zu einem sp&auml;teren Zeitpunkt erneut. Der Administrator wurde &uuml;ber das Problem informiert.';
                             errormail('Fehler beim erstellen des Links zum zur&uuml;cksetzen des Passwortes! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()! MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
                         }
-                    } else {
-                        $error = 'Es konnte kein Konto gefunden werden!';
                     }
+                    // Immer zur Success-Seite — verhindert E-Mail-Enumeration
+                    header('Location: '.$_SERVER["SCRIPT_NAME"].'?h=pwv_success');
+                    exit();
                 } else {
                     $error = 'Du hast einen falschen Sicherheitscode eingegeben!';
                 }
@@ -2093,7 +2092,9 @@ class loginsystem extends database
         $content .= file_get_contents($tpl_dir . $footer_file);
 
         foreach ($data as $key => $val) {
-            $content = str_replace('[' . $key . ']', $val, $content);
+            // 'message' kommt bereits HTML-escaped + nl2br aus contact() — nicht doppelt encoden
+            $escaped = ($key === 'message') ? (string)$val : htmlspecialchars((string)$val, ENT_QUOTES, 'UTF-8');
+            $content = str_replace('[' . $key . ']', $escaped, $content);
         }
         $content = str_replace('[link]',      getCurrentUrl(),                          $content);
         $content = str_replace('[title]',     parent::getMainData('site_title'),        $content);

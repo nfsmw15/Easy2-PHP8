@@ -16,6 +16,8 @@ PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
 - `$error ?? ''` in `settings.php`: kein PHP-Warning mehr wenn kein Fehler vorliegt
 
 ### Sicherheit
+- **E-Mail-Enumeration in `password_forget()` behoben**: Immer Redirect auf Success-Seite, unabhängig ob E-Mail-Adresse existiert — kein Informationsleck mehr
+- **Mail-Template-Injection behoben**: `sendMail()` escaped alle `$data`-Werte per `htmlspecialchars()` bevor sie in HTML-Templates eingesetzt werden; Ausnahme: `message` (kommt bereits escaped aus `contact()`)
 - **Avatar-Upload vollständig gehärtet** (`setUserAvatar()`):
   - MIME-Check via `finfo_file()` statt browser-geliefertem `$_FILES['type']` (war spoofbar)
   - Whitelist: nur `image/jpeg`, `image/png`, `image/gif`, `image/webp` erlaubt
