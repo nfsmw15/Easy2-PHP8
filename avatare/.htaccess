@@ -1,0 +1,6 @@
+# Block execution of all scripts in this directory
+<FilesMatch ".">
+    SetHandler default-handler
+</FilesMatch>
+Options -ExecCGI -Indexes
+php_flag engine off
