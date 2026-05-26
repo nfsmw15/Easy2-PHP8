@@ -20,13 +20,13 @@
 										<div class="card-body">
 											<form action="?p=rules&c=new" method="post">
 												<div class="form-group">
-													<input type="text" class="form-control" name="name" placeholder="Regelbezeichnung" maxlength="40" value="<?php echo $_POST['name'] ?? ''; ?>">
+													<input type="text" class="form-control" name="name" placeholder="Regelbezeichnung" maxlength="40" value="<?php echo htmlspecialchars($_POST['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
 												</div>
 												<div class="form-group">
-													<input type="text" class="form-control" name="tag" placeholder="Regelname" maxlength="40" value="<?php echo $_POST['tag'] ?? ''; ?>">
+													<input type="text" class="form-control" name="tag" placeholder="Regelname" maxlength="40" value="<?php echo htmlspecialchars($_POST['tag'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
 												</div>
 												<div class="form-group">
-													<input type="text" class="form-control" name="description" placeholder="Beschreibung" maxlength="256" value="<?php echo $_POST['description'] ?? ''; ?>">
+													<input type="text" class="form-control" name="description" placeholder="Beschreibung" maxlength="256" value="<?php echo htmlspecialchars($_POST['description'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
 												</div>
 												<div class="form-group">
 													<input type="submit" value="Hinzuf&uuml;gen" class="btn btn-block btn-success">
@@ -40,13 +40,13 @@
 										<div class="card-body">
 											<form action="?p=rules&c=edit&f=edit&id=<?php echo $id; ?>" method="post">
 												<div class="form-group">
-													<input type="text" class="form-control" name="name" placeholder="Regelbezeichnung" maxlength="40" value="<?php echo $_POST['name'] ?? $rules->getValue('rules', 'id', $id, 'name'); ?>">
+													<input type="text" class="form-control" name="name" placeholder="Regelbezeichnung" maxlength="40" value="<?php echo htmlspecialchars($_POST['name'] ?? $rules->getValue('rules', 'id', $id, 'name'), ENT_QUOTES, 'UTF-8'); ?>">
 												</div>
 												<div class="form-group">
-													<input type="text" class="form-control" name="tag" placeholder="Regelname" maxlength="40" value="<?php echo $_POST['tag'] ?? $rules->getValue('rules', 'id', $id, 'tag'); ?>">
+													<input type="text" class="form-control" name="tag" placeholder="Regelname" maxlength="40" value="<?php echo htmlspecialchars($_POST['tag'] ?? $rules->getValue('rules', 'id', $id, 'tag'), ENT_QUOTES, 'UTF-8'); ?>">
 												</div>
 												<div class="form-group">
-													<input type="text" class="form-control" name="description" placeholder="Beschreibung" maxlength="256" value="<?php echo $_POST['description'] ?? $rules->getValue('rules', 'id', $id, 'description'); ?>">
+													<input type="text" class="form-control" name="description" placeholder="Beschreibung" maxlength="256" value="<?php echo htmlspecialchars($_POST['description'] ?? $rules->getValue('rules', 'id', $id, 'description'), ENT_QUOTES, 'UTF-8'); ?>">
 												</div>
 												<div class="form-group">
 													<input type="submit" value="Speichern" class="btn btn-block btn-success">
