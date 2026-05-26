@@ -5,6 +5,7 @@ system/config.user.php
 # Benutzer-Uploads
 avatare/*
 !avatare/.gitkeep
+!avatare/.htaccess
 
 # Laufzeit / Cache
 *.log

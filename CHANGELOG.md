@@ -11,6 +11,12 @@
 - `$error ?? ''` in `settings.php`: kein PHP-Warning mehr wenn kein Fehler vorliegt
 
 ### Sicherheit
+- **Avatar-Upload vollständig gehärtet** (`setUserAvatar()`):
+  - MIME-Check via `finfo_file()` statt browser-geliefertem `$_FILES['type']` (war spoofbar)
+  - Whitelist: nur `image/jpeg`, `image/png`, `image/gif`, `image/webp` erlaubt
+  - GD-Re-Encoding: Bild wird neu gerendert → eingebetteter Code wird vernichtet
+  - Altes Bild wird erst nach erfolgreichem Speichern gelöscht
+  - `avatare/.htaccess`: PHP-Ausführung im Upload-Verzeichnis blockiert (`php_flag engine off`, `SetHandler default-handler`)
 - **Mitglied-Rang: `?p=menu` und `?p=additional_fields` nicht mehr zugänglich** — Site-IDs 18 und 19 aus `_ml_ranks.sql` (Mitglied) entfernt; Migration für bestehende Installs:
   ```sql
   UPDATE `[prefix]_ml_ranks`
