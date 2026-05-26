@@ -18,7 +18,7 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *********************************************/
 
-define('EASY_VERSION', '1.2.3');
+define('EASY_VERSION', '1.2.4');
 define('EASY_BRANCH',  'bs5');
 
 // ─── Input-Sanitierung ──────────────────────────────────────────────────────
@@ -135,7 +135,7 @@ function getCode(int $length = 32, array|string|null $tables = null, array|strin
 
 function encrypt(string $str, ?string $key = null): string
 {
-    $key = $key ?? defined('ENCRYPT_KEY') ? ENCRYPT_KEY : '';
+    $key = $key ?? (defined('ENCRYPT_KEY') ? ENCRYPT_KEY : '');
     if (strlen($key) < 32) {
         $key = str_pad($key, 32, "\0");
     } else {
@@ -148,7 +148,7 @@ function encrypt(string $str, ?string $key = null): string
 
 function decrypt(string $str, ?string $key = null): string|false
 {
-    $key = $key ?? defined('ENCRYPT_KEY') ? ENCRYPT_KEY : '';
+    $key = $key ?? (defined('ENCRYPT_KEY') ? ENCRYPT_KEY : '');
     if (strlen($key) < 32) {
         $key = str_pad($key, 32, "\0");
     } else {
@@ -170,7 +170,7 @@ function decrypt(string $str, ?string $key = null): string|false
 
 function encodeRand(string $str, ?string $secret = null): string
 {
-    $secret ??= defined('COOKIE_SECRET') ? COOKIE_SECRET : ENCRYPT_KEY;
+    $secret ??= (defined('COOKIE_SECRET') ? COOKIE_SECRET : ENCRYPT_KEY);
     $hmac     = hash_hmac('sha256', $str, $secret);
     return base64_encode($str . '|' . $hmac);
 }
@@ -369,6 +369,23 @@ function contact(): string
     );
     header('Location: ?p=contact&h=contact_success');
     exit();
+}
+
+// ─── HTTPS-Erkennung (direktes HTTPS + Reverse-Proxy via X-Forwarded-Proto) ──
+// Funktioniert sowohl hinter Traefik als auch bei direktem HTTPS.
+
+function is_https(): bool
+{
+    if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+        return true;
+    }
+    if (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https') {
+        return true;
+    }
+    if (($_SERVER['SERVER_PORT'] ?? 80) == 443) {
+        return true;
+    }
+    return false;
 }
 
 // ─── Error-Mail (DSGVO: keine Stack-Traces an den Browser) ──────────────────
