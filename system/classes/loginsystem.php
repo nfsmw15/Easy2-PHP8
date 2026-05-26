@@ -1993,33 +1993,54 @@ class loginsystem extends database
             if(!empty($title) && !empty($title_short) && !empty($email) && !empty($sender) && !empty($to) && !empty($dsgvo) && !empty($restore) && !empty($pwlength) && $pwlength >= 3 && $pwlength < 65){
                 
                 $default_avatar_type = parent::getMainData('default_avatar_type');
-                $dir = $this->dirAvatar;
-                $maxsize = return_bytes("1M"); // Gibt die maximale Dateigröße an in MB
+                $dir     = $this->dirAvatar;
+                $maxsize = return_bytes("1M");
                 if($_FILES["avatar-file"]["error"] == UPLOAD_ERR_OK){
-                    // Holt sich alle Paramater zur Datei
-                    $filename = $_FILES["avatar-file"]['name'];
-                    $filemime = $_FILES["avatar-file"]['type'];
-                    $tmp_name = $_FILES["avatar-file"]['tmp_name'];
-                    $filesize = $_FILES["avatar-file"]['size'];
-                    // Verarbeitung der Parameter
-                    $newname	= 'default_avatar';
-                    $newname   .= strtolower(substr($filename, strrpos($filename, ".")));
-                    $size		= count_size($filesize);
-                    $filetype	= strtolower(str_replace('.', '', substr($filename, strrpos($filename, "."))));
-                    if($filesize <= $maxsize){
-                        if(in_array('image', explode('/', $filemime))){ // Prüft ob die Datei ein Bild ist
-                            if(move_uploaded_file($tmp_name, $dir.$newname)){ // Bild mit neuem Namen hochladen
-                                $default_avatar_type = $filetype;
-                            } else {
-                                errormail('Fehler beim hochladen eines Bildes! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()!');
-                                $error = 'Fehler beim Hochladen des Bildes! Bitte versuchen Sie es zu einem sp&auml;tern Zeitpunkt erneut.';
-                            } // END-if(move_uploaded_file)
-                        } else {
-                            $error = 'Die ausgew&auml;hlte Datei ist kein Bild!';
-                        }
+                    $tmp_name = $_FILES["avatar-file"]['tmp_name'] ?? '';
+                    $filesize = (int)($_FILES["avatar-file"]['size'] ?? 0);
+                    if($filesize > $maxsize){
+                        $error = 'Die Datei ist mit '.count_size($filesize).' zu gro&szlig;! Die maximal zul&auml;ssige Dateigr&ouml;&szlig;e liegt bei: '.count_size($maxsize);
+                    } elseif(!is_uploaded_file($tmp_name)){
+                        $error = 'Fehler beim Hochladen des Bildes!';
                     } else {
-                        $error = 'Die Datei '.$filename.' ist mit '.$size.' zu gro&szlig;! Die maximal zul&auml;ssige Dateigr&ouml;&szlig;e liegt bei: '.count_size($maxsize);
-                    } // END-if($fielsize)
+                        $allowedMime = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif', 'image/webp' => 'webp'];
+                        $finfo    = new \finfo(FILEINFO_MIME_TYPE);
+                        $realMime = $finfo->file($tmp_name);
+                        if(!isset($allowedMime[$realMime])){
+                            $error = 'Nur JPEG, PNG, GIF und WebP sind erlaubt!';
+                        } else {
+                            $ext  = $allowedMime[$realMime];
+                            $src  = match($realMime){
+                                'image/jpeg' => @imagecreatefromjpeg($tmp_name),
+                                'image/png'  => @imagecreatefrompng($tmp_name),
+                                'image/gif'  => @imagecreatefromgif($tmp_name),
+                                'image/webp' => @imagecreatefromwebp($tmp_name),
+                            };
+                            if($src === false){
+                                $error = 'Das Bild konnte nicht verarbeitet werden!';
+                            } else {
+                                $destPath = $dir.'default_avatar.'.$ext;
+                                $oldType  = parent::getMainData('default_avatar_type');
+                                if(!empty($oldType) && $oldType !== $ext && file_exists($dir.'default_avatar.'.$oldType)){
+                                    unlink($dir.'default_avatar.'.$oldType);
+                                }
+                                $saved = match($realMime){
+                                    'image/jpeg' => imagejpeg($src, $destPath, 85),
+                                    'image/png'  => imagepng($src, $destPath, 6),
+                                    'image/gif'  => imagegif($src, $destPath),
+                                    'image/webp' => imagewebp($src, $destPath, 85),
+                                };
+                                imagedestroy($src);
+                                if($saved){
+                                    $default_avatar_type = $ext;
+                                } else {
+                                    @unlink($destPath);
+                                    errormail('Fehler beim Speichern des Standard-Avatars! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()!');
+                                    $error = 'Fehler beim Speichern des Bildes! Bitte versuche es sp&auml;ter erneut.';
+                                }
+                            }
+                        }
+                    }
                 }
                 
                 // Save Impressum & Privacy Policy

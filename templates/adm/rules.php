@@ -20,6 +20,7 @@
 										<div class="card-header"><i class="fa fa-plus"></i> Regel hinzuf&uuml;gen</div>
 										<div class="card-body">
 											<form action="?p=rules&c=new" method="post">
+								<?php echo csrf_field(); ?>
 												<div class="form-group">
 													<input type="text" class="form-control" name="name" placeholder="Regelbezeichnung" maxlength="40" value="<?php echo htmlspecialchars($_POST['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
 												</div>
@@ -40,6 +41,7 @@
 										<div class="card-header"><i class="fa fa-pencil"></i> Regel bearbeiten <a class="btn btn-sm btn-warning float-end" href="?p=rules">Abbrechen</a></div>
 										<div class="card-body">
 											<form action="?p=rules&c=edit&f=edit&id=<?php echo $id; ?>" method="post">
+								<?php echo csrf_field(); ?>
 												<div class="form-group">
 													<input type="text" class="form-control" name="name" placeholder="Regelbezeichnung" maxlength="40" value="<?php echo htmlspecialchars($_POST['name'] ?? $rules->getValue('rules', 'id', $id, 'name'), ENT_QUOTES, 'UTF-8'); ?>">
 												</div>
@@ -60,6 +62,7 @@
 										<div class="card-header"><i class="fa fa-trash"></i> Regel entfernen <a class="btn btn-sm btn-warning float-end" href="?p=rules">Abbrechen</a></div>
 										<div class="card-body">
 											<form action="?p=rules&c=delete&f=delete&id=<?php echo $id; ?>" method="post">
+								<?php echo csrf_field(); ?>
 												<div class="form-group">
 													Soll diese Regel wirklich entfernt werden?
 												</div>

@@ -49,6 +49,7 @@
 					</div>
 					<div class="card-body">
 						<form action="?p=additional_fields&f=edit&c=edit&id=<?php echo $id; ?>" method="post">
+							<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-6">
@@ -226,6 +227,7 @@
 					</div>
 					<div class="card-body">
 						<form action="?p=additional_fields&f=remove&c=remove&id=<?php echo $id; ?>" method="post">
+							<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-6">
@@ -319,6 +321,7 @@
 					</div>
 					<div class="card-body">
 						<form action="?p=additional_fields&f=new&c=new" method="post">
+							<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-6">
