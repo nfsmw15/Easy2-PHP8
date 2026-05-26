@@ -1,5 +1,13 @@
 # Changelog — EASY 2.0 PHP8 Fork
 
+## [1.1.5] — 2026-05-26
+
+### Neu
+- **`EASY_BRANCH`-Konstante** (`'bs3'`) in `functions.inc.php` eingeführt
+- **Versionscheck branch-spezifisch**: `settings.php` filtert GitHub-Releases jetzt nach `-bs3`-Suffix — kein falscher Update-Hinweis mehr durch BS5-Releases
+
+---
+
 ## [1.1.4] — 2026-05-26
 
 ### Neu

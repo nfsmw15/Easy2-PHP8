@@ -25,21 +25,30 @@
            		<div class="panel panel-primary mt15px">
                		<div class="panel-heading clearfix"><span><i class="fa fa-cogs"></i> Einstellungen</span>
                			<span class="pull-right"><?php
-               				$_gh_version = '';
-               				$_gh_cache_key = 'easy2_gh_version';
+               				$_gh_branch    = defined('EASY_BRANCH') ? EASY_BRANCH : 'bs5';
+               				$_gh_version   = '';
+               				$_gh_cache_key = 'easy2_gh_version_' . $_gh_branch;
                				if (!empty($_SESSION[$_gh_cache_key . '_time']) && (time() - $_SESSION[$_gh_cache_key . '_time']) < 3600) {
                					$_gh_version = $_SESSION[$_gh_cache_key] ?? '';
                				} else {
                					$_gh_ctx = stream_context_create(['http' => ['header' => "User-Agent: Easy2-PHP8\r\n", 'timeout' => 3]]);
-               					$_gh_json = @file_get_contents('https://api.github.com/repos/nfsmw15/Easy2-PHP8/releases/latest', false, $_gh_ctx);
+               					$_gh_json = @file_get_contents('https://api.github.com/repos/nfsmw15/Easy2-PHP8/releases?per_page=20', false, $_gh_ctx);
                					if ($_gh_json !== false) {
-               						$_gh_data = json_decode($_gh_json, true);
-               						$_gh_version = ltrim($_gh_data['tag_name'] ?? '', 'v');
+               						$_gh_releases = json_decode($_gh_json, true);
+               						if (is_array($_gh_releases)) {
+               							foreach ($_gh_releases as $_rel) {
+               								$_tag = $_rel['tag_name'] ?? '';
+               								if (str_ends_with($_tag, '-' . $_gh_branch)) {
+               									$_gh_version = ltrim(preg_replace('/-[^-]+$/', '', $_tag), 'v');
+               									break;
+               								}
+               							}
+               						}
                						$_SESSION[$_gh_cache_key] = $_gh_version;
                						$_SESSION[$_gh_cache_key . '_time'] = time();
                					}
                				}
-               				$_gh_version_clean = preg_replace('/-.*$/', '', $_gh_version);
+               				$_gh_version_clean = $_gh_version;
                				echo 'Version: <strong>' . htmlspecialchars(EASY_VERSION) . '</strong>';
                				if ($_gh_version_clean !== '' && version_compare($_gh_version_clean, EASY_VERSION, '>')) {
                					echo ' <a href="https://github.com/nfsmw15/Easy2-PHP8/releases" target="_blank" class="label label-warning"><i class="fa fa-arrow-up"></i> ' . htmlspecialchars($_gh_version_clean) . ' verfügbar</a>';
