@@ -15,6 +15,7 @@
 					<div class="card-header"><i class="fa fa-plus"></i> Men&uuml;punkt hinzuf&uuml;gen</div>
 					<div class="card-body">
 						<form action="?p=menu&c=add_menu" method="post">
+<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<label>Name des Links:</label>
 								<input type="text" name="title" placeholder="Name des Links" maxlength="32" value="<?php echo htmlspecialchar(isset($_POST['title']) ? $_POST['title'] : ''); ?>" class="form-control">
@@ -87,6 +88,7 @@
 					<div class="card-header"><i class="fa fa-pencil"></i> Men&uuml;punkt bearbeiten <a class="float-right btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
 					<div class="card-body">
 						<form action="?p=menu&c=edit&f=edit&id=<?php echo $id; ?>" method="post">
+<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<label>Name des Links:</label>
 								<input type="text" name="title" placeholder="Name des Links" maxlength="32" value="<?php echo htmlspecialchar(isset($_POST['title']) ? $_POST['title'] : $menu->getValue('menu', 'id', $id, 'title')); ?>" class="form-control">
@@ -159,6 +161,7 @@
 					<div class="card-header"><i class="fa fa-trash"></i> Men&uuml;punkt l&ouml;schen <a class="float-right btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
 					<div class="card-body">
 						<form action="?p=menu&c=remove&f=remove&id=<?php echo $id; ?>" method="post">
+<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<h5>Soll der Men&uuml;punkt "<?php echo $menu->getValue('menu', 'id', $id, 'title'); ?>" wirklich gel&ouml;scht werden?</h5>
 							</div>
@@ -173,6 +176,7 @@
 					<div class="card-header"><i class="fa fa-eraser"></i> Men&uuml;positionen resetten <a class="float-right btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
 					<div class="card-body">
 						<form action="?p=menu&c=reset_positions&f=reset_positions" method="post">
+<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<h5>Sollen wirklich alle Positionen der Men&uuml;punkte zur&uuml;ckgesetzt werden?</h5>
 								<p>Es wird nach Alphabet sortiert.</p>

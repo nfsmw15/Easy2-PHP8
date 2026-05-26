@@ -9,6 +9,7 @@
     </ol>
     <?php echo $error ?? ''; ?>
 	<form action="?p=settings&c=mainsave" method="post" enctype="multipart/form-data">
+<?php echo csrf_field(); ?>
 		<div class="row mb-4">
 			<div class="col-sm-12 mb-2">
 				<div class="clearfix">
