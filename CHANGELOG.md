@@ -10,6 +10,14 @@
 - `zipball_url` des Releases in `$_SESSION` gecacht (Vorbereitung Updater)
 - `$error ?? ''` in `settings.php`: kein PHP-Warning mehr wenn kein Fehler vorliegt
 
+
+### Sicherheit
+- **Mitglied-Rang: `?p=menu` und `?p=additional_fields` nicht mehr zugänglich** — Site-IDs 18 und 19 aus `_ml_ranks.sql` (Mitglied) entfernt; Migration für bestehende Installs:
+  ```sql
+  UPDATE `[prefix]_ml_ranks`
+  SET `sites` = REPLACE(REPLACE(`sites`, ',18', ''), ',19', '')
+  WHERE `id` = 1813201540;
+  ```
 ---
 
 ## [1.1.4] — 2026-05-26
