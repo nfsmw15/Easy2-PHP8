@@ -122,11 +122,11 @@
 							<form action="./?p=profil&c=data_change" method="post">
 								<div class="form-group">
 									<label>Benutzername: </label>
-									<input type="text" name="edit-username" class="form-control" value="<?php echo isset($_POST['edit-username']) ? $_POST['edit-username'] : $loginsystem->getUser('username'); ?>" placeholder="Benutzername" required="">
+									<input type="text" name="edit-username" class="form-control" value="<?php echo isset($_POST['edit-username']) ? htmlspecialchars($_POST['edit-username'], ENT_QUOTES, 'UTF-8') : $loginsystem->getUser('username'); ?>" placeholder="Benutzername" required="">
 								</div>
 								<div class="form-group">
 									<label>Vor-/Nachname: </label>
-									<input type="text" name="edit-fullname" class="form-control" value="<?php echo isset($_POST['edit-fullname']) ? $_POST['edit-fullname'] : $loginsystem->getUser('first_name').' '.$loginsystem->getUser('last_name'); ?>" placeholder="Vor-/Nachname" required="">
+									<input type="text" name="edit-fullname" class="form-control" value="<?php echo isset($_POST['edit-fullname']) ? htmlspecialchars($_POST['edit-fullname'], ENT_QUOTES, 'UTF-8') : $loginsystem->getUser('first_name').' '.$loginsystem->getUser('last_name'); ?>" placeholder="Vor-/Nachname" required="">
 								</div>
 								<?php 
 									echo $additional_fields->showFields(0, 'edit-', $loginsystem->getUser('id'));
@@ -207,4 +207,3 @@
 				</div><!-- /.col-sm-6 -->
 			</div><!-- /.row -->
 		<?php } ?>
-</div><!-- /.content -->

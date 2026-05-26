@@ -11,7 +11,7 @@
 							<?php echo $error; ?>
 							<div class="form-group">
 								<label>E-Mail Adresse:</label>
-								<input type="text" class="form-control" name="email" placeholder="E-Mail Adresse" required value="<?php echo isset($_POST["email"]) ? $_POST["email"] : ''; ?>" />
+								<input type="text" class="form-control" name="email" placeholder="E-Mail Adresse" required value="<?php echo htmlspecialchar(isset($_POST["email"]) ? $_POST["email"] : ''); ?>" />
 							</div>
 							<div><label>Sicherheitscode:</label></div>
 							<div class="form-group">

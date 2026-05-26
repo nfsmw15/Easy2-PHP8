@@ -26,11 +26,11 @@
 						<form action="./?p=sites&c=add_site" method="post" enctype="multipart/form-data">
 							<div class="form-group">
 								<label>Seitentitel:</label>
-								<input type="text" name="title" placeholder="Seitentitel" maxlength="32" value="<?php echo isset($_POST['title']) ? $_POST['title'] : ''; ?>" class="form-control">
+								<input type="text" name="title" placeholder="Seitentitel" maxlength="32" value="<?php echo isset($_POST['title']) ? htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8') : ''; ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Dateiname:</label>
-								<input type="text" name="filename" placeholder="Dateiname" maxlength="64" value="<?php echo isset($_POST['filename']) ? $_POST['filename'] : ''; ?>" class="form-control">
+								<input type="text" name="filename" placeholder="Dateiname" maxlength="64" value="<?php echo isset($_POST['filename']) ? htmlspecialchars($_POST['filename'], ENT_QUOTES, 'UTF-8') : ''; ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Datei hochladen:</label>
@@ -38,7 +38,7 @@
 							</div>
 							<div class="form-group">
 								<label>Verzeichnis:</label>
-								<input type="text" name="dir" placeholder="Verzeichnis" maxlength="128" value="<?php echo isset($_POST['dir']) ? $_POST['dir'] : ''; ?>" class="form-control">
+								<input type="text" name="dir" placeholder="Verzeichnis" maxlength="128" value="<?php echo isset($_POST['dir']) ? htmlspecialchars($_POST['dir'], ENT_QUOTES, 'UTF-8') : ''; ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>
@@ -75,11 +75,11 @@
 						<form action="./?p=sites&c=edit&f=edit&id=<?php echo $id; ?>" method="post" enctype="multipart/form-data">
 							<div class="form-group">
 								<label>Seitentitel:</label>
-								<input type="text" name="title" placeholder="Seitentitel" maxlength="32" value="<?php echo isset($_POST['title']) ? $_POST['title'] : $sites->getValue('sites', 'id', $id, 'title'); ?>" class="form-control">
+								<input type="text" name="title" placeholder="Seitentitel" maxlength="32" value="<?php echo isset($_POST['title']) ? htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8') : $sites->getValue('sites', 'id', $id, 'title'); ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Dateiname:</label>
-								<input type="text" name="filename" placeholder="Dateiname" maxlength="64" value="<?php echo isset($_POST['filename']) ? $_POST['filename'] : $sites->getSite('complete_filename', $id); ?>" class="form-control">
+								<input type="text" name="filename" placeholder="Dateiname" maxlength="64" value="<?php echo isset($_POST['filename']) ? htmlspecialchars($_POST['filename'], ENT_QUOTES, 'UTF-8') : $sites->getSite('complete_filename', $id); ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Datei hochladen:</label>
@@ -87,7 +87,7 @@
 							</div>
 							<div class="form-group">
 								<label>Verzeichnis:</label>
-								<input type="text" name="dir" placeholder="Verzeichnis" maxlength="128" value="<?php echo isset($_POST['dir']) ? $_POST['dir'] : $sites->getValue('sites', 'id', $id, 'dir'); ?>" class="form-control">
+								<input type="text" name="dir" placeholder="Verzeichnis" maxlength="128" value="<?php echo isset($_POST['dir']) ? htmlspecialchars($_POST['dir'], ENT_QUOTES, 'UTF-8') : $sites->getValue('sites', 'id', $id, 'dir'); ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>

@@ -26,11 +26,11 @@
 						<form action="./?p=menu&c=add_menu" method="post">
 							<div class="form-group">
 								<label>Name des Links:</label>
-								<input type="text" name="title" placeholder="Name des Links" maxlength="32" value="<?php echo isset($_POST['title']) ? $_POST['title'] : ''; ?>" class="form-control">
+								<input type="text" name="title" placeholder="Name des Links" maxlength="32" value="<?php echo isset($_POST['title']) ? htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8') : ''; ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Icon des Links:</label>
-								<input type="text" name="icon" placeholder="z.B. fa-home" maxlength="32" value="<?php echo isset($_POST['icon']) ? $_POST['icon'] : ''; ?>" class="form-control">
+								<input type="text" name="icon" placeholder="z.B. fa-home" maxlength="32" value="<?php echo isset($_POST['icon']) ? htmlspecialchars($_POST['icon'], ENT_QUOTES, 'UTF-8') : ''; ?>" class="form-control">
 							</div>
 							
 							<!--
@@ -65,11 +65,11 @@
 							</div>
 							<div class="form-group">
 								<label>Externe URL: <span class="wp11">(Nur wenn keine Datei ausgew&auml;hlt ist)</span></label>
-								<input type="text" name="url" placeholder="Externe URL" maxlength="1024" value="<?php echo isset($_POST['url']) ? $_POST['url'] : ''; ?>" class="form-control">
+								<input type="text" name="url" placeholder="Externe URL" maxlength="1024" value="<?php echo isset($_POST['url']) ? htmlspecialchars($_POST['url'], ENT_QUOTES, 'UTF-8') : ''; ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Position:</label>
-								<input type="number" name="pos" placeholder="Externe URL" maxlength="3" min="0" max="999" value="<?php echo isset($_POST['pos']) ? $_POST['pos'] : '0'; ?>" class="form-control">
+								<input type="number" name="pos" placeholder="Externe URL" maxlength="3" min="0" max="999" value="<?php echo isset($_POST['pos']) ? htmlspecialchars($_POST['pos'], ENT_QUOTES, 'UTF-8') : '0'; ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Link Target:</label>
@@ -98,11 +98,11 @@
 						<form action="./?p=menu&c=edit&f=edit&id=<?php echo $id; ?>" method="post">
 							<div class="form-group">
 								<label>Name des Links:</label>
-								<input type="text" name="title" placeholder="Name des Links" maxlength="32" value="<?php echo isset($_POST['title']) ? $_POST['title'] : $menu->getValue('menu', 'id', $id, 'title'); ?>" class="form-control">
+								<input type="text" name="title" placeholder="Name des Links" maxlength="32" value="<?php echo isset($_POST['title']) ? htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8') : $menu->getValue('menu', 'id', $id, 'title'); ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Icon des Links:</label>
-								<input type="text" name="icon" placeholder="z.B. fa-home" maxlength="32" value="<?php echo isset($_POST['icon']) ? $_POST['icon'] : $menu->getValue('menu', 'id', $id, 'icon'); ?>" class="form-control">
+								<input type="text" name="icon" placeholder="z.B. fa-home" maxlength="32" value="<?php echo isset($_POST['icon']) ? htmlspecialchars($_POST['icon'], ENT_QUOTES, 'UTF-8') : $menu->getValue('menu', 'id', $id, 'icon'); ?>" class="form-control">
 							</div>
 							
 							<!--
@@ -137,11 +137,11 @@
 							</div>
 							<div class="form-group">
 								<label>Externe URL: <span class="wp11">(Nur wenn keine Datei ausgew&auml;hlt ist)</span></label>
-								<input type="text" name="url" placeholder="Externe URL" maxlength="1024" value="<?php echo isset($_POST['url']) ? $_POST['url'] : $menu->getValue('menu', 'id', $id, 'url'); ?>" class="form-control">
+								<input type="text" name="url" placeholder="Externe URL" maxlength="1024" value="<?php echo isset($_POST['url']) ? htmlspecialchars($_POST['url'], ENT_QUOTES, 'UTF-8') : $menu->getValue('menu', 'id', $id, 'url'); ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Position:</label>
-								<input type="number" name="pos" maxlength="3" min="0" max="999" value="<?php echo isset($_POST['pos']) ? $_POST['pos'] : $menu->getValue('menu', 'id', $id, 'pos'); ?>" class="form-control">
+								<input type="number" name="pos" maxlength="3" min="0" max="999" value="<?php echo isset($_POST['pos']) ? htmlspecialchars($_POST['pos'], ENT_QUOTES, 'UTF-8') : $menu->getValue('menu', 'id', $id, 'pos'); ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Link Target:</label>

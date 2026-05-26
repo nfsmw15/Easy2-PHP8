@@ -27,7 +27,7 @@
                         <p>Du kannst nur Rechte vergeben und Seiten freigeben, welche du selbst hast.</p>
                         <form action="./?p=ranks&c=new_rank" method="post">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="name" placeholder="Rangbezeichnung" maxlength="32" value="<?php echo $_POST['name'] ?? ''; ?>">
+                                <input type="text" class="form-control" name="name" placeholder="Rangbezeichnung" maxlength="32" value="<?php echo htmlspecialchars($_POST['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                             </div>
                             <div class="form-group">
                                 <label class="wp15">Seite/n hinzuf&uuml;gen</label>
@@ -60,7 +60,7 @@
                         <p>Du kannst nur Rechte vergeben und Seiten freigeben, welche du selbst hast.</p>
                         <form action="./?p=ranks&c=edit_rank&f=edit_rank&id=<?php echo $id; ?>" method="post">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="name" placeholder="Rangbezeichnung" maxlength="32" value="<?php echo $_POST['name'] ?? $loginsystem->getValue('ranks', 'id', $id, 'title'); ?>">
+                                <input type="text" class="form-control" name="name" placeholder="Rangbezeichnung" maxlength="32" value="<?php echo htmlspecialchars($_POST['name'] ?? $loginsystem->getValue('ranks', 'id', $id, 'title'), ENT_QUOTES, 'UTF-8'); ?>">
                             </div>
                             <?php if($id != '1813201541'){ // Webmaster ?>
                             <div class="form-group">
@@ -77,7 +77,7 @@
                             </div>
                             <?php } ?>
                             <div class="form-group">
-                                <input type="text" class="form-control colorpicker-element" id="colorpicker" name="color" maxlength="7" value="#<?php echo $_POST['color'] ?? $loginsystem->getValue('ranks', 'id', $id, 'color'); ?>">
+                                <input type="text" class="form-control colorpicker-element" id="colorpicker" name="color" maxlength="7" value="#<?php echo htmlspecialchars($_POST['color'] ?? $loginsystem->getValue('ranks', 'id', $id, 'color'), ENT_QUOTES, 'UTF-8'); ?>">
                             </div>
                             <div class="form-group">
                             	<label>Styles:</label>

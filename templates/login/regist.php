@@ -14,7 +14,7 @@
                                     <label>Benutzername*:</label>
                                     <input type="text" class="form-control" name="regist-username" maxlength="64"
                                            placeholder="Benutzername" required
-                                           value="<?php echo isset($_POST["regist-username"]) ? $_POST["regist-username"] : ''; ?>"/>
+                                           value="<?php echo isset($_POST["regist-username"]) ? htmlspecialchars($_POST["regist-username"], ENT_QUOTES, 'UTF-8') : ''; ?>"/>
                                 </div>
                                 <div class="form-group">
                                     <label>Passwort*:</label>
@@ -30,7 +30,7 @@
                                     <label>Vor-/Nachname:</label>
                                     <input type="text" class="form-control" name="regist-fullname" maxlength="64"
                                            placeholder="Vor-/Nachname"
-                                           value="<?php echo isset($_POST["regist-fullname"]) ? $_POST["regist-fullname"] : ''; ?>"/>
+                                           value="<?php echo isset($_POST["regist-fullname"]) ? htmlspecialchars($_POST["regist-fullname"], ENT_QUOTES, 'UTF-8') : ''; ?>"/>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -38,13 +38,13 @@
                                     <label>E-Mail Adresse*:</label>
                                     <input type="email" class="form-control" name="regist-email" maxlength="64"
                                            placeholder="E-Mail Adresse" required
-                                           value="<?php echo isset($_POST["regist-email"]) ? $_POST["regist-email"] : ''; ?>"/>
+                                           value="<?php echo isset($_POST["regist-email"]) ? htmlspecialchars($_POST["regist-email"], ENT_QUOTES, 'UTF-8') : ''; ?>"/>
                                 </div>
                                 <div class="form-group">
                                     <label>E-Mail Adresse wiederholen*:</label>
                                     <input type="email" class="form-control" name="regist-email-confirm" maxlength="64"
                                            placeholder="E-Mail Adresse wiederholen" required
-                                           value="<?php echo isset($_POST["regist-email-confirm"]) ? $_POST["regist-email-confirm"] : ''; ?>"/>
+                                           value="<?php echo isset($_POST["regist-email-confirm"]) ? htmlspecialchars($_POST["regist-email-confirm"], ENT_QUOTES, 'UTF-8') : ''; ?>"/>
                                 </div>
                                 <?php
                                 echo $additional_fields->showFields(1, 'regist-');
