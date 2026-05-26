@@ -19,7 +19,7 @@ declare(strict_types=1);
  *********************************************/
 
 define('EASY_VERSION', '1.2.3');
-define('EASY_BRANCH',  'dashboard');
+define('EASY_BRANCH',  'bs5');
 
 // ─── Input-Sanitierung ──────────────────────────────────────────────────────
 
