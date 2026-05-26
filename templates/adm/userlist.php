@@ -111,11 +111,11 @@
                                 <?php } ?>
                                 <?php if($loginsystem->getUser('active', $id) == 0){ ?>
                                 	<?php if($loginsystem->auditRight('user_enable') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
-										<li><a href="./?p=userlist&c=activate&id=<?php echo $id; ?>"><i class="fa fa-check fa-fw"></i> Aktivieren</a></li>
+										<li><a href="./?p=userlist&c=activate&id=<?php echo $id; ?>&csrf=<?php echo $loginsystem->getData('csrfToken'); ?>"><i class="fa fa-check fa-fw"></i> Aktivieren</a></li>
                                     <?php } ?>
                                 <?php } else { ?>
                                 	<?php if($loginsystem->auditRight('user_disable') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
-										<li><a href="./?p=userlist&c=deactivate&id=<?php echo $id; ?>"><i class="fa fa-ban fa-fw"></i> Deaktivieren</a></li>
+										<li><a href="./?p=userlist&c=deactivate&id=<?php echo $id; ?>&csrf=<?php echo $loginsystem->getData('csrfToken'); ?>"><i class="fa fa-ban fa-fw"></i> Deaktivieren</a></li>
                                     <?php } ?>
                                 <?php } ?>
                                 <?php if($loginsystem->auditRight('user_pwreset')){ ?>
@@ -293,4 +293,3 @@
             <?php } ?>
         </div><!-- /.col-lg-4 -->
     </div>
-</div>
