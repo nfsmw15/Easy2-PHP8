@@ -29,8 +29,8 @@ class additional_fields extends loginsystem{
 	
 	public function listFields(){
 		$rtn = NULL;
-		
-		$sql = $this->mysql->query("Select * From `".Prefix."_fields` Order by pos ASC");
+
+		$sql = $this->pq("SELECT * FROM `".Prefix."_fields` ORDER BY `pos` ASC");
 		while($row = $sql->fetch_assoc()){
 			$btn = array();
 			
@@ -64,26 +64,15 @@ class additional_fields extends loginsystem{
 	}
 	
 	private function autoPosition($start = 0, $direction = 0, $end = 'na'){
-		/***********************
-		 * $start => Startwert, ab welcher er die anderen Menuepunkte verschieben soll
-		 * $direction => In welche Richtung verschoben werden soll (0 = +, 1 = -)
-		 * $end => Bis zu welchem Wert er verschieben soll
-		 ***********************/
 		if($end == 'na'){
-			if($direction == 0){
-				$query = "Update `".Prefix."_fields` Set pos = pos + 1 Where pos >= '$start'";
-			} else {
-				$query = "Update `".Prefix."_fields` Set pos = pos - 1 Where pos >= '$start'";
-			}
+			$op = ($direction == 0) ? '+ 1' : '- 1';
+			$sql = $this->pq("UPDATE `".Prefix."_fields` SET `pos` = `pos` $op WHERE `pos` >= ?", [(int)$start]);
 		} elseif(is_numeric($end)){
-			if($direction == 0){
-				$query = "Update `".Prefix."_fields` Set pos = pos + 1 Where pos >= '$start' AND pos <= '$end'";
-			} else {
-				$query = "Update `".Prefix."_fields` Set pos = pos - 1 Where pos >= '$start' AND pos <= '$end'";
-			}
+			$op = ($direction == 0) ? '+ 1' : '- 1';
+			$sql = $this->pq("UPDATE `".Prefix."_fields` SET `pos` = `pos` $op WHERE `pos` >= ? AND `pos` <= ?", [(int)$start, (int)$end]);
+		} else {
+			return false;
 		}
-		
-		$sql = $this->mysql->query($query);
 		if($sql === false){
 			errormail('Fehler beim anpassen der Positionen der Zusatzfelder! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()! MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
 			return false;
@@ -127,7 +116,10 @@ class additional_fields extends loginsystem{
 									}
 									
 									if($autoPos == true){
-										$sql = $this->mysql->query("Insert Into ".Prefix."_fields (`name`, `title`, `type`, `placeholder`, `value`, `maxlength`, `description`, `regex`, `options`, `pos`, `required`, `regist`, `regex_options`) Values ('$name', '$title', '$type', '$placeholder', '$value', '$maxlength', '$description', '$regex', '$options', '$position', '$required', '$regist', '$regex_options')");
+										$sql = $this->pq(
+											"INSERT INTO `".Prefix."_fields` (`name`, `title`, `type`, `placeholder`, `value`, `maxlength`, `description`, `regex`, `options`, `pos`, `required`, `regist`, `regex_options`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+											[$name, $title, $type, $placeholder, $value, $maxlength, $description, $regex, $options, $position, $required, $regist, $regex_options]
+										);
 										if($sql !== false){
 											header('Location: ?p=additional_fields&h=additional_fields_add_successfully');
 											exit();
@@ -207,7 +199,10 @@ class additional_fields extends loginsystem{
 									}
 									
 									if($autoPos == true){
-										$sql = $this->mysql->query("Update `".Prefix."_fields` Set `name` = '$name', `title` = '$title', `type` = '$type', `placeholder` = '$placeholder', `value` = '$value', `maxlength` = '$maxlength', `description` = '$description', `regex` = '$regex', `options` = '$options', `required` = '$required', `regist` = '$regist', `pos` = '$pos', `regex_options` = '$regex_options' Where `id` = '$id'");
+										$sql = $this->pq(
+											"UPDATE `".Prefix."_fields` SET `name` = ?, `title` = ?, `type` = ?, `placeholder` = ?, `value` = ?, `maxlength` = ?, `description` = ?, `regex` = ?, `options` = ?, `required` = ?, `regist` = ?, `pos` = ?, `regex_options` = ? WHERE `id` = ?",
+											[$name, $title, $type, $placeholder, $value, $maxlength, $description, $regex, $options, $required, $regist, $pos, $regex_options, $id]
+										);
 										if($sql !== false){
 											header('Location: ?p=additional_fields&h=additional_fields_edit_successfully');
 											exit();
@@ -258,13 +253,13 @@ class additional_fields extends loginsystem{
                     $pos = parent::getValue('fields', 'id', $id, 'pos');
 					
 					// Delete Field
-					$sql = $this->mysql->query("Delete From `".Prefix."_fields` Where `id` = '$id'");
+					$sql = $this->pq("DELETE FROM `".Prefix."_fields` WHERE `id` = ?", [$id]);
 					if($sql !== false){
 						// Adjust positions
 						$autoPos = self::autoPosition($pos, 1);
-						
+
 						// Delete all field data from users
-						$sql = $this->mysql->query("Delete From `".Prefix."_additional_user_information` Where `field_id` = '$id'");
+						$sql = $this->pq("DELETE FROM `".Prefix."_additional_user_information` WHERE `field_id` = ?", [$id]);
 						if($sql !== false){
 							header('Location: ?p=additional_fields&h=additional_fields_remove_successfully');
 							exit();
@@ -291,9 +286,11 @@ class additional_fields extends loginsystem{
 	
 	public function showFields($regist = 0, $prefix = '', $id = NULL, $tpl = 'default'){
 		$rtn = array();
-		$query = ($regist != 0) ? "Where `regist` = '$regist'" : '';
-		
-		$sql = $this->mysql->query("Select * From `".Prefix."_fields` $query Order by `pos` ASC");
+		if($regist != 0){
+			$sql = $this->pq("SELECT * FROM `".Prefix."_fields` WHERE `regist` = ? ORDER BY `pos` ASC", [(int)$regist]);
+		} else {
+			$sql = $this->pq("SELECT * FROM `".Prefix."_fields` ORDER BY `pos` ASC");
+		}
 		while($row = $sql->fetch_assoc()){
 			$pre = !empty($id) ? parent::getValue('additional_user_information', array('user_id', 'field_id'), array($id, $row['id']), 'value') : NULL;
 			if($row['type'] == 'checkbox'){
@@ -341,10 +338,13 @@ class additional_fields extends loginsystem{
 	
 	public function setFieldValues($regist = 0, $prefix = NULL, $id = NULL, $checkOnly = false){
 		$error = NULL;
-		$query = ($regist != 0) ? "Where `regist` = '$regist'" : '';
         if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
-        
-        $sql = $this->mysql->query("Select * From `".Prefix."_fields` $query Order by `pos` ASC");
+
+		if($regist != 0){
+			$sql = $this->pq("SELECT * FROM `".Prefix."_fields` WHERE `regist` = ? ORDER BY `pos` ASC", [(int)$regist]);
+		} else {
+			$sql = $this->pq("SELECT * FROM `".Prefix."_fields` ORDER BY `pos` ASC");
+		}
 		while($row = $sql->fetch_assoc()){
 			$val = isset($_POST[$prefix.$row['name']]) ? $_POST[$prefix.$row['name']] : NULL;
 			if(is_array($val)){
@@ -352,20 +352,25 @@ class additional_fields extends loginsystem{
 			} else {
 				$val = length($val, $row['maxlength'], 0, "sql");
 			}
-			
+
 			if(!empty($val) || $row['required'] == 0){
 				if(empty($row['regex']) || $row['required'] == 0 || preg_match('#'.$row['regex'].'#'.$row['regex_options'], $val)){
 					if($checkOnly == false){
 						if(parent::getAmount('additional_user_information', array('field_id', 'user_id'), array($row['id'], $id)) == 0){
-							$query = "Insert Into `".Prefix."_additional_user_information` (`field_id`, `user_id`, `value`) Values ('".$row['id']."', '$id', '$val')";
+							$sql_update = $this->pq(
+								"INSERT INTO `".Prefix."_additional_user_information` (`field_id`, `user_id`, `value`) VALUES (?, ?, ?)",
+								[$row['id'], $id, $val]
+							);
 						} else {
-							$query = "Update `".Prefix."_additional_user_information` Set `value` = '$val' Where `field_id` = '".$row['id']."' AND `user_id` = '$id'";
+							$sql_update = $this->pq(
+								"UPDATE `".Prefix."_additional_user_information` SET `value` = ? WHERE `field_id` = ? AND `user_id` = ?",
+								[$val, $row['id'], $id]
+							);
 						}
 
-						$sql_update = $this->mysql->query($query);
 						if($sql_update === false){
 							$error = 'Fehler beim speichern eines Feldes! Bitte versuche es zu einem sp&auml;teren Zeitpunkt erneut.';
-							errormail('Fehler beim speichern des Feldes "'.$row['name'].'#'.$row['id'].'"! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'!<br> MySQL-Fehler '.$this->mysql->errno.': <br>'.$this->mysql->error.'<br><br>Query: '.$query);
+							errormail('Fehler beim speichern des Feldes "'.$row['name'].'#'.$row['id'].'"! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'! MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
 							break;
 						}
 					}
@@ -378,7 +383,7 @@ class additional_fields extends loginsystem{
 				break;
 			}
 		}
-		
+
 		return $error;
 	}
 	
@@ -386,8 +391,10 @@ class additional_fields extends loginsystem{
 		$rtn = array();
 		$tpl_text = file_get_contents($this->tpl_field_dir.$tpl.'/get_field_text.tpl');
 		$tpl_multi = file_get_contents($this->tpl_field_dir.$tpl.'/get_field_multi.tpl');
-		$query = "Select a.*, b.`type`, b.`title`, b.`options` From ".Prefix."_additional_user_information a INNER JOIN ".Prefix."_fields b ON a.field_id = b.id Where a.user_id = '$id' AND a.value != '' Order by b.pos ASC";
-		$sql = $this->mysql->query($query);
+		$sql = $this->pq(
+			"SELECT a.*, b.`type`, b.`title`, b.`options` FROM `".Prefix."_additional_user_information` a INNER JOIN `".Prefix."_fields` b ON a.field_id = b.id WHERE a.user_id = ? AND a.value != '' ORDER BY b.pos ASC",
+			[$id]
+		);
 		while($row = $sql->fetch_assoc()){
 			$load_tpl = $tpl_text;
 			$options = array();
