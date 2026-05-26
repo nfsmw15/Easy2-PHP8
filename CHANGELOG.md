@@ -13,6 +13,7 @@
 - `userlist.php`: 4× `onClick="window.history.back();"` → `data-history-back`-Attribut (CSP-Verletzung behoben)
 - `regist.php`, `pw_reset.php`, `pwv.php`: Captcha-`onClick` entfernt (CSP-Verletzung behoben)
 - `app.js`: jQuery-Handler für `.captcha-img` und `[data-history-back]` ergänzt
+- **jQuery 1.11.1 → 3.7.1**: jQuery 1.x nutzte intern `setAttribute("onchange", "t")` als Browser-Kompatibilitätshack, was `script-src-attr`-CSP-Verletzung auslöste
 
 ---
 
