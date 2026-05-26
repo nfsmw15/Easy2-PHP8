@@ -1,5 +1,20 @@
 # Changelog — EASY 2.0 PHP8 Fork (Bootstrap 5)
 
+## [1.2.3] — 2026-05-26
+
+### Sicherheit
+- **SQL-Injection vollständig behoben**: Alle `$this->mysql->query()` in `loginsystem.php`, `sites.php`, `menu.php`, `additional_fields.php` und `rules.php` auf `$this->pq()` (Prepared Statements) umgestellt
+  - `database.php`: neue geschützte Methode `pq(string $sql, array $params)` als sicherer Drop-in-Ersatz
+  - `getUser()`: Whitelist für `$search_column` (nur erlaubte Spalten)
+  - `restore()`: Whitelist für `$row['coloum']` (verhindert Column-Injection aus DB-Werten)
+  - `autoPosition()` in `menu.php` und `additional_fields.php`: dynamische Query-Konstruktion durch Prepared Statements ersetzt
+- **CSRF-Token**: `uniqid()` → `bin2hex(random_bytes(32))` (kryptografisch sicher); `lock()` CSRF-Länge 16 → 64 (konsistent mit Session)
+- **Session-Härtung**: `session_regenerate_id(true)` nach erfolgreichem Login
+- **Remember-Me-Cookies**: Cookie-Optionen auf `secure`, `httponly`, `samesite=Strict` gehärtet (Array-Syntax)
+- **Passwort-Vergleiche**: `md5($a) == md5($b)` → `$a === $b` (kein Hash-Vergleich mehr, kein Typ-Juggling)
+
+---
+
 ## [1.2.2] — 2026-05-26
 
 ### Neu

@@ -106,6 +106,30 @@ class database
         return $stmt;
     }
 
+    /**
+     * Safe drop-in für $this->mysql->query() mit Prepared Statements.
+     * Gibt MysqliResultWrapper (SELECT/SHOW) oder true (DML) oder false (Fehler) zurück.
+     */
+    protected function pq(string $sql, array $params = []): \MysqliResultWrapper|bool
+    {
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
+            $this->mysql->insert_id = (int)$this->pdo->lastInsertId();
+
+            $first = ltrim($sql);
+            if (stripos($first, 'SELECT') === 0 || stripos($first, 'SHOW') === 0) {
+                return new \MysqliResultWrapper($stmt);
+            }
+            return true;
+        } catch (\PDOException $e) {
+            $this->mysql->errno = (int)$e->getCode();
+            $this->mysql->error = $e->getMessage();
+            error_log('SQL-Fehler [pq]: ' . $e->getMessage());
+            return false;
+        }
+    }
+
     // ── getTableInfo ─────────────────────────────────────────────────────────
 
     public function getTableInfo(string $table, ?string $value = null, string $prefix = Prefix): mixed

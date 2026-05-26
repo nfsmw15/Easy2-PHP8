@@ -26,7 +26,7 @@ class rules extends loginsystem{
 
 	public function listRules(){
 		$output = NULL;
-		$sql  	= $this->mysql->query("Select * From `".Prefix."_rules` Order by tag");
+		$sql  	= $this->pq("SELECT * FROM `".Prefix."_rules` ORDER BY `tag`");
 		while($out = $sql->fetch_assoc()){
 			$output .= '
 								<tr>
@@ -57,7 +57,7 @@ class rules extends loginsystem{
             if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
             
             if(!empty($name) && !empty($tag) && !empty($desc)){
-				$sql = $this->mysql->query("Insert Into ".Prefix."_rules (`name`, `tag`, `description`) Values ('$name', '$tag', '$desc')");
+				$sql = $this->pq("INSERT INTO `".Prefix."_rules` (`name`, `tag`, `description`) VALUES (?, ?, ?)", [$name, $tag, $desc]);
 				if($sql){
 					header('Location: ?p=rules&h=rule_add_successfully');
 					exit();
@@ -83,7 +83,7 @@ class rules extends loginsystem{
 			if(!empty($name) && !empty($tag) && !empty($desc)){
                 if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
                 
-                $sql = $this->mysql->query("Update ".Prefix."_rules Set `name` = '$name', `tag` = '$tag', `description` = '$desc' Where `id` = '$id'");
+                $sql = $this->pq("UPDATE `".Prefix."_rules` SET `name` = ?, `tag` = ?, `description` = ? WHERE `id` = ?", [$name, $tag, $desc, $id]);
 				if($sql){
 					header('Location: ?p=rules&h=rule_edit_successfully');
 					exit();
@@ -105,7 +105,7 @@ class rules extends loginsystem{
 		if(parent::auditRight('rule_delete')){
             if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
             
-            $sql = $this->mysql->query("Delete From ".Prefix."_rules Where id = '$id' Limit 1");
+            $sql = $this->pq("DELETE FROM `".Prefix."_rules` WHERE `id` = ? LIMIT 1", [$id]);
 			if($sql){
 				header('Location: ?p=rules&h=rule_remove_successfully');
 				exit();
