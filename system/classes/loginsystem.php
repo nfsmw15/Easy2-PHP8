@@ -1026,7 +1026,7 @@ class loginsystem extends database
             if(self::auditRight('user_show'))
                 $btns[] = '<a href="?p=userlist&f=show&id='.$row['id'].'" title="Anzeigen"><i class="fa fa-fw fa-eye"></i></a>';
             
-            if(self::auditRight('user_edit'))
+            if(self::auditRight('user_edit') && $this->checkRank($row['rank']))
                 $btns[] = '<a href="?p=userlist&f=edit&id='.$row['id'].'" title="Bearbeiten"><i class="fa fa-fw fa-pencil"></i></a>';
             if($row['active'] == 1){
                 if(self::auditRight('user_disable') && $this->checkRank($row['rank']))
@@ -1170,7 +1170,7 @@ class loginsystem extends database
         global $id;
         global $additional_fields;
         $error = NULL;
-        if(self::auditRight('user_pwreset') && self::getUser('uik', $id) != '3A2xdfRKw5k6IqptThiZSFXbT5J0oELO'){
+        if(self::auditRight('user_pwreset') && $this->checkRank(self::getUser('rank', $id)) && self::getUser('uik', $id) != '3A2xdfRKw5k6IqptThiZSFXbT5J0oELO'){
             if(parent::getAmount('user', 'id', $id) == 1){
                 $username	= length($_POST['edit-username'] ?? '', 64);
                 $fullname	= length($_POST['edit-fullname'] ?? '', 64);
@@ -1301,10 +1301,10 @@ class loginsystem extends database
     
     public function resetUserPasswd(){
         global $id;
-        if(self::auditRight('user_pwreset') && self::getUser('uik', $id) != '3A2xdfRKw5k6IqptThiZSFXbT5J0oELO' && self::getUser('uik', $id) != '3A2xdfRKw9l6IqptThiZSFXbT5J0oELO'){
+        if(self::auditRight('user_pwreset') && $this->checkRank(self::getUser('rank', $id)) && self::getUser('uik', $id) != '3A2xdfRKw5k6IqptThiZSFXbT5J0oELO' && self::getUser('uik', $id) != '3A2xdfRKw9l6IqptThiZSFXbT5J0oELO'){
             if(database::getAmount('user', 'id', $id) == 1){
                 if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
-    
+
                 $password = length(isset($_POST['reset-password']) ? $_POST['reset-password'] : '', 64);
                 if(self::pwverify($password, self::getUser('password'))){
                     $new_passwd = self::generatePassword();
@@ -1390,7 +1390,7 @@ class loginsystem extends database
         if(empty($this->sessionData['csrf']) || $csrf !== $this->sessionData['csrf']){
             return 'Ung&uuml;ltiger CSRF Code!';
         }
-        if(self::auditRight('user_enable') && self::getUser('uik', $id) != '3A2xdfRKw5k6IqptThiZSFXbT5J0oELO' && self::getUser('uik', $id) != '3A2xdfRKw9l6IqptThiZSFXbT5J0oELO'){
+        if(self::auditRight('user_enable') && $this->checkRank(self::getUser('rank', $id)) && self::getUser('uik', $id) != '3A2xdfRKw5k6IqptThiZSFXbT5J0oELO' && self::getUser('uik', $id) != '3A2xdfRKw9l6IqptThiZSFXbT5J0oELO'){
             if(database::getAmount('user', 'id', $id) == 1){
                 if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
     
@@ -1464,7 +1464,7 @@ class loginsystem extends database
         global $id;
         $userid = $id;
         
-        if(self::auditRight('user_rm_avatar') && self::getUser('uik', $id) != '3A2xdfRKw5k6IqptThiZSFXbT5J0oELO'){
+        if(self::auditRight('user_rm_avatar') && $this->checkRank(self::getUser('rank', $id)) && self::getUser('uik', $id) != '3A2xdfRKw5k6IqptThiZSFXbT5J0oELO'){
             if(database::getAmount('user', 'id', $userid) == 1){
                 if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
     

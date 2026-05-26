@@ -13,6 +13,9 @@
   - `getCurrentUrl()`: nutzt `is_https()` statt `$_SERVER['HTTPS']` — Passwort-Reset-/Kontaktlinks in E-Mails haben jetzt auch hinter Traefik korrekte `https://`-Scheme
   - `loginsystem.php` `session_data()`: hardcoded `http://` durch `is_https()`-Erkennung ersetzt — Redirect-URL wird korrekt mit `https://` gebaut
   - `decodeRand()`: fehlende Klammern ergänzt (war letzter verbliebener `??=`-Precedence-Bug)
+- **Privilege-Escalation in Benutzerverwaltung behoben**: `editUser()`, `resetUserPasswd()`, `activateUser()`, `rmUserAvatar()` prüfen jetzt `checkRank()` des Zielusers — ein Administrator konnte bisher Benutzer mit höherem Rang (z.B. Webmaster) bearbeiten, Passwort zurücksetzen und Avatar entfernen
+- **Edit-Button in Userliste**: fehlender `checkRank()`-Check ergänzt — Bearbeiten-Icon wird für höherrangige Benutzer nicht mehr angezeigt
+- **Gast-Rang: `adm/`-Seiten gesperrt** (`sites.php`): `allowSite()` blockiert jetzt alle Seiten mit `dir='adm/'` ohne aktiven Login, unabhängig von DB-Einstellungen
 
 ---
 
