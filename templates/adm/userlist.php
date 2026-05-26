@@ -107,7 +107,7 @@
 						<div class="btn-group pull-right">
 							<button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">Aktionen <span class="caret"></span></button>
 							<ul class="dropdown-menu" role="menu">
-                            	<?php if($loginsystem->auditRight('user_edit')){ ?>
+                            	<?php if($loginsystem->auditRight('user_edit') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
 									<li><a href="./?p=userlist&f=edit&id=<?php echo $id; ?>"><i class="fa fa-pencil fa-fw"></i> Bearbeiten</a></li>
                                 <?php } ?>
                                 <?php if($loginsystem->getUser('active', $id) == 0){ ?>
@@ -119,10 +119,10 @@
 										<li><a href="./?p=userlist&c=deactivate&id=<?php echo $id; ?>&csrf=<?php echo $loginsystem->getData('csrfToken'); ?>"><i class="fa fa-ban fa-fw"></i> Deaktivieren</a></li>
                                     <?php } ?>
                                 <?php } ?>
-                                <?php if($loginsystem->auditRight('user_pwreset')){ ?>
+                                <?php if($loginsystem->auditRight('user_pwreset') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
 									<li><a href="./?p=userlist&f=pwreset&id=<?php echo $id; ?>"><i class="fa fa-refresh fa-fw"></i> Passwort zur&uuml;cksetzen</a></li>
                                	<?php } ?>
-                                <?php if($loginsystem->auditRight('user_rm_avatar')){ ?>
+                                <?php if($loginsystem->auditRight('user_rm_avatar') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
 									<li><a href="./?p=userlist&f=rm_avatar&id=<?php echo $id; ?>"><i class="fa fa-eraser fa-fw"></i> Profilbild entfernen</a></li>
                                	<?php } ?>
                                 <?php if($loginsystem->auditRight('user_delete') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
@@ -173,7 +173,7 @@
                            </tbody>
                         </table>
 				</div><!-- /.card -->
-        	<?php } elseif($f == 'edit' && !empty($id) && $loginsystem->auditRight('user_edit')){ ?>
+        	<?php } elseif($f == 'edit' && !empty($id) && $loginsystem->auditRight('user_edit') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <i class="fa fa-pencil"></i> Benutzer bearbeiten
@@ -214,7 +214,7 @@
                         </form>
                     </div>
                 </div><!-- /.card -->
-        	<?php } elseif($f == 'delete' && !empty($id) && $loginsystem->auditRight('user_delete')){ ?>
+        	<?php } elseif($f == 'delete' && !empty($id) && $loginsystem->auditRight('user_delete') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <i class="fa fa-trash"></i> Benutzer l&ouml;schen
@@ -241,7 +241,7 @@
                         </form>
                     </div>
                 </div><!-- /.card -->
-        	<?php } elseif($f == 'pwreset' && !empty($id) && $loginsystem->auditRight('user_pwreset')){ ?>
+        	<?php } elseif($f == 'pwreset' && !empty($id) && $loginsystem->auditRight('user_pwreset') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <i class="fa fa-refresh"></i> Benutzerpasswort zur&uuml;cksetzen
@@ -268,7 +268,7 @@
                         </form>
                     </div>
                 </div><!-- /.card -->
-        	<?php } elseif($f == 'rm_avatar' && !empty($id) && $loginsystem->auditRight('user_rm_avatar')){ ?>
+        	<?php } elseif($f == 'rm_avatar' && !empty($id) && $loginsystem->auditRight('user_rm_avatar') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <i class="fa fa-refresh"></i> Profilbild entfernen
