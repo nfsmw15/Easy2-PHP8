@@ -68,7 +68,7 @@ class loginsystem extends database
         $this->sessionData['url']     = length($_SESSION['ml_url']         ?? '', 512, 0, 'none');
         $this->sessionData['url_old'] = length($_SESSION['ml_url_old']     ?? '', 512, 0, 'none');
         
-        $url = 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+        $url = (is_https() ? 'https' : 'http') . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
         if($url != $this->sessionData['url']){
             $_SESSION['ml_url_old'] = $this->sessionData['url'];
             $this->sessionData['url_old'] = length($_SESSION['ml_url_old'] ?? '', 512, 0, 'none');
