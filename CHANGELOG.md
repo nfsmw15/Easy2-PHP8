@@ -10,14 +10,23 @@
 - `zipball_url` des Releases in `$_SESSION` gecacht (Vorbereitung Updater)
 - `$error ?? ''` in `settings.php`: kein PHP-Warning mehr wenn kein Fehler vorliegt
 
-
 ### Sicherheit
+- **SQL-Injection vollständig behoben**: Alle `$this->mysql->query()` in `loginsystem.php`, `sites.php`, `menu.php`, `additional_fields.php` und `rules.php` auf `$this->pq()` (Prepared Statements) umgestellt
+  - `database.php`: neue geschützte Methode `pq(string $sql, array $params)` als sicherer Drop-in-Ersatz
+  - `getUser()`: Whitelist für `$search_column` (nur erlaubte Spalten)
+  - `restore()`: Whitelist für `$row['coloum']` (verhindert Column-Injection aus DB-Werten)
+  - `autoPosition()` in `menu.php` und `additional_fields.php`: dynamische Query-Konstruktion durch Prepared Statements ersetzt
+- **CSRF-Token**: `uniqid()` → `bin2hex(random_bytes(32))` (kryptografisch sicher); `lock()` CSRF-Länge 16 → 64 (konsistent mit Session)
+- **Session-Härtung**: `session_regenerate_id(true)` nach erfolgreichem Login
+- **Remember-Me-Cookies**: Cookie-Optionen auf `secure`, `httponly`, `samesite=Strict` gehärtet (Array-Syntax)
+- **Passwort-Vergleiche**: `md5($a) == md5($b)` → `$a === $b` (kein Hash-Vergleich mehr, kein Typ-Juggling)
 - **Mitglied-Rang: `?p=menu` und `?p=additional_fields` nicht mehr zugänglich** — Site-IDs 18 und 19 aus `_ml_ranks.sql` (Mitglied) entfernt; Migration für bestehende Installs:
   ```sql
   UPDATE `[prefix]_ml_ranks`
   SET `sites` = REPLACE(REPLACE(`sites`, ',18', ''), ',19', '')
   WHERE `id` = 1813201540;
   ```
+
 ---
 
 ## [1.1.4] — 2026-05-26

@@ -34,7 +34,7 @@ class menu extends sites{
 		$tpl_link = file_get_contents($this->main_path.$tpl_dir.'/menu_point.tpl');
 		$tpl_drop = file_get_contents($this->main_path.$tpl_dir.'/menu_dropdown_point.tpl');
 		
-		$sql = $this->mysql->query("Select * From ".Prefix."_menu Where menu = '$menu' AND under = '0' Order by `pos` ASC, `title` ASC");
+		$sql = $this->pq("SELECT * FROM `".Prefix."_menu` WHERE `menu` = ? AND `under` = '0' ORDER BY `pos` ASC, `title` ASC", [$menu]);
 		while($row = $sql->fetch_assoc()){
 			$page = NULL;
 			$url = '';
@@ -104,7 +104,7 @@ class menu extends sites{
 		$tpl_link = file_get_contents($this->main_path.$tpl_dir.'/menu_dropdown_link.tpl');
 		
 		// Falls der Pull-Down-Link auch einen Link enthaelt wird dieser ins Pull-Down aufgenommen
-		$sql = $this->mysql->query("Select * From ".Prefix."_menu Where id = '$id'");
+		$sql = $this->pq("SELECT * FROM `".Prefix."_menu` WHERE `id` = ?", [$id]);
 		$row = $sql->fetch_assoc();
 		if(!empty($row['sid']) || !empty($row['url'])){
 			$page = NULL;
@@ -156,7 +156,7 @@ class menu extends sites{
 			}
 		}
 		
-		$sql = $this->mysql->query("Select * From ".Prefix."_menu Where under = '$id' Order by `pos` ASC, `title` ASC");
+		$sql = $this->pq("SELECT * FROM `".Prefix."_menu` WHERE `under` = ? ORDER BY `pos` ASC, `title` ASC", [$id]);
 		while($row = $sql->fetch_assoc()){
 			$page = NULL;
 			$tpl = $tpl_link;
@@ -210,7 +210,7 @@ class menu extends sites{
 	
 	public function getMenuGroupOptions($id = NULL){
 		$rtn = NULL;
-		$sql = $this->mysql->query("Select * From ".Prefix."_menu_group Order by `name`");
+		$sql = $this->pq("SELECT * FROM `".Prefix."_menu_group` ORDER BY `name`");
 		while($row = $sql->fetch_assoc()){
 			$sel = ($id == $row['id']) ? ' selected' : NULL;
 			$rtn .= '<option value="'.$row['id'].'"'.$sel.'>'.$row['name'].' #'.$row['id'].'</option>';
@@ -220,7 +220,7 @@ class menu extends sites{
 	
 	public function getSiteOptions($id = NULL){
 		$rtn = NULL;
-		$sql = $this->mysql->query("Select * From ".Prefix."_sites Order by `title`");
+		$sql = $this->pq("SELECT * FROM `".Prefix."_sites` ORDER BY `title`");
 		while($row = $sql->fetch_assoc()){
 			$sel = ($id == $row['id']) ? ' selected' : NULL;
 			$rtn .= '<option value="'.$row['id'].'"'.$sel.'>'.$row['title'].' ('.$row['filename'].'.'.$row['type'].')</option>';
@@ -239,7 +239,7 @@ class menu extends sites{
 			</thead>
 			<tbody>';
 		
-		$sql = $this->mysql->query("Select * From ".Prefix."_menu Where id = '$id'");
+		$sql = $this->pq("SELECT * FROM `".Prefix."_menu` WHERE `id` = ?", [$id]);
 		$row = $sql->fetch_assoc();
 		if(!empty($row['sid']) || !empty($row['url'])){
 			$btn = array();
@@ -271,7 +271,7 @@ class menu extends sites{
 			</tr>';
 		}
 		
-		$sql = $this->mysql->query("Select * From ".Prefix."_menu Where under = '$id' Order by `pos` ASC, `title` ASC");
+		$sql = $this->pq("SELECT * FROM `".Prefix."_menu` WHERE `under` = ? ORDER BY `pos` ASC, `title` ASC", [$id]);
 		while($row = $sql->fetch_assoc()){
 			$btn = array();
 			$icon = empty($row['icon']) ? NULL : '<i class="fa fa-fw '.$row['icon'].'"></i> ';
@@ -307,7 +307,7 @@ class menu extends sites{
 	// Gibt Menue-Tabelle aus
 	public function listMenu(){
 		$rtn = NULL;
-		$sql = $this->mysql->query("Select * From ".Prefix."_menu Where under = '0' Order by `pos` ASC, `title` ASC");
+		$sql = $this->pq("SELECT * FROM `".Prefix."_menu` WHERE `under` = '0' ORDER BY `pos` ASC, `title` ASC");
 		while($row = $sql->fetch_assoc()){
 			$btn = array();
 			$icon = empty($row['icon']) ? NULL : '<i class="fa fa-fw '.$row['icon'].'"></i> ';
@@ -341,7 +341,7 @@ class menu extends sites{
 	
 	public function menuOptionsUnder($id = NULL){
 		$rtn = NULL;
-		$sql = $this->mysql->query("Select * From ".Prefix."_menu Where under = '0' Order by `title`");
+		$sql = $this->pq("SELECT * FROM `".Prefix."_menu` WHERE `under` = '0' ORDER BY `title`");
 		while($row = $sql->fetch_assoc()){
 			$sel = ($id == $row['id']) ? ' selected' : NULL;
 			$icon = NULL;
@@ -357,28 +357,16 @@ class menu extends sites{
 	
 	private function autoPosition($start = 0, $menu = 0, $direction = 0, $end = 'na'){
         if(DEMO_MODE){ return false; }
-        
-        /***********************
-		 * $start => Startwert, ab welcher er die anderen Menuepunkte verschieben soll
-		 * $menu  => In welchem Menue verschoben werden soll (Menu-Under-ID)
-		 * $direction => In welche Richtung verschoben werden soll (0 = +, 1 = -)
-		 * $end => Bis zu welchem Wert er verschieben soll
-		 ***********************/
+
 		if($end == 'na'){
-			if($direction == 0){
-				$query = "Update `".Prefix."_menu` Set pos = pos + 1 Where under = '$menu' AND pos >= '$start'";
-			} else {
-				$query = "Update `".Prefix."_menu` Set pos = pos - 1 Where under = '$menu' AND pos >= '$start'";
-			}
+			$op = ($direction == 0) ? '+ 1' : '- 1';
+			$sql = $this->pq("UPDATE `".Prefix."_menu` SET `pos` = `pos` $op WHERE `under` = ? AND `pos` >= ?", [(int)$menu, (int)$start]);
 		} elseif(is_numeric($end)){
-			if($direction == 0){
-				$query = "Update `".Prefix."_menu` Set pos = pos + 1 Where under = '$menu' AND pos >= '$start' AND pos <= '$end'";
-			} else {
-				$query = "Update `".Prefix."_menu` Set pos = pos - 1 Where under = '$menu' AND pos >= '$start' AND pos <= '$end'";
-			}
+			$op = ($direction == 0) ? '+ 1' : '- 1';
+			$sql = $this->pq("UPDATE `".Prefix."_menu` SET `pos` = `pos` $op WHERE `under` = ? AND `pos` >= ? AND `pos` <= ?", [(int)$menu, (int)$start, (int)$end]);
+		} else {
+			return false;
 		}
-		
-		$sql = $this->mysql->query($query);
 		if($sql === false){
 			errormail('Fehler beim anpassen der Positionen! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()! MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
 			return false;
@@ -409,7 +397,10 @@ class menu extends sites{
 						if(self::autoPosition($pos, $under, 0)){
 							if(!empty($url) && preg_match('/^www.(.*)/si', $url))
 								$url = 'http://'.$url;
-							$sql = $this->mysql->query("Insert Into ".Prefix."_menu (`title`, `icon`, `under`, `sid`, `url`, `target`, `link_type`, `menu`, `pos`) Values ('$title', '$icon', '$under', '$file', '$url', '$target', '$type', '$menu', '$pos')");
+							$sql = $this->pq(
+								"INSERT INTO `".Prefix."_menu` (`title`, `icon`, `under`, `sid`, `url`, `target`, `link_type`, `menu`, `pos`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+								[$title, $icon, $under, $file, $url, $target, $type, $menu, $pos]
+							);
 							if($sql !== false){
 								header('Location: ?p=menu&h=menu_add_successfully');
 								exit();
@@ -469,7 +460,10 @@ class menu extends sites{
 								if($autoPos == true){
 									if(!empty($url) && preg_match('/^www.(.*)/si', $url))
 										$url = 'http://'.$url;
-									$sql = $this->mysql->query("Update ".Prefix."_menu Set `title` = '$title', `icon` = '$icon', `under` = '$under', `sid` = '$file', `url` = '$url', `target` = '$target', `link_type` = '$type', `menu` = '$menu', `pos` = '$pos' Where id = '$id'");
+									$sql = $this->pq(
+										"UPDATE `".Prefix."_menu` SET `title` = ?, `icon` = ?, `under` = ?, `sid` = ?, `url` = ?, `target` = ?, `link_type` = ?, `menu` = ?, `pos` = ? WHERE `id` = ?",
+										[$title, $icon, $under, $file, $url, $target, $type, $menu, $pos, $id]
+									);
 									if($sql !== false){
 										header('Location: ?p=menu&h=menu_edit_successfully');
 										exit();
@@ -513,7 +507,7 @@ class menu extends sites{
 					$pos = parent::getValue('menu', 'id', $id, 'pos');
 					$under = parent::getValue('menu', 'id', $id, 'under');
 					if(self::autoPosition($pos, $under, 1)){
-						$sql = $this->mysql->query("Delete From ".Prefix."_menu Where id = '$id'");
+						$sql = $this->pq("DELETE FROM `".Prefix."_menu` WHERE `id` = ?", [$id]);
 						if($sql !== false){
 							header('Location: ?p=menu&h=menu_remove_successfully');
 							exit();
@@ -539,7 +533,7 @@ class menu extends sites{
 	public function resetOptions($val){
 		$rtn = NULL;
 		$pos = 0;
-		$sql = $this->mysql->query("Select * From ".Prefix."_menu Group by `under` Order by `under` ASC, `title` ASC");
+		$sql = $this->pq("SELECT * FROM `".Prefix."_menu` GROUP BY `under` ORDER BY `under` ASC, `title` ASC");
         if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
         
         while($row = $sql->fetch_assoc()){
@@ -576,16 +570,16 @@ class menu extends sites{
                 
                 $pos = 0;
 				$under = 0;
-				$range = NULL;
 				if($resetOption != 'all'){
-					$range = "Where under = '$resetOption'";
+					$sql = $this->pq("SELECT * FROM `".Prefix."_menu` WHERE `under` = ? ORDER BY `under` ASC, `title` ASC", [$resetOption]);
+				} else {
+					$sql = $this->pq("SELECT * FROM `".Prefix."_menu` ORDER BY `under` ASC, `title` ASC");
 				}
-				$sql = $this->mysql->query("Select * From `".Prefix."_menu` $range Order by `under` ASC, `title` ASC");
 				while($row = $sql->fetch_assoc()){
 					if($under != $row['under'])
 						$pos = 0;
-					
-					$query = $this->mysql->query("Update `".Prefix."_menu` Set pos = '$pos' Where id = '".$row['id']."'");
+
+					$query = $this->pq("UPDATE `".Prefix."_menu` SET `pos` = ? WHERE `id` = ?", [$pos, $row['id']]);
 					if($query === false){
 						$error = 'Fehler beim neu anordnen der Positionen!';
 							errormail('Fehler beim neu anordnen der Positionen! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()! MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
@@ -618,7 +612,7 @@ class menu extends sites{
 			$last = -1;
 			$founds = array();
 			$last_under = -1;
-			$sql = $this->mysql->query("Select * From `".Prefix."_menu` Order by `under` ASC, `pos` ASC");
+			$sql = $this->pq("SELECT * FROM `".Prefix."_menu` ORDER BY `under` ASC, `pos` ASC");
 			while($row = $sql->fetch_assoc()){
 				if($last_under != $row['under']){
 					$start = $row['pos'];
@@ -664,7 +658,7 @@ class menu extends sites{
 					}
 					
 					if($discovery[4] == true) // Wenn eine Zahl doppelt ist
-						$this->mysql->query("Update `".Prefix."_menu` Set pos = pos + 1 Where id = '".$discovery[1]."'");
+						$this->pq("UPDATE `".Prefix."_menu` SET `pos` = `pos` + 1 WHERE `id` = ?", [$discovery[1]]);
 				}
 			}
 			if(empty($error)){

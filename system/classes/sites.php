@@ -68,7 +68,7 @@ class sites extends loginsystem{
 		global $p;
 		$sitename = parent::getMainData('short_site_title');
 		if(!empty($p)){
-			$sql = $this->mysql->query("Select * From ".Prefix."_sites Where filename Like '$p' Limit 1");
+			$sql = $this->pq("SELECT * FROM `".Prefix."_sites` WHERE `filename` LIKE ? LIMIT 1", [$p]);
 			if($sql->num_rows == 1){
 				$row = $sql->fetch_assoc();
 				return $row['title'].' • '.$sitename;
@@ -80,9 +80,9 @@ class sites extends loginsystem{
 	public function includeSite($pre = false){
 		global $p;
 		$errorsite = parent::getValue('sites', 'errorsite', '1', NULL, false) ?: ['dir' => '', 'filename' => '', 'type' => ''];
-		
+
 		if(!empty($p)){
-			$sql = $this->mysql->query("Select * From ".Prefix."_sites Where filename Like '$p' Limit 1");
+			$sql = $this->pq("SELECT * FROM `".Prefix."_sites` WHERE `filename` LIKE ? LIMIT 1", [$p]);
 			if($sql->num_rows == 1){
 				$row = $sql->fetch_assoc();
 				if(self::allowSite($row['id']) == true){
@@ -139,8 +139,8 @@ class sites extends loginsystem{
 	
 	public function listSites(){
 		$rtn = NULL;
-		
-		$sql = $this->mysql->query("Select * From ".Prefix."_sites Order by dir ASC, filename ASC");
+
+		$sql = $this->pq("SELECT * FROM `".Prefix."_sites` ORDER BY `dir` ASC, `filename` ASC");
 		while($row = $sql->fetch_assoc()){
 			$startsite = NULL;
 			if($row['start_site'] == '1') $startsite .= '<i class="fa fa-home" title="Startseite"></i> ';
@@ -192,21 +192,22 @@ class sites extends loginsystem{
 						if(parent::getAmount('sites', 'filename', $filename) == 0){
 							if($file_check == 0 || $createsite == 1 || file_exists($this->main_path.$dir.$filename.'.'.$type)){
 								if($start == 1){
-									// Reset old startsite | Setze alte Startseite zurueck
-									$this->mysql->query("Update ".Prefix."_sites Set start_site = '0' Where start_site = '1'");
+									$this->pq("UPDATE `".Prefix."_sites` SET `start_site` = '0' WHERE `start_site` = '1'");
 								}
 								if($start_login == 1){
-									// Reset old startsite after login | Setze alte Startseite nach dem Login zurueck
-									$this->mysql->query("Update ".Prefix."_sites Set start_site_login = '0' Where start_site_login = '1'");
+									$this->pq("UPDATE `".Prefix."_sites` SET `start_site_login` = '0' WHERE `start_site_login` = '1'");
 								}
 								if($errorsite == 1){
-									$this->mysql->query("Update ".Prefix."_sites Set errorsite = '0' Where errorsite = '1'");
+									$this->pq("UPDATE `".Prefix."_sites` SET `errorsite` = '0' WHERE `errorsite` = '1'");
 								}
 								if($logoutsite == 1){
-									$this->mysql->query("Update ".Prefix."_sites Set logout_site = '0' Where logout_site = '1'");
+									$this->pq("UPDATE `".Prefix."_sites` SET `logout_site` = '0' WHERE `logout_site` = '1'");
 								}
 
-								$sql = $this->mysql->query("Insert Into ".Prefix."_sites (`title`,`filename`,`dir`,`start_site`,`start_site_login`, `errorsite`, `type`, `logout_site`) Values ('$title', '$filename', '$dir', '$start', '$start_login', '$errorsite', '$type', '$logoutsite')");
+								$sql = $this->pq(
+									"INSERT INTO `".Prefix."_sites` (`title`, `filename`, `dir`, `start_site`, `start_site_login`, `errorsite`, `type`, `logout_site`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+									[$title, $filename, $dir, $start, $start_login, $errorsite, $type, $logoutsite]
+								);
 								if($sql === true){
 									if($createsite == 1 && !file_exists($this->main_path.$dir.$filename.'.'.$type)){
 										if(!is_dir($this->main_path.$dir))
@@ -282,21 +283,22 @@ class sites extends loginsystem{
 							if($file_check == 0 || $createsite == 1 || file_exists($this->main_path.$dir.$filename.'.'.$type)){
 								if(!empty($id) && parent::getAmount('sites', 'id', $id) == 1){
 									if($start == 1){
-										// Reset old startsite | Setze alte Startseite zurueck
-										$this->mysql->query("Update ".Prefix."_sites Set start_site = '0' Where start_site = '1'");
+										$this->pq("UPDATE `".Prefix."_sites` SET `start_site` = '0' WHERE `start_site` = '1'");
 									}
 									if($start_login == 1){
-										// Reset old startsite after login | Setze alte Startseite nach dem Login zurueck
-										$this->mysql->query("Update ".Prefix."_sites Set start_site_login = '0' Where start_site_login = '1'");
+										$this->pq("UPDATE `".Prefix."_sites` SET `start_site_login` = '0' WHERE `start_site_login` = '1'");
 									}
 									if($errorsite == 1){
-										$this->mysql->query("Update ".Prefix."_sites Set errorsite = '0' Where errorsite = '1'");
+										$this->pq("UPDATE `".Prefix."_sites` SET `errorsite` = '0' WHERE `errorsite` = '1'");
 									}
 									if($logoutsite == 1){
-										$this->mysql->query("Update ".Prefix."_sites Set logout_site = '0' Where logout_site = '1'");
+										$this->pq("UPDATE `".Prefix."_sites` SET `logout_site` = '0' WHERE `logout_site` = '1'");
 									}
 
-									$sql = $this->mysql->query("Update ".Prefix."_sites Set title = '$title', filename = '$filename', dir = '$dir', start_site = '$start', start_site_login = '$start_login', logout_site = '$logoutsite', errorsite = '$errorsite', type = '$type' Where id = '$id'");
+									$sql = $this->pq(
+										"UPDATE `".Prefix."_sites` SET `title` = ?, `filename` = ?, `dir` = ?, `start_site` = ?, `start_site_login` = ?, `logout_site` = ?, `errorsite` = ?, `type` = ? WHERE `id` = ?",
+										[$title, $filename, $dir, $start, $start_login, $logoutsite, $errorsite, $type, $id]
+									);
 									if($sql === true){
 										if($createsite == 1 && !file_exists($this->main_path.$dir.$filename.'.'.$type)){
 											if(!is_dir($this->main_path.$dir))
@@ -374,7 +376,7 @@ class sites extends loginsystem{
 			$dir	  = parent::getValue('sites', 'id', $id, 'dir');
 			if(!empty($id) && parent::getAmount('sites', 'id', $id) == 1){
 				if(parent::getAmount('sites', array('start_site', 'start_site_login', 'id'), array('0', '0', $id)) == 1){
-					$sql = $this->mysql->query("Delete From ".Prefix."_sites Where id = '$id'");
+					$sql = $this->pq("DELETE FROM `".Prefix."_sites` WHERE `id` = ?", [$id]);
 					if($sql === true){
 						if($delete_file == 1){
 							if(file_exists($this->main_path.$dir.$filename))

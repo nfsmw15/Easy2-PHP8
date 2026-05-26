@@ -79,13 +79,18 @@ class loginsystem extends database
     
     public function login_session(){
         if(!empty($this->sessionData['uik']) && !empty($this->sessionData['sic']) && !empty($this->sessionData['ulc']) && !empty($this->sessionData['ult']) && $this->sessionData['csrf']){
-            $sql    = "Select * From ".Prefix."_user Where active = '1' AND uik = '".$_SESSION['ml_login_uik']."'";
-            $result = $this->mysql->query($sql);
+            $result = $this->pq(
+                "SELECT * FROM `".Prefix."_user` WHERE `active` = '1' AND `uik` = ?",
+                [$_SESSION['ml_login_uik'] ?? '']
+            );
             // If user is found
             if($result->num_rows == 1){
-                $sql = $this->mysql->query("Select * From ".Prefix."_sessions Where uik = '".$this->sessionData['uik']."' AND sic = '".$this->sessionData['sic']."' AND ult = '".$this->sessionData['ult']."' AND ulc = '".$this->sessionData['ulc']."' AND logout = '0' AND closed = '0'");
+                $sql = $this->pq(
+                    "SELECT * FROM `".Prefix."_sessions` WHERE `uik` = ? AND `sic` = ? AND `ult` = ? AND `ulc` = ? AND `logout` = '0' AND `closed` = '0'",
+                    [$this->sessionData['uik'], $this->sessionData['sic'], $this->sessionData['ult'], $this->sessionData['ulc']]
+                );
                 if($sql->num_rows == 1){
-                    $sql = $this->mysql->query("Update ".Prefix."_sessions Set last_action = '".time()."' Where sic = '".$this->sessionData['sic']."'");
+                    $this->pq("UPDATE `".Prefix."_sessions` SET `last_action` = ? WHERE `sic` = ?", [time(), $this->sessionData['sic']]);
                     return true;
                 } else {
                     return false;
@@ -111,13 +116,16 @@ class loginsystem extends database
             if(!empty($uik) && !empty($login_code) && !empty($sic) && !empty($ult)){
                 if(database::getAmount('user', 'uik', $uik) == 1){
                     if(database::getValue('user', 'uik', $uik, 'active') == 1){
-                        $sql = $this->mysql->query("Select * From ".Prefix."_sessions Where uik = '".$uik."' AND sic = '".$sic."' AND ult = '".$ult."' AND ulc = '".$login_code."' AND logout = '0' AND closed = '0'");
+                        $sql = $this->pq(
+                            "SELECT * FROM `".Prefix."_sessions` WHERE `uik` = ? AND `sic` = ? AND `ult` = ? AND `ulc` = ? AND `logout` = '0' AND `closed` = '0'",
+                            [$uik, $sic, $ult, $login_code]
+                        );
                         if($sql->num_rows == 1){
                             $_SESSION['ml_login_uik'] = $uik;
                             $_SESSION['ml_login_code'] = $login_code;
                             $_SESSION['ml_login_time'] = $ult;
                             $_SESSION['ml_login_sic'] = $sic;
-                            $_SESSION['ml_csrfToken'] = uniqid('', true);
+                            $_SESSION['ml_csrfToken'] = bin2hex(random_bytes(32));
                             self::session_data();
                             global $p;
                             $url = NULL;
@@ -125,7 +133,7 @@ class loginsystem extends database
                                 global $sites;
                                 $userID = self::getUser('id', $uik, 'uik');
                                 $pID = NULL;
-                                $sql = $this->mysql->query("Select `id` From ".Prefix."_sites Where filename Like '$p.%' Limit 1");
+                                $sql = $this->pq("SELECT `id` FROM `".Prefix."_sites` WHERE `filename` LIKE ? LIMIT 1", [$p . '.%']);
                                 if($sql->num_rows == 1){
                                     $row = $sql->fetch_assoc();
                                     $pID = $row['id'];
@@ -149,7 +157,10 @@ class loginsystem extends database
     
     public function is_locked(){
         if($this->login_session()){
-            $sql = $this->mysql->query("Select `locked` From ".Prefix."_sessions Where uik = '".$this->sessionData['uik']."' AND sic = '".$this->sessionData['sic']."' AND ult = '".$this->sessionData['ult']."' AND ulc = '".$this->sessionData['ulc']."' AND logout = '0' AND closed = '0'");
+            $sql = $this->pq(
+                "SELECT `locked` FROM `".Prefix."_sessions` WHERE `uik` = ? AND `sic` = ? AND `ult` = ? AND `ulc` = ? AND `logout` = '0' AND `closed` = '0'",
+                [$this->sessionData['uik'], $this->sessionData['sic'], $this->sessionData['ult'], $this->sessionData['ulc']]
+            );
             $row = $sql->fetch_assoc();
             if($row['locked'] === '1')
                 return true;
@@ -158,10 +169,13 @@ class loginsystem extends database
     }
     
     public function lock(){
-        $csrf = length($_GET['csrf'] ?? '', 16);
-        if($csrf == $this->sessionData['csrf']){
+        $csrf = length($_GET['csrf'] ?? '', 64);
+        if($csrf === $this->sessionData['csrf']){
             $url = parse_url($this->sessionData['url_old'], PHP_URL_QUERY);
-            $sql = $this->mysql->query("Update ".Prefix."_sessions Set locked = '1', locked_dir = '".$url."' Where uik = '".$this->sessionData['uik']."' AND sic = '".$this->sessionData['sic']."' AND ult = '".$this->sessionData['ult']."' AND ulc = '".$this->sessionData['ulc']."' AND logout = '0' AND closed = '0'");
+            $sql = $this->pq(
+                "UPDATE `".Prefix."_sessions` SET `locked` = '1', `locked_dir` = ? WHERE `uik` = ? AND `sic` = ? AND `ult` = ? AND `ulc` = ? AND `logout` = '0' AND `closed` = '0'",
+                [$url, $this->sessionData['uik'], $this->sessionData['sic'], $this->sessionData['ult'], $this->sessionData['ulc']]
+            );
             if($sql === true){
                 header('Location: '.$_SERVER["SCRIPT_NAME"]);
                 exit();
@@ -177,7 +191,10 @@ class loginsystem extends database
     public function unlock(){
         $passwd = length($_POST['locked-passwd'] ?? '', 32);
         if(self::pwverify($passwd)){
-            $sql = $this->mysql->query("Update ".Prefix."_sessions Set locked = '0' Where uik = '".$this->sessionData['uik']."' AND sic = '".$this->sessionData['sic']."' AND ult = '".$this->sessionData['ult']."' AND ulc = '".$this->sessionData['ulc']."' AND logout = '0' AND closed = '0'");
+            $sql = $this->pq(
+                "UPDATE `".Prefix."_sessions` SET `locked` = '0' WHERE `uik` = ? AND `sic` = ? AND `ult` = ? AND `ulc` = ? AND `logout` = '0' AND `closed` = '0'",
+                [$this->sessionData['uik'], $this->sessionData['sic'], $this->sessionData['ult'], $this->sessionData['ulc']]
+            );
             if($sql === true){
                 header('Location: '.$_SERVER["SCRIPT_NAME"].'?'.database::getValue('sessions', 'sic', $this->sessionData['sic'], 'locked_dir'));
                 exit();
@@ -200,30 +217,38 @@ class loginsystem extends database
         $passwd = length($_POST['login-passwd'] ?? '', 64);
         $remember = length($_POST['login-remember'] ?? 0, 1);
         if(!empty($email) && !empty($passwd)){
-            $user = $this->mysql->query("SELECT `password`, `id`, `uik`, `active` FROM `".Prefix."_user` WHERE (`username` = '".$email."' OR `email` = '".$email."') LIMIT 0,1");
+            $user = $this->pq(
+                "SELECT `password`, `id`, `uik`, `active` FROM `".Prefix."_user` WHERE (`username` = ? OR `email` = ?) LIMIT 1",
+                [$email, $email]
+            );
             $result = $user->fetch_assoc();
             if($user->num_rows == 1){
                 if(self::pwverify($passwd, $result['password'])){
                     if(password_needs_rehash($result['password'], PASSWORD_BCRYPT, $this->options)) {
                         $new_hash = self::pwhash($passwd);
-                        $this->mysql->query("Update `".Prefix."_user` Set `password` = '".$new_hash."' Where `id` = '".$result['id']."'");
+                        $this->pq("UPDATE `".Prefix."_user` SET `password` = ? WHERE `id` = ?", [$new_hash, $result['id']]);
                     }
                     if($result['active'] == 1){
                         $lc = getCode(32, 'sessions', 'ulc'); // Generate Logincode
                         $sic = getCode(32, 'sessions', 'sic'); // Generate Sessioncode
                         $lt = time(); // Logintime
-                        $this->mysql->query("Insert Into `".Prefix."_sessions` (uik, sic, ult, ulc, last_action) Values ('".$result['uik']."', '$sic', '$lt', '$lc', '$lt')");
+                        $this->pq(
+                            "INSERT INTO `".Prefix."_sessions` (`uik`, `sic`, `ult`, `ulc`, `last_action`) VALUES (?, ?, ?, ?, ?)",
+                            [$result['uik'], $sic, $lt, $lc, $lt]
+                        );
                         $_SESSION['ml_login_uik'] = $result['uik'];
                         $_SESSION['ml_login_code'] = $lc;
                         $_SESSION['ml_login_time'] = $lt;
                         $_SESSION['ml_login_sic'] = $sic;
-                        $_SESSION['ml_csrfToken'] = uniqid('', true);
+                        $_SESSION['ml_csrfToken'] = bin2hex(random_bytes(32));
+                        session_regenerate_id(true);
                         if($remember == 1){
                             $lifetime = database::getMainData('cookielifetime');
-                            setcookie('ml_login_uik', $result['uik'], time() + $lifetime, '/');
-                            setcookie('ml_login_ulc', encodeRand($lc), time() + $lifetime, '/');
-                            setcookie('ml_login_sic', $sic, time() + $lifetime, '/');
-                            setcookie('ml_login_ult', $lt, time() + $lifetime, '/');
+                            $secure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+                            setcookie('ml_login_uik', $result['uik'], ['expires' => time() + $lifetime, 'path' => '/', 'secure' => $secure, 'httponly' => true, 'samesite' => 'Strict']);
+                            setcookie('ml_login_ulc', encodeRand($lc), ['expires' => time() + $lifetime, 'path' => '/', 'secure' => $secure, 'httponly' => true, 'samesite' => 'Strict']);
+                            setcookie('ml_login_sic', $sic, ['expires' => time() + $lifetime, 'path' => '/', 'secure' => $secure, 'httponly' => true, 'samesite' => 'Strict']);
+                            setcookie('ml_login_ult', $lt, ['expires' => time() + $lifetime, 'path' => '/', 'secure' => $secure, 'httponly' => true, 'samesite' => 'Strict']);
                         }
                         header('Location: '.$_SERVER["SCRIPT_NAME"]);
                         exit();
@@ -244,8 +269,8 @@ class loginsystem extends database
     
     public function logout($system = false, $header = true){
         $csrf = length($_GET['csrf'] ?? '', 64);
-        if($csrf == $this->sessionData['csrf'] || $system){
-            $sql = $this->mysql->query("Update ".Prefix."_sessions Set closed = '1', logout = '1' Where sic = '".$this->sessionData['sic']."'");
+        if($csrf === $this->sessionData['csrf'] || $system){
+            $sql = $this->pq("UPDATE `".Prefix."_sessions` SET `closed` = '1', `logout` = '1' WHERE `sic` = ?", [$this->sessionData['sic']]);
             // Destroy all Sessions and Cookies
             unset($_SESSION['ml_login_uik']);
             unset($_SESSION['ml_login_code']);
@@ -286,7 +311,10 @@ class loginsystem extends database
                     if(database::getAmount('user', 'email', $email) == 1){
                         $code = getCode(32, 'codes', 'code');
                         $expiry = time() + 172800;
-                        $sql = $this->mysql->query("Insert Into ".Prefix."_codes (uik, code, action, expiry_date) Values ('".self::getUser('uik', $email, 'email')."', '$code', 'pwr', '$expiry')");
+                        $sql = $this->pq(
+                            "INSERT INTO `".Prefix."_codes` (`uik`, `code`, `action`, `expiry_date`) VALUES (?, ?, 'pwr', ?)",
+                            [self::getUser('uik', $email, 'email'), $code, $expiry]
+                        );
                         if($sql === true){
                             $data = array();
                             $data["subject"] = "Dein Passwort zurücksetzen";
@@ -321,22 +349,22 @@ class loginsystem extends database
             if(!empty($passwd) && !empty($passwd_confirm)){
                 $captchaClass = new captcha();
                 if($captchaClass->check_captcha($captcha)){
-                    if(md5($passwd) == md5($passwd_confirm)){
+                    if($passwd === $passwd_confirm){
                         if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
-    
+
                         $pw_length = database::getMainData('password_length');
                         if(strlen($passwd) >= $pw_length){
                             if(database::getAmount('codes', array('action', 'code'), array('pwr', $a)) == 1){
                                 $new_passwd = self::pwhash($passwd);
                                 $uik = database::getValue('codes', array('action', 'code'), array('pwr', $a), 'uik');
-                                $sql = $this->mysql->query("Update ".Prefix."_user Set password = '$new_passwd' Where uik = '$uik'");
+                                $sql = $this->pq("UPDATE `".Prefix."_user` SET `password` = ? WHERE `uik` = ?", [$new_passwd, $uik]);
                                 if($sql === true){
                                     $data = array();
                                     $data["subject"] = "Dein Passwort zurückgesetzt";
                                     $data["fullname"] = self::getUser('fullname', $uik, 'uik');
                                     $email_address = self::getUser('email', $uik, 'uik');
                                     self::sendMail("password_forget_success.html", self::getUser('id', $uik, 'uik'), $data, $email_address);
-                                    $this->mysql->query("Delete From ".Prefix."_codes Where code = '$a' Limit 1");
+                                    $this->pq("DELETE FROM `".Prefix."_codes` WHERE `code` = ? LIMIT 1", [$a]);
                                     header('Location: '.$_SERVER["SCRIPT_NAME"].'?h=pwr_success');
                                     exit();
                                 } else {
@@ -383,9 +411,9 @@ class loginsystem extends database
             if(!empty($username) && !empty($passwd) && !empty($passwdco) && !empty($email) && !empty($emailco) && !empty($captcha) && !empty($dsgvo)){
                 $pw_length = database::getMainData('password_length');
                 if(strlen($passwd) >= $pw_length){
-                    if(md5($passwd) == md5($passwdco)){
+                    if($passwd === $passwdco){
                         if(check_email($email)){
-                            if(md5($email) == md5($emailco)){
+                            if($email === $emailco){
                                 $captchaClass = new captcha();
                                 if($captchaClass->check_captcha($captcha)){
                                     if(empty($fullname) || preg_match("/^[\D\s]{2,128}+$/", $fullname)){
@@ -407,12 +435,18 @@ class loginsystem extends database
                                                             $mode = database::getMainData('user_activation_mode');
                                                             $user_active = ($mode == 0) ? 1 : 0;
                                                             
-                                                            $sql = $this->mysql->query("Insert Into ".Prefix."_user (`username`, `first_name`, `last_name`, `email`, `password`, `active`, `rank`, `uik`, `regdate`) Values ('$username', '$first_name', '$last_name', '$email', '$password', '$user_active', '$defaultRank', '$uik', '".time()."')");
+                                                            $sql = $this->pq(
+                                                                "INSERT INTO `".Prefix."_user` (`username`, `first_name`, `last_name`, `email`, `password`, `active`, `rank`, `uik`, `regdate`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                                                                [$username, $first_name, $last_name, $email, $password, $user_active, $defaultRank, $uik, time()]
+                                                            );
                                                             if($sql === true){
                                                                 $code = NULL;
                                                                 if($mode == 1){
                                                                     $code = getCode(32, 'codes', 'code');
-                                                                    $sql = $this->mysql->query("Insert Into ".Prefix."_codes (`uik`, `code`, `action`, `expiry_date`) Values ('$uik', '$code', 'activate', '0')");
+                                                                    $sql = $this->pq(
+                                                                        "INSERT INTO `".Prefix."_codes` (`uik`, `code`, `action`, `expiry_date`) VALUES (?, ?, 'activate', '0')",
+                                                                        [$uik, $code]
+                                                                    );
                                                                     $tpl = 'regist_link';
                                                                 } elseif($mode == 0)
                                                                     $tpl = 'regist';
@@ -496,11 +530,11 @@ class loginsystem extends database
             if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
     
             if(database::getAmount('codes', array('action', 'code'), array('activate', $a)) == 1){
-                $sql = $this->mysql->query("Select * From ".Prefix."_codes Where action = 'activate' AND code = '$a' Limit 1");
+                $sql = $this->pq("SELECT * FROM `".Prefix."_codes` WHERE `action` = 'activate' AND `code` = ? LIMIT 1", [$a]);
                 $row = $sql->fetch_assoc();
-                $sql = $this->mysql->query("Update ".Prefix."_user Set active = '1' Where uik = '".$row['uik']."'");
+                $sql = $this->pq("UPDATE `".Prefix."_user` SET `active` = '1' WHERE `uik` = ?", [$row['uik']]);
                 if($sql === true){
-                    $sql = $this->mysql->query("Delete From ".Prefix."_codes Where id = '".$row['id']."'");
+                    $sql = $this->pq("DELETE FROM `".Prefix."_codes` WHERE `id` = ?", [$row['id']]);
                     if($sql === false)
                         errormail('Fehler beim entfernen der Aktivierung ID#'.$row['id'].' - Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()! MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
                     
@@ -526,11 +560,11 @@ class loginsystem extends database
             if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
     
             if(database::getAmount('codes', array('action', 'code'), array('remove', $a)) == 1){
-                $sql = $this->mysql->query("Select * From ".Prefix."_codes Where action = 'remove' AND code = '$a' Limit 1");
+                $sql = $this->pq("SELECT * FROM `".Prefix."_codes` WHERE `action` = 'remove' AND `code` = ? LIMIT 1", [$a]);
                 $row = $sql->fetch_assoc();
-                $sql = $this->mysql->query("Delete From ".Prefix."_user Where uik = '".$row['uik']."'");
+                $sql = $this->pq("DELETE FROM `".Prefix."_user` WHERE `uik` = ?", [$row['uik']]);
                 if($sql === true){
-                    $this->mysql->query("Delete From ".Prefix."_sessions Where uik = '".$row['uik']."'");
+                    $this->pq("DELETE FROM `".Prefix."_sessions` WHERE `uik` = ?", [$row['uik']]);
                     header('Location: ?p=home&h=user_remove_self_successfully');
                     exit();
                 } else {
@@ -607,9 +641,13 @@ class loginsystem extends database
             }
             
             $specials = array("fullname");
-            
+
+            $allowed_columns = ['id', 'uik', 'username', 'email', 'first_name', 'last_name', 'password', 'active', 'rank', 'avatar', 'regdate'];
             $search_column = empty($search_column) ? 'id' : $search_column;
-            $sql = $this->mysql->query("Select * From `".Prefix."_user` Where `$search_column` = '$value'");
+            if(!in_array($search_column, $allowed_columns, true)){
+                return "nicht gefunden";
+            }
+            $sql = $this->pq("SELECT * FROM `".Prefix."_user` WHERE `$search_column` = ?", [$value]);
             if($sql->num_rows === 0){
                 return "nicht gefunden";
             } elseif($sql->num_rows > 1 || $array === true){
@@ -653,23 +691,26 @@ class loginsystem extends database
         if(!empty($passwd) && !empty($passwd_confirm) && !empty($passwd_actual)){
             $actual_password = self::getUser('password');
             if(self::pwverify($passwd_actual, $actual_password)){
-                if(md5($passwd) == md5($passwd_confirm)){
+                if($passwd === $passwd_confirm){
                     if(strlen($passwd) >= 6){
                         if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
-    
-                        $sql = $this->mysql->query("Update ".Prefix."_user Set password = '".self::pwhash($passwd)."' Where id = '".self::getUser('id')."'");
+
+                        $sql = $this->pq("UPDATE `".Prefix."_user` SET `password` = ? WHERE `id` = ?", [self::pwhash($passwd), self::getUser('id')]);
                         if($sql === true){
                             // beende alle laufenden Sessions ausser dieser | exit all running sessions except this
-                            $sql = $this->mysql->query("Update ".Prefix."_sessions Set closed = '1' Where uik = '".self::getUser('uik')."' AND sic != '".$this->sessionData['sic']."'");
-                            
+                            $sql = $this->pq("UPDATE `".Prefix."_sessions` SET `closed` = '1' WHERE `uik` = ? AND `sic` != ?", [self::getUser('uik'), $this->sessionData['sic']]);
+
                             if(parent::getMainData('restore') >= 1){
                                 $backup_code = getCode(32, 'changes', 'code');
                                 $data = array();
                                 $data["subject"] = "Dein Passwort wurde geändert!";
                                 $data["username"] = self::getUser('username');
                                 $data["changecode"] = '?v=restore&a='.$backup_code;
-                                
-                                $sql = $this->mysql->query("Insert Into ".Prefix."_changes (code, timestamp, coloum, value, author, user) Values ('$backup_code', '".time()."', 'password', '$actual_password', '".self::getUser('id')."', '".self::getUser('id')."')");
+
+                                $sql = $this->pq(
+                                    "INSERT INTO `".Prefix."_changes` (`code`, `timestamp`, `coloum`, `value`, `author`, `user`) VALUES (?, ?, 'password', ?, ?, ?)",
+                                    [$backup_code, time(), $actual_password, self::getUser('id'), self::getUser('id')]
+                                );
                                 self::sendMail("user_changed_pw.html", self::getUser('id'), $data, self::getUser('email'));
                             }
                             header('Location: ?p=profil&h=pwchange_success');
@@ -700,11 +741,11 @@ class loginsystem extends database
         $passwd_actual	= length($_POST['password-actual'] ?? '', 64);
         if(!empty($email) && !empty($email_confirm) && !empty($passwd_actual)){
             if(self::pwverify($passwd_actual, self::getUser('password'))){
-                if(md5($email) == md5($email_confirm)){
+                if($email === $email_confirm){
                     if(check_email($email)){
                         if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
-    
-                        $sql = $this->mysql->query("Update ".Prefix."_user Set email = '".$email."' Where id = '".self::getUser('id')."'");
+
+                        $sql = $this->pq("UPDATE `".Prefix."_user` SET `email` = ? WHERE `id` = ?", [$email, self::getUser('id')]);
                         if($sql === true){
                             if(parent::getMainData('restore') >= 1){
                                 $backup_code = getCode(32, 'changes', 'code');
@@ -713,8 +754,11 @@ class loginsystem extends database
                                 $data["username"] = self::getUser('username');
                                 $data["changecode"] = '?v=restore&a='.$backup_code;
                                 $data["data"] = 'E-Mail Adresse: '.$old_email.' => '.$email;
-                                
-                                $sql = $this->mysql->query("Insert Into ".Prefix."_changes (code, timestamp, coloum, value, author, user) Values ('$backup_code', '".time()."', 'email', '$old_email', '".self::getUser('id')."', '".self::getUser('id')."')");
+
+                                $sql = $this->pq(
+                                    "INSERT INTO `".Prefix."_changes` (`code`, `timestamp`, `coloum`, `value`, `author`, `user`) VALUES (?, ?, 'email', ?, ?, ?)",
+                                    [$backup_code, time(), $old_email, self::getUser('id'), self::getUser('id')]
+                                );
                                 self::sendMail("user_changed.html", self::getUser('id'), $data, self::getUser('email'));
                                 self::sendMail("user_changed.html", self::getUser('id'), $data, $old_email);
                             }
@@ -766,23 +810,32 @@ class loginsystem extends database
                                 
                                 $error = $additional_fields->setFieldValues(0, 'edit-', self::getUser('id'), true);
                                 if(empty($error)){
-                                    $sql = $this->mysql->query("Update ".Prefix."_user Set username = '".$username."', first_name = '".$first_name."', last_name = '".$last_name."' Where id = '".self::getUser('id')."'");
+                                    $sql = $this->pq(
+                                        "UPDATE `".Prefix."_user` SET `username` = ?, `first_name` = ?, `last_name` = ? WHERE `id` = ?",
+                                        [$username, $first_name, $last_name, self::getUser('id')]
+                                    );
                                     if($sql === true){
                                         $error = $additional_fields->setFieldValues(0, 'edit-', self::getUser('id'));
                                         if(parent::getMainData('restore') >= 1){
                                             $msg = 'Du hast deine Kontodaten ge&auml;ndert.';
                                             if($old_username != $username && $old_fullname == $fullname)
                                                 $msg = 'Du hast dein Benutzernamen von "'.$old_username.'" auf "'.$username.'" ge&auml;ndert!';
-                                            
+
                                             if($old_fullname != $fullname || $old_username != $username){
                                                 $backup_code = getCode(32, 'changes', 'code');
                                                 $changed_data = array();
                                                 if($old_username != $username){
-                                                    $sql = $this->mysql->query("Insert Into ".Prefix."_changes (code, timestamp, coloum, value, author, user) Values ('$backup_code', '".time()."', 'username', '$old_username', '".self::getUser('id')."', '".self::getUser('id')."')");
+                                                    $sql = $this->pq(
+                                                        "INSERT INTO `".Prefix."_changes` (`code`, `timestamp`, `coloum`, `value`, `author`, `user`) VALUES (?, ?, 'username', ?, ?, ?)",
+                                                        [$backup_code, time(), $old_username, self::getUser('id'), self::getUser('id')]
+                                                    );
                                                     $changed_data[] = 'Benutzername: '.$old_username.' => '.$username;
                                                 }
                                                 if($old_fullname != $fullname){
-                                                    $sql = $this->mysql->query("Insert Into ".Prefix."_changes (code, timestamp, coloum, value, author, user) Values ('$backup_code', '".time()."', 'first_name', '$old_first_name', '".self::getUser('id')."', '".self::getUser('id')."'),('$backup_code', '".time()."', 'last_name', '$old_last_name', '".self::getUser('id')."', '".self::getUser('id')."')");
+                                                    $sql = $this->pq(
+                                                        "INSERT INTO `".Prefix."_changes` (`code`, `timestamp`, `coloum`, `value`, `author`, `user`) VALUES (?, ?, 'first_name', ?, ?, ?), (?, ?, 'last_name', ?, ?, ?)",
+                                                        [$backup_code, time(), $old_first_name, self::getUser('id'), self::getUser('id'), $backup_code, time(), $old_last_name, self::getUser('id'), self::getUser('id')]
+                                                    );
                                                     $changed_data[] = 'Vor-/Nachname: '.$old_fullname.' => '.$fullname;
                                                 }
                                                 
@@ -889,7 +942,7 @@ class loginsystem extends database
                         if($filesize <= $maxsize){
                             if(in_array('image', explode('/', $filemime))){ // Prüft ob die Datei ein Bild ist
                                 if(move_uploaded_file($tmp_name, $dir.$newname)){ // Bild mit neuem Namen hochladen
-                                    if($this->mysql->query("Update `".Prefix."_user` Set avatar = '$filetype' Where id = '$userid'")){
+                                    if($this->pq("UPDATE `".Prefix."_user` SET `avatar` = ? WHERE `id` = ?", [$filetype, $userid])){
                                         header('Location: ?p=profil&h=set_new_avatar_success');
                                         exit();
                                     } else {
@@ -927,7 +980,10 @@ class loginsystem extends database
     
             $code = getCode(32, 'codes', 'code');
             $expiry_time = strtotime("+14 days");
-            $sql = $this->mysql->query("Insert Into ".Prefix."_codes (uik, code, action, expiry_date) Values ('".self::getUser('uik')."', '$code', 'remove', '$expiry_time')");
+            $sql = $this->pq(
+                "INSERT INTO `".Prefix."_codes` (`uik`, `code`, `action`, `expiry_date`) VALUES (?, ?, 'remove', ?)",
+                [self::getUser('uik'), $code, $expiry_time]
+            );
             if($sql !== false){
                 $data = array();
                 $data["subject"] = "Löschung deines Kontos!";
@@ -953,7 +1009,7 @@ class loginsystem extends database
     
     public function listAllUsers(){
         $rtn = NULL;
-        $sql = $this->mysql->query("Select * From ".Prefix."_user Where uik != '3A2xdfRKw5k6IqptThiZSFXbT5J0oELO' AND uik != '3A2xdfRKw9l6IqptThiZSFXbT5J0oELO'");
+        $sql = $this->pq("SELECT * FROM `".Prefix."_user` WHERE `uik` != '3A2xdfRKw5k6IqptThiZSFXbT5J0oELO' AND `uik` != '3A2xdfRKw9l6IqptThiZSFXbT5J0oELO'");
         while($row = $sql->fetch_assoc()){
             $name = $row['first_name'].' '.$row['last_name'];
             
@@ -1016,7 +1072,7 @@ class loginsystem extends database
                 if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
                 if(parent::getAmount('user', 'username', $username) == 0){
                     if(parent::getAmount('user', 'email', $email) == 0){
-                        if(md5($password) == md5($password_confirm)){
+                        if($password === $password_confirm){
                             if(check_email($email)){
                                 if(!in_array(strtolower($username), $this->username_blacklist)){
                                     if(preg_match("#^[a-zA-Z0-9äöüÄÖÜß_-]{4,}+$#", $username)){
@@ -1033,7 +1089,10 @@ class loginsystem extends database
                                                     $last_name = ($namesAmount > 1) ? array_pop($names) : NULL;
                                                     $first_name = implode(' ', $names);
                                                     
-                                                    $sql = $this->mysql->query("Insert Into ".Prefix."_user (username, first_name, last_name, email, password, active, rank, uik, regdate) Values ('$username', '$first_name', '$last_name', '$email', '$password', '1', '$rank', '$uik', '".time()."')");
+                                                    $sql = $this->pq(
+                                                        "INSERT INTO `".Prefix."_user` (`username`, `first_name`, `last_name`, `email`, `password`, `active`, `rank`, `uik`, `regdate`) VALUES (?, ?, ?, ?, ?, '1', ?, ?, ?)",
+                                                        [$username, $first_name, $last_name, $email, $password, $rank, $uik, time()]
+                                                    );
                                                     if($sql === true){
                                                         $id = parent::getValue('user', 'uik', $uik, 'id');
                                                         $error = $additional_fields->setFieldValues(0, 'new-', $id);
@@ -1088,7 +1147,7 @@ class loginsystem extends database
     }
     
     private function rankPosition($rankid){
-        $sql = $this->mysql->query("SELECT `pos` FROM ".Prefix."_ranks WHERE `id` = '{$rankid}' LIMIT 1");
+        $sql = $this->pq("SELECT `pos` FROM `".Prefix."_ranks` WHERE `id` = ? LIMIT 1", [$rankid]);
         $row = $sql->fetch_assoc();
         return $row['pos'];
     }
@@ -1147,23 +1206,35 @@ class loginsystem extends database
                                                 $old_last_name = ($old_nameAmount > 1) ? array_pop($old_name) : NULL;
                                                 $old_first_name = implode(' ', $old_name);
                                                 
-                                                $sql = $this->mysql->query("Update ".Prefix."_user Set `username` = '$username', `email` = '$email', `first_name` = '$first_name', `last_name` = '$last_name', `rank` = '$rank' Where `id` = '$id'");
+                                                $sql = $this->pq(
+                                                    "UPDATE `".Prefix."_user` SET `username` = ?, `email` = ?, `first_name` = ?, `last_name` = ?, `rank` = ? WHERE `id` = ?",
+                                                    [$username, $email, $first_name, $last_name, $rank, $id]
+                                                );
                                                 if($sql === true){
                                                     if(parent::getMainData('restore') == 2){
                                                         if($old_email != $email || $old_fullname != $fullname || $old_username != $username){
-                                                            
+
                                                             $backup_code = getCode(32, 'changes', 'code');
                                                             $changed_data = array();
                                                             if($old_email != $email){
-                                                                $sql = $this->mysql->query("Insert Into ".Prefix."_changes (code, timestamp, coloum, value, author, user) Values ('$backup_code', '".time()."', 'email', '$old_email', '".self::getUser('id')."', '$id')");
+                                                                $sql = $this->pq(
+                                                                    "INSERT INTO `".Prefix."_changes` (`code`, `timestamp`, `coloum`, `value`, `author`, `user`) VALUES (?, ?, 'email', ?, ?, ?)",
+                                                                    [$backup_code, time(), $old_email, self::getUser('id'), $id]
+                                                                );
                                                                 $changed_data[] = 'E-Mail Adresse: '.$old_email.' => '.$email;
                                                             }
                                                             if($old_username != $username){
-                                                                $sql = $this->mysql->query("Insert Into ".Prefix."_changes (code, timestamp, coloum, value, author, user) Values ('$backup_code', '".time()."', 'username', '$old_username', '".self::getUser('id')."', '$id')");
+                                                                $sql = $this->pq(
+                                                                    "INSERT INTO `".Prefix."_changes` (`code`, `timestamp`, `coloum`, `value`, `author`, `user`) VALUES (?, ?, 'username', ?, ?, ?)",
+                                                                    [$backup_code, time(), $old_username, self::getUser('id'), $id]
+                                                                );
                                                                 $changed_data[] = 'Benutzername: '.$old_username.' => '.$username;
                                                             }
                                                             if($old_fullname != $fullname){
-                                                                $sql = $this->mysql->query("Insert Into ".Prefix."_changes (code, timestamp, coloum, value, author, user) Values ('$backup_code', '".time()."', 'first_name', '$old_first_name', '".self::getUser('id')."', '$id'),('$backup_code', '".time()."', 'last_name', '$old_last_name', '".self::getUser('id')."', '$id')");
+                                                                $sql = $this->pq(
+                                                                    "INSERT INTO `".Prefix."_changes` (`code`, `timestamp`, `coloum`, `value`, `author`, `user`) VALUES (?, ?, 'first_name', ?, ?, ?), (?, ?, 'last_name', ?, ?, ?)",
+                                                                    [$backup_code, time(), $old_first_name, self::getUser('id'), $id, $backup_code, time(), $old_last_name, self::getUser('id'), $id]
+                                                                );
                                                                 $changed_data[] = 'Vor-/Nachname: '.$old_fullname.' => '.$fullname;
                                                             }
                                                             if($old_rank != $rank){
@@ -1231,7 +1302,7 @@ class loginsystem extends database
                 if(self::pwverify($password, self::getUser('password'))){
                     $new_passwd = self::generatePassword();
                     $new_passwd_hash = self::pwhash($new_passwd);
-                    $sql = $this->mysql->query("Update ".Prefix."_user Set password = '$new_passwd_hash' Where id = '$id'");
+                    $sql = $this->pq("UPDATE `".Prefix."_user` SET `password` = ? WHERE `id` = ?", [$new_passwd_hash, $id]);
                     if($sql === true){
                         $data = array();
                         $data["subject"] = "Dein Passwort wurde zurückgesetzt";
@@ -1240,7 +1311,7 @@ class loginsystem extends database
                         $data["password"] = $new_passwd;
                         self::sendMail("password_reset.html", $id, $data, self::getUser('email', $id));
                         // beende alle laufenden Sessions ausser dieser | exit all running sessions except this
-                        $sql = $this->mysql->query("Update ".Prefix."_sessions Set closed = '1' Where uik = '".self::getUser('uik')."' AND sic != '".$this->sessionData['sic']."'");
+                        $sql = $this->pq("UPDATE `".Prefix."_sessions` SET `closed` = '1' WHERE `uik` = ? AND `sic` != ?", [self::getUser('uik'), $this->sessionData['sic']]);
                         header('Location: ?p=userlist&h=reset_passwd_user_successfully&id='.$id);
                         exit();
                     } else {
@@ -1271,11 +1342,11 @@ class loginsystem extends database
                         $email = self::getUser('email', $id);
                         $username = self::getUser('username', $id);
                         $uik = self::getUser('uik', $id);
-                        $sql = $this->mysql->query("Delete From ".Prefix."_user Where id = '$id'");
+                        $sql = $this->pq("DELETE FROM `".Prefix."_user` WHERE `id` = ?", [$id]);
                         if($sql === true){
-                            $this->mysql->query("Delete From ".Prefix."_sessions Where uik = '$uik'");
-                            $this->mysql->query("Delete From ".Prefix."_additional_user_information Where user_id = '$id'");
-                            $this->mysql->query("Delete From ".Prefix."_changes Where user = '$id'");
+                            $this->pq("DELETE FROM `".Prefix."_sessions` WHERE `uik` = ?", [$uik]);
+                            $this->pq("DELETE FROM `".Prefix."_additional_user_information` WHERE `user_id` = ?", [$id]);
+                            $this->pq("DELETE FROM `".Prefix."_changes` WHERE `user` = ?", [$id]);
                             
                             if(parent::getMainData('useradministration_share') == 1){
                                 $data = array();
@@ -1313,7 +1384,7 @@ class loginsystem extends database
                 if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
     
                 if(self::getUser('id') != $id){
-                    $sql = $this->mysql->query("Update ".Prefix."_user Set active = '1' Where id = '$id'");
+                    $sql = $this->pq("UPDATE `".Prefix."_user` SET `active` = '1' WHERE `id` = ?", [$id]);
                     if($sql === true){
                         if(parent::getMainData('useradministration_share') == 1){
                             $data = array();
@@ -1347,7 +1418,7 @@ class loginsystem extends database
                 if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
     
                 if(self::getUser('id') != $id){
-                    $sql = $this->mysql->query("Update ".Prefix."_user Set active = '0' Where id = '$id'");
+                    $sql = $this->pq("UPDATE `".Prefix."_user` SET `active` = '0' WHERE `id` = ?", [$id]);
                     if($sql === true){
                         if(parent::getMainData('useradministration_share') == 1){
                             $data = array();
@@ -1406,19 +1477,21 @@ class loginsystem extends database
     
     public function restore(){
         global $a;
+        $allowed_restore_columns = ['password', 'email', 'username', 'first_name', 'last_name'];
         if(!empty($a)){
-            $sql = $this->mysql->query("Select * From ".Prefix."_changes Where code = '$a' AND changed = '0'");
+            $sql = $this->pq("SELECT * FROM `".Prefix."_changes` WHERE `code` = ? AND `changed` = '0'", [$a]);
             if($sql->num_rows > 0){
                 $row = $sql->fetch_assoc();
                 $time = $row['timestamp'];
                 if($time >= (time() - (86400 * 7))){
                     $changes = array();
-                    $sql = $this->mysql->query("Select * From ".Prefix."_changes Where code = '$a' AND changed = '0'");
+                    $sql = $this->pq("SELECT * FROM `".Prefix."_changes` WHERE `code` = ? AND `changed` = '0'", [$a]);
                     while($row = $sql->fetch_assoc()){
+                        if(!in_array($row['coloum'], $allowed_restore_columns, true)) continue;
                         $changes[$row['coloum']][0] = self::getUser($row['coloum'], $row['user']);
                         $changes[$row['coloum']][1] = $row['value'];
-                        $sql_edit = $this->mysql->query("Update ".Prefix."_user Set ".$row['coloum']." = '".$row['value']."' Where id = '".$row['user']."'");
-                        $sql_edit = $this->mysql->query("Update ".Prefix."_changes Set changed = '".time()."' Where id = '".$row['id']."'");
+                        $sql_edit = $this->pq("UPDATE `".Prefix."_user` SET `".$row['coloum']."` = ? WHERE `id` = ?", [$row['value'], $row['user']]);
+                        $sql_edit = $this->pq("UPDATE `".Prefix."_changes` SET `changed` = ? WHERE `id` = ?", [time(), $row['id']]);
                         $user = $row['user'];
                     }
                     if(empty($this->mysql->error)){
@@ -1525,7 +1598,7 @@ class loginsystem extends database
     public function getRankList(){
         $return = NULL;
         $count = 1;
-        $sql = $this->mysql->query("Select * From ".Prefix."_ranks Order by pos ASC");
+        $sql = $this->pq("SELECT * FROM `".Prefix."_ranks` ORDER BY `pos` ASC");
         while($row = $sql->fetch_assoc()){
             $options = array();
             $options[] = '<a href="?p=ranks&f=view_rank&id='.$row['id'].'" title="ansehen"><i class="fa fa-eye"></i></a>';
@@ -1571,9 +1644,9 @@ class loginsystem extends database
     
     public function getRankOptions($sid = NULL, $without = []){
         $outp = NULL;
-        $myRankPosSql = $this->mysql->query("SELECT pos FROM ".Prefix."_ranks WHERE id = '".$this->getUser('rank')."'");
+        $myRankPosSql = $this->pq("SELECT `pos` FROM `".Prefix."_ranks` WHERE `id` = ?", [$this->getUser('rank')]);
         $myRankPos = $myRankPosSql->fetch_assoc();
-        $sql = $this->mysql->query("Select * From ".Prefix."_ranks Where `guest` = '0' AND `pos` >= '".$myRankPos['pos']."' Order by pos");
+        $sql = $this->pq("SELECT * FROM `".Prefix."_ranks` WHERE `guest` = '0' AND `pos` >= ? ORDER BY `pos`", [$myRankPos['pos']]);
         while($row = $sql->fetch_array()){
             $sel = NULL;
             if(($row['id'] == $sid && !empty($sid)) || (empty($sid)) && $row['default'] == 1) $sel = 'selected ';
@@ -1588,7 +1661,7 @@ class loginsystem extends database
         $urules	= explode(',', str_replace(' ', '', database::getValue('ranks', 'id', self::getUser('rank'), 'rules')));
         if(!is_array($sid))
             $sid = explode(',', str_replace(' ', '', $sid));
-        $sql = $this->mysql->query("Select * From ".Prefix."_rules Order by tag");
+        $sql = $this->pq("SELECT * FROM `".Prefix."_rules` ORDER BY `tag`");
         while($row = $sql->fetch_array()){
             $sel = NULL;
             if(in_array($row['tag'], $urules) || $urules[0] == 'all'){
@@ -1604,7 +1677,7 @@ class loginsystem extends database
         $usites	= explode(',', str_replace(' ', '', database::getValue('ranks', 'id', self::getUser('rank'), 'sites')));
         if(!is_array($sid))
             $sid = explode(',', str_replace(' ', '', $sid));
-        $sql = $this->mysql->query("Select * From ".Prefix."_sites Where title != '404' Order by filename");
+        $sql = $this->pq("SELECT * FROM `".Prefix."_sites` WHERE `title` != '404' ORDER BY `filename`");
         while($row = $sql->fetch_array()){
             $sel = NULL;
             if(in_array($row['id'], $usites) || $usites[0] == 'all'){
@@ -1612,7 +1685,7 @@ class loginsystem extends database
                 $outp .= '<option '.$sel.'value="'.$row['id'].'">'.$row['title'].'</option>';
             }
         }
-        $sql = $this->mysql->query("Select * From ".Prefix."_menu Where url != '' || (url = '' AND sid = '0') Order by title");
+        $sql = $this->pq("SELECT * FROM `".Prefix."_menu` WHERE `url` != '' OR (`url` = '' AND `sid` = '0') ORDER BY `title`");
         while($row = $sql->fetch_array()){
             $sel = NULL;
             if(in_array('m'.$row['id'], $usites) || $usites[0] == 'all'){
@@ -1674,9 +1747,12 @@ class loginsystem extends database
                 }
                 
                 $pos = database::getValue('ranks', 'id', $pos, 'pos') + 1;
-                $this->mysql->query("Update ".Prefix."_ranks Set pos = pos + 1 Where pos >= '".$pos."'");
-                
-                $sql = $this->mysql->query("Insert Into ".Prefix."_ranks (`title`, `sites`, `rules`, `pos`) Values ('$name', '$sites', '$rules', '$pos')");
+                $this->pq("UPDATE `".Prefix."_ranks` SET `pos` = `pos` + 1 WHERE `pos` >= ?", [$pos]);
+
+                $sql = $this->pq(
+                    "INSERT INTO `".Prefix."_ranks` (`title`, `sites`, `rules`, `pos`) VALUES (?, ?, ?, ?)",
+                    [$name, $sites, $rules, $pos]
+                );
                 if($sql){
                     header('Location: ?p=ranks&h=new_rank_successfully');
                     exit();
@@ -1745,7 +1821,10 @@ class loginsystem extends database
                 }
                 $color = empty($colorc) ? NULL : str_replace('#', '', $color);
                 $special = implode(',', $special);
-                $sql = $this->mysql->query("Update ".Prefix."_ranks Set title = '$name', sites = '$sites', rules = '$rules', color = '$color', special = '$special' Where id = '$id'");
+                $sql = $this->pq(
+                    "UPDATE `".Prefix."_ranks` SET `title` = ?, `sites` = ?, `rules` = ?, `color` = ?, `special` = ? WHERE `id` = ?",
+                    [$name, $sites, $rules, $color, $special, $id]
+                );
                 if($sql === true){
                     header('Location: ?p=ranks&h=edit_rank_successfully');
                     exit();
@@ -1771,16 +1850,16 @@ class loginsystem extends database
             if($direction == "up"){
                 $pmdown = database::getValue('ranks', 'pos', $pos - 1, 'id');
                 if($pos >= 2 && $id != "1813201542" && $pmdown != "1813201541"){
-                    $update = $this->mysql->query("Update ".Prefix."_ranks Set pos = pos - 1 Where id = '$id'");
-                    $update2 = $this->mysql->query("Update ".Prefix."_ranks Set pos = pos + 1 Where id = '$pmdown'");
+                    $update = $this->pq("UPDATE `".Prefix."_ranks` SET `pos` = `pos` - 1 WHERE `id` = ?", [$id]);
+                    $update2 = $this->pq("UPDATE `".Prefix."_ranks` SET `pos` = `pos` + 1 WHERE `id` = ?", [$pmdown]);
                 } else {
                     $error = 'Diese Aktion ist nicht m&ouml;glich!';
                 }
             } else {
                 $pmup = database::getValue('ranks', 'pos', $pos + 1, 'id');
                 if($pmup != "1813201542" && $id != "1813201542"){
-                    $update = $this->mysql->query("Update ".Prefix."_ranks Set pos = pos + 1 Where id = '$id'");
-                    $update2 = $this->mysql->query("Update ".Prefix."_ranks Set pos = pos - 1 Where id = '$pmup'");
+                    $update = $this->pq("UPDATE `".Prefix."_ranks` SET `pos` = `pos` + 1 WHERE `id` = ?", [$id]);
+                    $update2 = $this->pq("UPDATE `".Prefix."_ranks` SET `pos` = `pos` - 1 WHERE `id` = ?", [$pmup]);
                 } else {
                     $error = 'Diese Aktion ist nicht m&ouml;glich!';
                 }
@@ -1811,10 +1890,10 @@ class loginsystem extends database
                 $def = database::getValue('ranks', 'id', $id, 'default');
                 if(($user > 0 && !empty($rank) && $rank != $id && $rank != "1813201541" && $def == "0") || $user == 0){
                     if($user > 0)
-                        $this->mysql->query("Update ".Prefix."_user Set rank = '$rank' Where rank = '$id'");
-                    
-                    $sql = $this->mysql->query("Delete From ".Prefix."_ranks Where id = '$id'");
-                    $sql2 = $this->mysql->query("Update ".Prefix."_ranks Set pos = pos - 1 Where pos >= '$pos'");
+                        $this->pq("UPDATE `".Prefix."_user` SET `rank` = ? WHERE `rank` = ?", [$rank, $id]);
+
+                    $sql = $this->pq("DELETE FROM `".Prefix."_ranks` WHERE `id` = ?", [$id]);
+                    $sql2 = $this->pq("UPDATE `".Prefix."_ranks` SET `pos` = `pos` - 1 WHERE `pos` >= ?", [$pos]);
                     if($sql === true && $sql2 == true){
                         header('Location: ?p=ranks&h=remove_rank_successfully');
                         exit();
@@ -1841,8 +1920,8 @@ class loginsystem extends database
             if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
     
             if(database::getValue('ranks', 'id', $id, 'default') == "0" && $id != '1813201542' && $id != '1813201541'){
-                $sql = $this->mysql->query("Update ".Prefix."_ranks Set `default` = '0' Where `default` = '1'");
-                $sql2 = $this->mysql->query("Update ".Prefix."_ranks Set `default` = '1' Where id = '$id'");
+                $sql = $this->pq("UPDATE `".Prefix."_ranks` SET `default` = '0' WHERE `default` = '1'");
+                $sql2 = $this->pq("UPDATE `".Prefix."_ranks` SET `default` = '1' WHERE `id` = ?", [$id]);
                 if($sql === true && $sql2 === true){
                     header('Location: ?p=ranks&h=special_rank_successfully');
                     exit();
@@ -1949,7 +2028,7 @@ class loginsystem extends database
                 $update['osm_embed_url'] = $osm_url;
 
                 foreach($update as $key => $val){
-                    $sql = $this->mysql->query("Update ".Prefix."_main Set value = '$val' Where tag = '$key'");
+                    $sql = $this->pq("UPDATE `".Prefix."_main` SET `value` = ? WHERE `tag` = ?", [$val, $key]);
                     if($sql === false)
                         break;
                 }
