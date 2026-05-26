@@ -20,6 +20,12 @@
   - GD-Re-Encoding: Bild wird neu gerendert → eingebetteter Code wird vernichtet
   - Altes Bild wird erst nach erfolgreichem Speichern gelöscht
   - `avatare/.htaccess`: PHP-Ausführung im Upload-Verzeichnis blockiert (`php_flag engine off`, `SetHandler default-handler`)
+- **Mitglied-Rang: Logout/Profil-Menü fehlte** — Menu-IDs `m5` (Mein Profil), `m6` (Sperren), `m7` (Abmelden) in `_ml_ranks.sql` (Mitglied) ergänzt; Migration für bestehende Installs:
+  ```sql
+  UPDATE `[prefix]_ml_ranks`
+  SET `sites` = CONCAT(`sites`, ',m5,m6,m7')
+  WHERE `id` = 1813201540 AND `sites` NOT LIKE '%m7%';
+  ```
 - **CSRF auf GET-Aktionen behoben**: `activateUser()`, `deactivateUser()`, `moveRank()`, `setSpecialRank()` prüfen jetzt `$_GET['csrf']` gegen `$_SESSION['ml_csrfToken']` (gleicher Mechanismus wie `lock()`); Templates `userlist.php` und `getRankList()` hängen Token an betroffene Links an
 - **SQL-Injection vollständig behoben**: Alle `$this->mysql->query()` in `loginsystem.php`, `sites.php`, `menu.php`, `additional_fields.php` und `rules.php` auf `$this->pq()` (Prepared Statements) umgestellt
   - `database.php`: neue geschützte Methode `pq(string $sql, array $params)` als sicherer Drop-in-Ersatz
