@@ -371,6 +371,15 @@ function contact(): string
     exit();
 }
 
+function csrf_field(): string
+{
+    $token = $_SESSION['ml_csrfToken'] ?? '';
+    if (empty($token)) {
+        return '';
+    }
+    return '<input type="hidden" name="csrf" value="' . htmlspecialchars($token, ENT_QUOTES, 'UTF-8') . '">';
+}
+
 // ─── Error-Mail (DSGVO: keine Stack-Traces an den Browser) ──────────────────
 
 function errormail(string $message): void

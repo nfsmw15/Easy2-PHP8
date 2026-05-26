@@ -53,6 +53,7 @@
                     <div class="panel-body">
 						<?php if($loginsystem->auditRight('user_add')){ ?>
                             <form action="./?p=userlist&c=new" method="post">
+<?php echo csrf_field(); ?>
                                 <div class="form-group">
                                     <label>Benutzername:</label>
                                     <input type="text" class="form-control" value="<?php echo isset($_POST['new-username']) ? $_POST['new-username'] : ''; ?>" name="new-username" maxlength="64" placeholder="Benutzername" required>
@@ -179,6 +180,7 @@
                     </div>
                     <div class="panel-body">
                         <form action="./?p=userlist&c=edit&f=edit&id=<?php echo $id; ?>" method="post">
+<?php echo csrf_field(); ?>
                             <div class="form-group">
                                 <label>Benutzername:</label>
                                 <input type="text" class="form-control" value="<?php echo isset($_POST['edit-username']) ? $_POST['edit-username'] : $loginsystem->getUser('username', $id); ?>" name="edit-username" maxlength="64" placeholder="Benutzername" required>
@@ -219,6 +221,7 @@
                     </div>
                     <div class="panel-body">
                         <form action="./?p=userlist&c=delete&f=delete&id=<?php echo $id; ?>" method="post">
+<?php echo csrf_field(); ?>
                             <div class="form-group">
                                 <div class="col-sm-12 text-center f-s-16">
                                 	M&ouml;chtest du den Benutzer "<?php echo $loginsystem->getUser('username', $id); ?>" wirklich l&ouml;schen?
@@ -245,6 +248,7 @@
                     </div>
                     <div class="panel-body">
                         <form action="./?p=userlist&c=pwreset&f=pwreset&id=<?php echo $id; ?>" method="post">
+<?php echo csrf_field(); ?>
                             <div class="form-group">
                                 <div class="col-sm-12 text-center f-s-14">
                                 	M&ouml;chtest du das Passwort von "<?php echo $loginsystem->getUser('username', $id); ?>" wirklich zur&uuml;cksetzen?
@@ -271,6 +275,7 @@
                     </div>
                     <div class="panel-body">
                         <form action="./?p=userlist&c=rm_avatar&f=rm_avatar&id=<?php echo $id; ?>" method="post">
+<?php echo csrf_field(); ?>
                             <div class="form-group">
                                 <div class="col-sm-12 text-center f-s-14">
                                 	M&ouml;chtest du das Profilbild von "<?php echo $loginsystem->getUser('username', $id); ?>" wirklich entfernen?

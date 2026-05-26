@@ -26,6 +26,7 @@
                     <div class="panel-body">
                         <p>Du kannst nur Rechte vergeben und Seiten freigeben, welche du selbst hast.</p>
                         <form action="./?p=ranks&c=new_rank" method="post">
+<?php echo csrf_field(); ?>
                             <div class="form-group">
                                 <input type="text" class="form-control" name="name" placeholder="Rangbezeichnung" maxlength="32" value="<?php echo htmlspecialchars($_POST['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                             </div>
@@ -59,6 +60,7 @@
                     <div class="panel-body">
                         <p>Du kannst nur Rechte vergeben und Seiten freigeben, welche du selbst hast.</p>
                         <form action="./?p=ranks&c=edit_rank&f=edit_rank&id=<?php echo $id; ?>" method="post">
+<?php echo csrf_field(); ?>
                             <div class="form-group">
                                 <input type="text" class="form-control" name="name" placeholder="Rangbezeichnung" maxlength="32" value="<?php echo htmlspecialchars($_POST['name'] ?? $loginsystem->getValue('ranks', 'id', $id, 'title'), ENT_QUOTES, 'UTF-8'); ?>">
                             </div>
@@ -109,6 +111,7 @@
                     <div class="panel-heading">Rang l&ouml;schen <a class="btn btn-xs btn-warning pull-right mt-2px" href="./?p=ranks">zur&uuml;ck</a></div>
                     <div class="panel-body">
                         <form action="./?p=ranks&c=delete_rank&f=delete_rank&id=<?php echo $id; ?>" method="post">
+<?php echo csrf_field(); ?>
                             <div class="form-group">
                                 <input type="password" class="form-control" name="passwd" placeholder="Passwort" maxlength="64">
                             </div>

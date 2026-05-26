@@ -33,6 +33,19 @@ $id	= length(isset($_GET['id']) ? $_GET['id'] : '', 16);
 $error = isset($error) ? $error : '';
 $success = isset($success) ? $success : '';
 
+// ─── Zentraler CSRF-Guard für POST-Aktionen ─────────────────────────────────
+// Greift nur wenn eine Session existiert (d.h. Benutzer ist eingeloggt).
+// Unauthentifizierte Aktionen (login, regist, pwv, pw_reset) haben kein Token
+// in der Session — der Guard überspringt sie automatisch.
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_SESSION['ml_csrfToken'])) {
+    $__csrf = $_POST['csrf'] ?? '';
+    if (empty($__csrf) || !hash_equals($_SESSION['ml_csrfToken'], $__csrf)) {
+        $error = 'Ung&uuml;ltiger CSRF-Token!';
+        $c = '';
+    }
+    unset($__csrf);
+}
+
 /* Automatic run */
 $loginsystem->cookielogin();
 auto_remover(); // Clean MySQL-Tabels

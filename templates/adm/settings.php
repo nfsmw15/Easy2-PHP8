@@ -17,6 +17,7 @@
     <!-- /.row -->
     <?php echo $error ?? ''; ?>
 	<form action="./?p=settings&c=mainsave" method="post" enctype="multipart/form-data">
+<?php echo csrf_field(); ?>
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="clearfix">

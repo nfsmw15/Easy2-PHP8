@@ -68,6 +68,7 @@
 						</div>
 						<div class="panel-body">
 							<form action="./?p=profil&c=passwd_change" method="post">
+<?php echo csrf_field(); ?>
 								<div class="form-group">
 									<label>Neues Passwort: </label>
 									<input type="password" name="password" class="form-control" placeholder="Neues Passwort" required="">
@@ -94,6 +95,7 @@
 						</div>
 						<div class="panel-body">
 							<form action="./?p=profil&c=email_change" method="post">
+<?php echo csrf_field(); ?>
 								<div class="form-group">
 									<label>Neue E-Mail: </label>
 									<input type="email" name="email" class="form-control" placeholder="Neue E-Mail" required="">
@@ -120,6 +122,7 @@
 						</div>
 						<div class="panel-body">
 							<form action="./?p=profil&c=data_change" method="post">
+<?php echo csrf_field(); ?>
 								<div class="form-group">
 									<label>Benutzername: </label>
 									<input type="text" name="edit-username" class="form-control" value="<?php echo isset($_POST['edit-username']) ? htmlspecialchars($_POST['edit-username'], ENT_QUOTES, 'UTF-8') : $loginsystem->getUser('username'); ?>" placeholder="Benutzername" required="">
@@ -149,6 +152,7 @@
 						</div>
 						<div class="panel-body">
 							<form action="./?p=profil&c=avatar_change" method="post" enctype="multipart/form-data">
+<?php echo csrf_field(); ?>
 								<div class="form-group">
 									<label>Bild ausw&auml;hlen: <span class="wp11">ideal: 200x200px, max 1MB</span></label>
 									<input type="file" name="avatar-file" class="form-control" accept="image/*">
@@ -178,6 +182,7 @@
 						</div>
 						<div class="panel-body">
 							<form action="./?p=profil&c=remove_self&f=remove_self" method="post">
+<?php echo csrf_field(); ?>
 								<div class="form-group">
 									<h5>Bist du sicher das du dein Konto l&ouml;schen m&ouml;schtest?</h5>
 								</div>                        
