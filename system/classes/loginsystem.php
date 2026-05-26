@@ -1030,10 +1030,10 @@ class loginsystem extends database
                 $btns[] = '<a href="?p=userlist&f=edit&id='.$row['id'].'" title="Bearbeiten"><i class="fa fa-fw fa-pencil"></i></a>';
             if($row['active'] == 1){
                 if(self::auditRight('user_disable') && $this->checkRank($row['rank']))
-                    $btns[] = '<a href="?p=userlist&c=deactivate&id='.$row['id'].'" title="Deaktivieren"><i class="fa fa-fw fa-ban"></i></a>';
+                    $btns[] = '<a href="?p=userlist&c=deactivate&id='.$row['id'].'&csrf='.$this->sessionData['csrf'].'" title="Deaktivieren"><i class="fa fa-fw fa-ban"></i></a>';
             } else {
                 if(self::auditRight('user_enable') && $this->checkRank($row['rank']))
-                    $btns[] = '<a href="?p=userlist&c=activate&id='.$row['id'].'" title="Aktivieren"><i class="fa fa-fw fa-check"></i></a>';
+                    $btns[] = '<a href="?p=userlist&c=activate&id='.$row['id'].'&csrf='.$this->sessionData['csrf'].'" title="Aktivieren"><i class="fa fa-fw fa-check"></i></a>';
             }
             
             if(self::auditRight('user_delete') && $this->checkRank($row['rank']))
