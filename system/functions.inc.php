@@ -80,10 +80,10 @@ function this_domain(): string
 
 function getCurrentUrl(): string
 {
-    $https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
-    $url   = ($https ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    $parts = parse_url($url);
-    return ($parts['scheme'] ?? 'https') . '://' . ($parts['host'] ?? '') . ($parts['path'] ?? '');
+    $scheme = is_https() ? 'https' : 'http';
+    $url    = $scheme . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    $parts  = parse_url($url);
+    return ($parts['scheme'] ?? $scheme) . '://' . ($parts['host'] ?? '') . ($parts['path'] ?? '');
 }
 
 // ─── Zufallscode (kryptografisch sicher) ────────────────────────────────────
@@ -177,7 +177,7 @@ function encodeRand(string $str, ?string $secret = null): string
 
 function decodeRand(string $str, ?string $secret = null): string|false
 {
-    $secret  ??= defined('COOKIE_SECRET') ? COOKIE_SECRET : ENCRYPT_KEY;
+    $secret  ??= (defined('COOKIE_SECRET') ? COOKIE_SECRET : ENCRYPT_KEY);
     $decoded   = base64_decode($str, true);
     if ($decoded === false) {
         return false;

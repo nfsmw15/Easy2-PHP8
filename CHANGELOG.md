@@ -15,6 +15,9 @@ PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
   - `index.php`: Session-Cookie `Secure`-Flag berücksichtigt jetzt `X-Forwarded-Proto: https` (war zuvor immer `0` hinter Traefik)
   - `loginsystem.php`: Remember-Me-Cookies nutzen `is_https()` statt nackter `$_SERVER['HTTPS']`-Prüfung
   - `loginsystem.php` `logout()`: Cookie-Löschung von 7-Argument-Signatur auf Array-Syntax umgestellt (konsistent mit Setzen; `Secure`+`SameSite` korrekt übergeben)
+  - `getCurrentUrl()`: nutzt `is_https()` statt `$_SERVER['HTTPS']` — Passwort-Reset-/Kontaktlinks in E-Mails haben jetzt auch hinter Traefik korrekte `https://`-Scheme
+  - `loginsystem.php` `session_data()`: hardcoded `http://` durch `is_https()`-Erkennung ersetzt — Redirect-URL wird korrekt mit `https://` gebaut
+  - `decodeRand()`: fehlende Klammern ergänzt (war letzter verbliebener `??=`-Precedence-Bug)
 
 ---
 
