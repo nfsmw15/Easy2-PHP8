@@ -39,7 +39,7 @@
 - **CSP gehärtet**: `unsafe-eval` aus `script-src` entfernt — kein Code nutzte `eval()` oder `new Function()`; `unsafe-inline` in `style-src` bleibt (statische `style=""`-Attribute in Templates und Summernote-Editor)
 - **CSRF auf alle POST-Formulare ausgeweitet**:
   - `functions.inc.php`: neue Helper-Funktion `csrf_field()` — gibt `<input type="hidden" name="csrf">` aus (leer wenn nicht eingeloggt)
-  - `run.inc.php`: zentraler Guard prüft `$_POST['csrf']` mit `hash_equals()` vor allen Aktionen; greift nur bei aktiver Session (unauthentifizierte Formulare bleiben unverändert)
+  - `run.inc.php`: `cookielogin()` läuft jetzt vor dem Guard (Session vollständig aufgebaut); Guard prüft `$_POST['csrf']` via `hash_equals()`; öffentliche Aktionen (`login`, `regist`, `pwv/send`, `pw_reset/reset`) explizit whitelisted
   - 28 `csrf_field()`-Aufrufe in 9 Templates: `settings.php`, `ranks.php`, `rules.php`, `sites.php`, `menu.php`, `additional_fields.php`, `userlist.php`, `profil.php`, `contact.php`
 - **Default-Avatar-Upload gehärtet** (`mainSettings()`): gleicher Codepfad wie `setUserAvatar()` — `finfo` MIME-Check, GD-Re-Encoding, Whitelist `jpeg/png/gif/webp`; altes Bild wird bei Typ-Wechsel gelöscht
 
