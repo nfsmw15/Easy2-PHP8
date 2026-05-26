@@ -20,10 +20,10 @@
   - GD-Re-Encoding: Bild wird neu gerendert → eingebetteter Code wird vernichtet
   - Altes Bild wird erst nach erfolgreichem Speichern gelöscht
   - `avatare/.htaccess`: PHP-Ausführung im Upload-Verzeichnis blockiert (`php_flag engine off`, `SetHandler default-handler`)
-- **Mitglied-Rang: Logout/Profil-Menü fehlte** — Menu-IDs `m5` (Mein Profil), `m6` (Sperren), `m7` (Abmelden) in `_ml_ranks.sql` (Mitglied) ergänzt; Migration für bestehende Installs:
+- **Mitglied-Rang: Berechtigungen korrigiert** — Site-IDs 18 (`?p=menu`) und 19 (`?p=additional_fields`) entfernt; Menu-IDs `m5` (Mein Profil), `m6` (Sperren), `m7` (Abmelden) ergänzt; Migration für bestehende Installs:
   ```sql
   UPDATE `[prefix]_ml_ranks`
-  SET `sites` = CONCAT(`sites`, ',m5,m6,m7')
+  SET `sites` = CONCAT(REPLACE(REPLACE(`sites`, ',18', ''), ',19', ''), ',m5,m6,m7')
   WHERE `id` = 1813201540 AND `sites` NOT LIKE '%m7%';
   ```
 - **CSRF auf GET-Aktionen behoben**: `activateUser()`, `deactivateUser()`, `moveRank()`, `setSpecialRank()` prüfen jetzt `$_GET['csrf']` gegen `$_SESSION['ml_csrfToken']` (gleicher Mechanismus wie `lock()`); Templates `userlist.php` und `getRankList()` hängen Token an betroffene Links an
@@ -36,12 +36,6 @@
 - **Session-Härtung**: `session_regenerate_id(true)` nach erfolgreichem Login
 - **Remember-Me-Cookies**: Cookie-Optionen auf `secure`, `httponly`, `samesite=Strict` gehärtet (Array-Syntax)
 - **Passwort-Vergleiche**: `md5($a) == md5($b)` → `$a === $b` (kein Hash-Vergleich mehr, kein Typ-Juggling)
-- **Mitglied-Rang: `?p=menu` und `?p=additional_fields` nicht mehr zugänglich** — Site-IDs 18 und 19 aus `_ml_ranks.sql` (Mitglied) entfernt; Migration für bestehende Installs:
-  ```sql
-  UPDATE `[prefix]_ml_ranks`
-  SET `sites` = REPLACE(REPLACE(`sites`, ',18', ''), ',19', '')
-  WHERE `id` = 1813201540;
-  ```
 
 ---
 
