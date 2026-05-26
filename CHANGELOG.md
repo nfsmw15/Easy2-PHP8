@@ -36,12 +36,6 @@
 - **Session-Härtung**: `session_regenerate_id(true)` nach erfolgreichem Login
 - **Remember-Me-Cookies**: Cookie-Optionen auf `secure`, `httponly`, `samesite=Strict` gehärtet (Array-Syntax)
 - **Passwort-Vergleiche**: `md5($a) == md5($b)` → `$a === $b` (kein Hash-Vergleich mehr, kein Typ-Juggling)
-- **Mitglied-Rang: `?p=menu` und `?p=additional_fields` nicht mehr zugänglich** — Site-IDs 18 und 19 aus `_ml_ranks.sql` (Mitglied) entfernt; Migration für bestehende Installs:
-  ```sql
-  UPDATE `[prefix]_ml_ranks`
-  SET `sites` = REPLACE(REPLACE(`sites`, ',18', ''), ',19', '')
-  WHERE `id` = 1813201540;
-  ```
 
 ---
 
