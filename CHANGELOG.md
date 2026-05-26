@@ -36,6 +36,7 @@
 - **Session-Härtung**: `session_regenerate_id(true)` nach erfolgreichem Login
 - **Remember-Me-Cookies**: Cookie-Optionen auf `secure`, `httponly`, `samesite=Strict` gehärtet (Array-Syntax)
 - **Passwort-Vergleiche**: `md5($a) == md5($b)` → `$a === $b` (kein Hash-Vergleich mehr, kein Typ-Juggling)
+- **CSP gehärtet**: `unsafe-eval` aus `script-src` entfernt — kein Code nutzte `eval()` oder `new Function()`; `unsafe-inline` in `style-src` bleibt (statische `style=""`-Attribute in Templates und Summernote-Editor)
 
 ---
 
