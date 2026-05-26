@@ -1379,6 +1379,10 @@ class loginsystem extends database
     
     public function activateUser(){
         global $id;
+        $csrf = length($_GET['csrf'] ?? '', 64);
+        if(empty($this->sessionData['csrf']) || $csrf !== $this->sessionData['csrf']){
+            return 'Ung&uuml;ltiger CSRF Code!';
+        }
         if(self::auditRight('user_enable') && self::getUser('uik', $id) != '3A2xdfRKw5k6IqptThiZSFXbT5J0oELO' && self::getUser('uik', $id) != '3A2xdfRKw9l6IqptThiZSFXbT5J0oELO'){
             if(database::getAmount('user', 'id', $id) == 1){
                 if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
@@ -1413,6 +1417,10 @@ class loginsystem extends database
     
     public function deactivateUser(){
         global $id;
+        $csrf = length($_GET['csrf'] ?? '', 64);
+        if(empty($this->sessionData['csrf']) || $csrf !== $this->sessionData['csrf']){
+            return 'Ung&uuml;ltiger CSRF Code!';
+        }
         if(self::auditRight('user_disable') && $this->checkRank($this->getUser('rank', $id)) && self::getUser('uik', $id) != '3A2xdfRKw5k6IqptThiZSFXbT5J0oELO'){
             if(database::getAmount('user', 'id', $id) == 1){
                 if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
@@ -1610,17 +1618,17 @@ class loginsystem extends database
                 if($count <= 2 || $sql->num_rows == $count){
                     $options[] = '<a class="text-muted"><i class="fa fa-arrow-up"></i></a>';
                 } else {
-                    $options[] = '<a href="?p=ranks&c=move_rank_up&id='.$row['id'].'"><i class="fa fa-arrow-up"></i></a>';
+                    $options[] = '<a href="?p=ranks&c=move_rank_up&id='.$row['id'].'&csrf='.$this->sessionData['csrf'].'"><i class="fa fa-arrow-up"></i></a>';
                 }
                 if($sql->num_rows - 1 <= $count){
                     $options[] = '<a class="text-muted"><i class="fa fa-arrow-down"></i></a>';
                 } else {
-                    $options[] = '<a href="?p=ranks&c=move_rank_down&id='.$row['id'].'" ><i class="fa fa-arrow-down"></i></a>';
+                    $options[] = '<a href="?p=ranks&c=move_rank_down&id='.$row['id'].'&csrf='.$this->sessionData['csrf'].'" ><i class="fa fa-arrow-down"></i></a>';
                 }
             }
-            
+
             if(self::auditRight('rank_default') && $row['default'] == '0' && $row['guest'] == '0' && $row['pos'] != '0')
-                $options[] = '<a href="?p=ranks&c=default_rank&id='.$row['id'].'" title="Als Standard Rang setzen"><i class="fa fa-bookmark"></i></a>';
+                $options[] = '<a href="?p=ranks&c=default_rank&id='.$row['id'].'&csrf='.$this->sessionData['csrf'].'" title="Als Standard Rang setzen"><i class="fa fa-bookmark"></i></a>';
             if(self::auditRight('rank_delete') && $row['pos'] != '0' && $row['guest'] == '0' && $row['default'] == '0')
                 $options[] = '<a href="?p=ranks&f=delete_rank&id='.$row['id'].'" title="l&ouml;schen"><i class="fa fa-trash"></i></a>';
             
@@ -1843,6 +1851,10 @@ class loginsystem extends database
     
     public function moveRank($direction = "up"){
         global $id;
+        $csrf = length($_GET['csrf'] ?? '', 64);
+        if(empty($this->sessionData['csrf']) || $csrf !== $this->sessionData['csrf']){
+            return 'Ung&uuml;ltiger CSRF Code!';
+        }
         if(self::auditRight('rank_move') && $id != "1813201541"){
             if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
     
@@ -1915,7 +1927,10 @@ class loginsystem extends database
     
     public function setSpecialRank(){
         global $id;
-        
+        $csrf = length($_GET['csrf'] ?? '', 64);
+        if(empty($this->sessionData['csrf']) || $csrf !== $this->sessionData['csrf']){
+            return 'Ung&uuml;ltiger CSRF Code!';
+        }
         if(self::auditRight('rank_edit')){
             if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
     
