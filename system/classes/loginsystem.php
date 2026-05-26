@@ -919,48 +919,55 @@ class loginsystem extends database
                         $error = 'Das standard Profilbild kann nicht entfernt werden!';
                     }
                 } else { // Upload
-                    
-                    if(file_exists($this->dirAvatar.$userid.'.'.$type))
-                        unlink($this->dirAvatar.$userid.'.'.$type);
-                    
-                    $dir = $this->dirAvatar;
-                    $maxsize = return_bytes("1M"); // Gibt die maximale Dateigröße an in MB
-                    if($_FILES["avatar-file"]["error"] == UPLOAD_ERR_OK){
-                        // Holt sich alle Paramater zur Datei
-                        $filename = $_FILES["avatar-file"]['name'];
-                        $filemime = $_FILES["avatar-file"]['type'];
-                        $tmp_name = $_FILES["avatar-file"]['tmp_name'];
-                        $filesize = $_FILES["avatar-file"]['size'];
-                        
-                        // Verarbeitung der Parameter
-                        $newname	= $userid;
-                        $newname   .= strtolower(substr($filename, strrpos($filename, ".")));
-                        $size		= count_size($filesize);
-                        $filetype	= strtolower(str_replace('.', '', substr($filename, strrpos($filename, "."))));
-                        $blankname	= substr($filename, 0, strrpos($filename, "."));
-                        
-                        if($filesize <= $maxsize){
-                            if(in_array('image', explode('/', $filemime))){ // Prüft ob die Datei ein Bild ist
-                                if(move_uploaded_file($tmp_name, $dir.$newname)){ // Bild mit neuem Namen hochladen
-                                    if($this->pq("UPDATE `".Prefix."_user` SET `avatar` = ? WHERE `id` = ?", [$filetype, $userid])){
-                                        header('Location: ?p=profil&h=set_new_avatar_success');
-                                        exit();
-                                    } else {
-                                        errormail('Fehler beim speichern des Datentypes eines Profilbildes! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()! MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
-                                        $error = 'Fehler beim speichern des Bildes! Bitte versuchen Sie es zu einem sp&auml;tern Zeitpunkt erneut.';
-                                    }
-                                } else {
-                                    errormail('Fehler beim hochladen eines Bildes! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()!');
-                                    $error = 'Fehler beim Hochladen des Bildes! Bitte versuchen Sie es zu einem sp&auml;tern Zeitpunkt erneut.';
-                                } // END-if(move_uploaded_file)
-                            } else {
-                                $error = 'Die ausgew&auml;hlte Datei ist kein Bild!';
-                            }
-                        } else {
-                            $error = 'Die Datei '.$filename.' ist mit '.$size.' zu gro&szlig;! Die maximal zul&auml;ssige Dateigr&ouml;&szlig;e liegt bei: '.count_size($maxsize);
-                        } // END-if($fielsize)
-                    } else {// END-if($error == UPLOAD_ERR_OK)
+                    $tmp_name = $_FILES["avatar-file"]['tmp_name'] ?? '';
+                    $filesize = (int)($_FILES["avatar-file"]['size'] ?? 0);
+                    $maxsize  = return_bytes("1M");
+
+                    if($filesize > $maxsize){
+                        $error = 'Das Bild ist zu gro&szlig;! Maximal zul&auml;ssig: '.count_size($maxsize);
+                    } elseif(!is_uploaded_file($tmp_name)){
                         $error = 'Fehler! Bild konnte nicht hochgeladen werden!';
+                    } else {
+                        // MIME aus Dateiinhalt prüfen — browser-gelieferter type wird ignoriert
+                        $allowedMime = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/gif' => 'gif', 'image/webp' => 'webp'];
+                        $finfo = new \finfo(FILEINFO_MIME_TYPE);
+                        $realMime = $finfo->file($tmp_name);
+                        if(!isset($allowedMime[$realMime])){
+                            $error = 'Nur JPEG, PNG, GIF und WebP sind erlaubt!';
+                        } else {
+                            $ext = $allowedMime[$realMime];
+                            // Re-Encoding durch GD: vernichtet eingebetteten Code
+                            $src = match($realMime){
+                                'image/jpeg' => @imagecreatefromjpeg($tmp_name),
+                                'image/png'  => @imagecreatefrompng($tmp_name),
+                                'image/gif'  => @imagecreatefromgif($tmp_name),
+                                'image/webp' => @imagecreatefromwebp($tmp_name),
+                            };
+                            if($src === false){
+                                $error = 'Das Bild konnte nicht verarbeitet werden!';
+                            } else {
+                                $destPath = $this->dirAvatar.$userid.'.'.$ext;
+                                // Altes Bild entfernen (beliebige Endung)
+                                if(!empty($type) && file_exists($this->dirAvatar.$userid.'.'.$type)){
+                                    unlink($this->dirAvatar.$userid.'.'.$type);
+                                }
+                                $saved = match($realMime){
+                                    'image/jpeg' => imagejpeg($src, $destPath, 85),
+                                    'image/png'  => imagepng($src, $destPath, 6),
+                                    'image/gif'  => imagegif($src, $destPath),
+                                    'image/webp' => imagewebp($src, $destPath, 85),
+                                };
+                                imagedestroy($src);
+                                if($saved && $this->pq("UPDATE `".Prefix."_user` SET `avatar` = ? WHERE `id` = ?", [$ext, $userid])){
+                                    header('Location: ?p=profil&h=set_new_avatar_success');
+                                    exit();
+                                } else {
+                                    @unlink($destPath);
+                                    errormail('Fehler beim speichern des Profilbildes! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()!');
+                                    $error = 'Fehler beim Speichern des Bildes! Bitte versuche es sp&auml;ter erneut.';
+                                }
+                            }
+                        }
                     }
                 }
             } else {

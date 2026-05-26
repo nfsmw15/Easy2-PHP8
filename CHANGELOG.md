@@ -11,6 +11,12 @@
 - `$error ?? ''` in `settings.php`: kein PHP-Warning mehr wenn kein Fehler vorliegt
 
 ### Sicherheit
+- **Avatar-Upload vollständig gehärtet** (`setUserAvatar()`):
+  - MIME-Check via `finfo_file()` statt browser-geliefertem `$_FILES['type']` (war spoofbar)
+  - Whitelist: nur `image/jpeg`, `image/png`, `image/gif`, `image/webp` erlaubt
+  - GD-Re-Encoding: Bild wird neu gerendert → eingebetteter Code wird vernichtet
+  - Altes Bild wird erst nach erfolgreichem Speichern gelöscht
+  - `avatare/.htaccess`: PHP-Ausführung im Upload-Verzeichnis blockiert (`php_flag engine off`, `SetHandler default-handler`)
 - **CSRF auf GET-Aktionen behoben**: `activateUser()`, `deactivateUser()`, `moveRank()`, `setSpecialRank()` prüfen jetzt `$_GET['csrf']` gegen `$_SESSION['ml_csrfToken']` (gleicher Mechanismus wie `lock()`); Templates `userlist.php` und `getRankList()` hängen Token an betroffene Links an
 - **SQL-Injection vollständig behoben**: Alle `$this->mysql->query()` in `loginsystem.php`, `sites.php`, `menu.php`, `additional_fields.php` und `rules.php` auf `$this->pq()` (Prepared Statements) umgestellt
   - `database.php`: neue geschützte Methode `pq(string $sql, array $params)` als sicherer Drop-in-Ersatz
