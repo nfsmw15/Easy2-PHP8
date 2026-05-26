@@ -11,6 +11,7 @@
 - `$error ?? ''` in `settings.php`: kein PHP-Warning mehr wenn kein Fehler vorliegt
 
 ### Sicherheit
+- **XSS in Templates behoben**: `$_POST`-Werte in `value=""`-Attributen ohne HTML-Escaping in `regist.php`, `pwv.php`, `profil.php`, `menu.php`, `sites.php`, `rules.php`, `ranks.php` — alle Stellen durch `htmlspecialchar()` gesichert
 - **E-Mail-Enumeration in `password_forget()` behoben**: Immer Redirect auf Success-Seite, unabhängig ob E-Mail-Adresse existiert — kein Informationsleck mehr
 - **Mail-Template-Injection behoben**: `sendMail()` escaped alle `$data`-Werte per `htmlspecialchars()` bevor sie in HTML-Templates eingesetzt werden; Ausnahme: `message` (kommt bereits escaped aus `contact()`)
 - **Avatar-Upload vollständig gehärtet** (`setUserAvatar()`):
