@@ -11,6 +11,12 @@
 - `$error ?? ''` in `settings.php`: kein PHP-Warning mehr wenn kein Fehler vorliegt
 
 ### Sicherheit
+- **Mitglied-Rang: `?p=menu` und `?p=additional_fields` nicht mehr zugänglich** — Site-IDs 18 und 19 aus `_ml_ranks.sql` (Mitglied) entfernt; Migration für bestehende Installs:
+  ```sql
+  UPDATE `[prefix]_ml_ranks`
+  SET `sites` = REPLACE(REPLACE(`sites`, ',18', ''), ',19', '')
+  WHERE `id` = 1813201540;
+  ```
 - **CSRF auf GET-Aktionen behoben**: `activateUser()`, `deactivateUser()`, `moveRank()`, `setSpecialRank()` prüfen jetzt `$_GET['csrf']` gegen `$_SESSION['ml_csrfToken']` (gleicher Mechanismus wie `lock()`); Templates `userlist.php` und `getRankList()` hängen Token an betroffene Links an
 - **SQL-Injection vollständig behoben**: Alle `$this->mysql->query()` in `loginsystem.php`, `sites.php`, `menu.php`, `additional_fields.php` und `rules.php` auf `$this->pq()` (Prepared Statements) umgestellt
   - `database.php`: neue geschützte Methode `pq(string $sql, array $params)` als sicherer Drop-in-Ersatz
