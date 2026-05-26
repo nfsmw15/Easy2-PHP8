@@ -37,6 +37,7 @@ header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
 
 // ─── Session sicher konfigurieren ────────────────────────────────────────────
 $_easy_https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+            || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https')
             || (($_SERVER['SERVER_PORT'] ?? 80) == 443);
 ini_set('session.cookie_httponly',  '1');
 ini_set('session.cookie_secure',    $_easy_https ? '1' : '0');

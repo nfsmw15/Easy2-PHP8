@@ -5,6 +5,19 @@ PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
 
 ---
 
+## [1.1.6] – 2026-05-26 – Sicherheits-Patches
+
+### Sicherheit
+- **Operator-Precedence-Bug in `encrypt()`/`decrypt()` behoben**: `$key ?? defined('ENCRYPT_KEY') ? ENCRYPT_KEY : ''` wurde als `($key ?? defined('ENCRYPT_KEY')) ? ENCRYPT_KEY : ''` ausgewertet (PHP-Priorität: `??` > `?:`) — bei übergebenem Key wurde stattdessen immer `ENCRYPT_KEY` verwendet; Klammern ergänzt
+- **Gleiches Problem in `encodeRand()`/`decodeRand()`** für `$secret ??= ...` behoben
+- **HTTPS-Erkennung hinter Reverse-Proxy gehärtet**:
+  - Neue Funktion `is_https()` in `functions.inc.php`: prüft `$_SERVER['HTTPS']`, `$_SERVER['HTTP_X_FORWARDED_PROTO']` (Traefik) und Port 443 — funktioniert sowohl hinter Traefik als auch bei direktem HTTPS
+  - `index.php`: Session-Cookie `Secure`-Flag berücksichtigt jetzt `X-Forwarded-Proto: https` (war zuvor immer `0` hinter Traefik)
+  - `loginsystem.php`: Remember-Me-Cookies nutzen `is_https()` statt nackter `$_SERVER['HTTPS']`-Prüfung
+  - `loginsystem.php` `logout()`: Cookie-Löschung von 7-Argument-Signatur auf Array-Syntax umgestellt (konsistent mit Setzen; `Secure`+`SameSite` korrekt übergeben)
+
+---
+
 ## [1.1.5] – 2026-05-26 – Sicherheits-Patches
 
 ### Neu
