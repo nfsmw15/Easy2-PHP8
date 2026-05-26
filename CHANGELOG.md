@@ -5,6 +5,14 @@ PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
 
 ---
 
+## [1.1.5] – 2026-05-26 – Branch-spezifischer Versionscheck
+
+### Neu
+- **`EASY_BRANCH`-Konstante** (`'dashboard'`) in `functions.inc.php` eingeführt
+- **Versionscheck branch-spezifisch**: `settings.php` filtert GitHub-Releases nach `-dashboard`-Suffix — kein falscher Update-Hinweis mehr durch BS5-Releases
+
+---
+
 ## [1.1.4] – 2026-05-26 – OpenStreetMap & CSP-Fixes
 
 ### Neu
