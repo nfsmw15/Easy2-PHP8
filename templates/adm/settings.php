@@ -8,7 +8,7 @@
   		<li class="breadcrumb-item active">Einstellungen</li>
     </ol>
 </div>
-    <?php echo $error; ?>
+    <?php echo $error ?? ''; ?>
 	<form action="?p=settings&c=mainsave" method="post" enctype="multipart/form-data">
 		<div class="row mb-4">
 			<div class="col-sm-12 mb-2">
@@ -26,14 +26,16 @@
                					$_gh_version = $_SESSION[$_gh_cache_key] ?? '';
                				} else {
                					$_gh_ctx = stream_context_create(['http' => ['header' => "User-Agent: Easy2-PHP8\r\n", 'timeout' => 3]]);
-               					$_gh_json = @file_get_contents('https://api.github.com/repos/nfsmw15/Easy2-PHP8/releases?per_page=20', false, $_gh_ctx);
+               					$_gh_json = @file_get_contents('https://api.github.com/repos/nfsmw15/Easy2-PHP8/releases?per_page=50', false, $_gh_ctx);
                					if ($_gh_json !== false) {
                						$_gh_releases = json_decode($_gh_json, true);
                						if (is_array($_gh_releases)) {
                							foreach ($_gh_releases as $_rel) {
+               								if ($_rel['prerelease'] ?? false) continue;
                								$_tag = $_rel['tag_name'] ?? '';
                								if (str_ends_with($_tag, '-' . $_gh_branch)) {
                									$_gh_version = ltrim(preg_replace('/-[^-]+$/', '', $_tag), 'v');
+               									$_SESSION[$_gh_cache_key . '_url'] = $_rel['zipball_url'] ?? '';
                									break;
                								}
                							}

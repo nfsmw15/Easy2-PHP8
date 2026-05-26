@@ -4,7 +4,11 @@
 
 ### Neu
 - **`EASY_BRANCH`-Konstante** in `functions.inc.php` eingeführt (Wert je Branch: `bs5`, `bs4`, `bs3`, `dashboard`)
-- **Versionscheck branch-spezifisch**: `settings.php` fragt jetzt `releases?per_page=20` ab und filtert nach Tag-Suffix (`-dashboard`, `-bs5` usw.) statt immer `releases/latest` (BS5) zu nehmen — kein falscher Update-Hinweis mehr auf BS3/BS4/Dashboard
+- **Versionscheck branch-spezifisch**: `settings.php` filtert GitHub-Releases nach Branch-Suffix (`-bs5` usw.) statt immer `releases/latest` zu nehmen — kein falscher Update-Hinweis mehr
+- Pre-Releases (`prerelease: true`) werden übersprungen
+- `per_page` 20 → 50 (robuster bei vielen Releases)
+- `zipball_url` des Releases in `$_SESSION` gecacht (Vorbereitung Updater)
+- `$error ?? ''` in `settings.php`: kein PHP-Warning mehr wenn kein Fehler vorliegt
 
 ### Sicherheit
 - **SQL-Injection vollständig behoben**: Alle `$this->mysql->query()` in `loginsystem.php`, `sites.php`, `menu.php`, `additional_fields.php` und `rules.php` auf `$this->pq()` (Prepared Statements) umgestellt
