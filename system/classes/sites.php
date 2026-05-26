@@ -30,12 +30,18 @@ class sites extends loginsystem{
 		 * $site = ID der zu pruefenden Seite | ID from site which you will check
 		 * $user = Fur welchen Benutzer geprueft werden soll
 		 *************************/
+		// Admin-Seiten (dir='adm/') erfordern immer einen aktiven Login
+		$siteDir = parent::getValue('sites', 'id', $site, 'dir');
+		if($siteDir === 'adm/' && !parent::login_session()) {
+			return false;
+		}
+
 		$userrank = parent::getUser('rank', $userID);
 		$allowedSites = parent::getValue('ranks', 'id', $userrank, 'sites');
 		// Sind alle erlaubt? (Webadmin Rechte)
 		if($allowedSites == "all")
 			return true;
-		
+
 		$allowedSitesArray = explode(',', $allowedSites);
 		if(parent::getMainData('regist_active') == 0){
 			if(($key = array_search(14, $allowedSitesArray)) !== false)
