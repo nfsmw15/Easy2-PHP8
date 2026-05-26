@@ -4,7 +4,11 @@
 
 ### Neu
 - **`EASY_BRANCH`-Konstante** (`'bs3'`) in `functions.inc.php` eingeführt
-- **Versionscheck branch-spezifisch**: `settings.php` filtert GitHub-Releases jetzt nach `-bs3`-Suffix — kein falscher Update-Hinweis mehr durch BS5-Releases
+- **Versionscheck branch-spezifisch**: `settings.php` filtert GitHub-Releases nach `-bs3`-Suffix — kein falscher Update-Hinweis mehr durch BS5-Releases
+- Pre-Releases (`prerelease: true`) werden übersprungen
+- `per_page` 20 → 50 (robuster bei vielen Releases)
+- `zipball_url` des Releases in `$_SESSION` gecacht (Vorbereitung Updater)
+- `$error ?? ''` in `settings.php`: kein PHP-Warning mehr wenn kein Fehler vorliegt
 
 ---
 
