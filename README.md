@@ -10,10 +10,10 @@
 
 | Branch | Bootstrap | Version | Besonderheiten |
 |---|---|---|---|
-| **`main-bs5`** *(default)* | 5.3.8 | 1.2.2 | Dark Mode, Vanilla JS, kein jQuery (außer Summernote) |
-| `main-bs4` | 4.6.2 | 1.1.4 | jQuery 3.7.1 |
-| `main-bs3` | 3.3.7 | 1.1.4 | jQuery 3.7.1 |
-| `main-dashboard` | 4 / SB Admin | 1.1.4 | Admin-Dashboard-Layout |
+| **`main-bs5`** *(default)* | 5.3.8 | 1.2.4 | Dark Mode, Vanilla JS, kein jQuery (außer Summernote) |
+| `main-bs4` | 4.6.2 | 1.1.6 | jQuery 3.7.1 |
+| `main-bs3` | 3.3.7 | 1.1.6 | jQuery 3.7.1 |
+| `main-dashboard` | 4 / SB Admin | 1.1.6 | Admin-Dashboard-Layout |
 
 ---
 
