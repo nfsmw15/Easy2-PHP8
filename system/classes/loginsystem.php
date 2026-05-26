@@ -244,7 +244,7 @@ class loginsystem extends database
                         session_regenerate_id(true);
                         if($remember == 1){
                             $lifetime = database::getMainData('cookielifetime');
-                            $secure = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+                            $secure = is_https();
                             setcookie('ml_login_uik', $result['uik'], ['expires' => time() + $lifetime, 'path' => '/', 'secure' => $secure, 'httponly' => true, 'samesite' => 'Strict']);
                             setcookie('ml_login_ulc', encodeRand($lc), ['expires' => time() + $lifetime, 'path' => '/', 'secure' => $secure, 'httponly' => true, 'samesite' => 'Strict']);
                             setcookie('ml_login_sic', $sic, ['expires' => time() + $lifetime, 'path' => '/', 'secure' => $secure, 'httponly' => true, 'samesite' => 'Strict']);
@@ -277,10 +277,11 @@ class loginsystem extends database
             unset($_SESSION['ml_login_time']);
             unset($_SESSION['ml_login_sic']);
             unset($_SESSION['ml_csrfToken']);
-            setcookie('ml_login_uik', '', time() - 1, '/', '', true, true);
-            setcookie('ml_login_ulc', '', time() - 1, '/', '', true, true);
-            setcookie('ml_login_ult', '', time() - 1, '/', '', true, true);
-            setcookie('ml_login_sic', '', time() - 1, '/', '', true, true);
+            $__secure = is_https();
+            setcookie('ml_login_uik', '', ['expires' => time() - 1, 'path' => '/', 'secure' => $__secure, 'httponly' => true, 'samesite' => 'Strict']);
+            setcookie('ml_login_ulc', '', ['expires' => time() - 1, 'path' => '/', 'secure' => $__secure, 'httponly' => true, 'samesite' => 'Strict']);
+            setcookie('ml_login_ult', '', ['expires' => time() - 1, 'path' => '/', 'secure' => $__secure, 'httponly' => true, 'samesite' => 'Strict']);
+            setcookie('ml_login_sic', '', ['expires' => time() - 1, 'path' => '/', 'secure' => $__secure, 'httponly' => true, 'samesite' => 'Strict']);
             
             // Read Logout-Site
             $page = parent::getValue('sites', 'logout_site', '1', 'filename');
