@@ -1,5 +1,26 @@
 # Changelog — EASY 2.0 PHP8 Fork (Bootstrap 5)
 
+## [1.2.6] — 2026-05-27
+
+### Sicherheit
+- **`e()` Helper eingeführt**: Neue Funktion `e()` in `functions.inc.php` — `htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8')` als standardisierte Output-Escaping-Funktion
+- **Stored XSS in Zusatzfeldern (`showFields()`) behoben**: Template-Platzhalter `{NAME}`, `{TYPE}`, `{MAXLENGTH}`, `{DESCRIPTION}`, `{VALUE}` wurden unescaped per `str_replace()` in `.tpl`-Dateien eingesetzt — betraf alle Seiten mit Zusatzfeldern (Userliste, Profil, Registrierung); alle Platzhalter jetzt mit `e()` abgesichert
+- **Stored XSS via `javascript:`-URLs in Menü geblockt**: Neue Funktion `sanitize_menu_url()` in `menu.php` validiert URL-Scheme bei Speicherung und Ausgabe; erlaubt nur `http://`, `https://`, `mailto:`, relative Pfade (`/`, `?`); blockiert `javascript:`, `data:`, `vbscript:`, `file:` — defense-in-depth schützt auch bereits gespeicherte Einträge
+- **Menü-Icon-Eingabe gehärtet**: Server-seitige Validierung beschränkt Icon-Eingabe auf `[a-zA-Z0-9_\- ]` — verhindert CSS/HTML-Injection über Klassen-Attribute
+- **Regelverwaltung: Formularsichtbarkeit an Berechtigungen geknüpft**: `templates/adm/rules.php` rendert "Hinzufügen"-, "Bearbeiten"- und "Löschen"-Formular nur noch wenn `auditRight('rule_new'/'rule_edit'/'rule_delete')` gewährt ist
+- **SMTP-Passwort nicht mehr im HTML ausgegeben**: `value=""`-Attribut mit gespeichertem SMTP-Passwort entfernt; Feld hat `autocomplete="new-password"` und Platzhaltertext; wird nur überschrieben wenn Feld beim POST nicht leer ist
+- **XSS/HTML-Attribut-Injection im Settings-Formular behoben**: Alle `$_POST`-Werte in `value=""`-Attributen mit `e()` escaped; HTML-kodiert gespeicherte Felder (`title`, `email`, `smtp_host` etc.) nutzen Zwei-Pfad-Muster (`e()` auf POST, DB-Wert direkt); roh gespeicherte Felder (`impressum_info`, `osm_embed_url`) nutzen uniform `e()`; Summernote-HTML-Felder bleiben absichtlich unescaped
+- **XSS in `additional_fields.php` behoben**: Alle Formularwerte in Edit-, Neu- und Anzeige-Formularen escaped; Stored XSS in `listFields()` und `getFieldValues()` behoben; doppeltes Escaping bei HTML-kodiert gespeicherten Feldern (`title`, `placeholder`) entfernt
+- **XSS in `userlist.php` behoben**: `value=""`-Attribute, Detailansicht und Bestätigungsdialoge mit `htmlspecialchars()` abgesichert
+
+### Verbesserungen
+- **Live-Icon-Vorschau im Menü-Admin**: `js/icon-preview.js` zeigt Font-Awesome-Vorschau in Echtzeit; ungültige Zeichen werden sofort mit rotem Hinweis markiert — als externe Datei umgesetzt (Inline-Script wäre durch `script-src 'self'`-CSP blockiert)
+
+### Behoben
+- Fehlermeldungen zur Namensvalidierung sachlich formuliert, Tippfehler behoben
+
+---
+
 ## [1.2.5] — 2026-05-27
 
 ### Sicherheit
