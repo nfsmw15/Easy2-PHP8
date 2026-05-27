@@ -48,15 +48,15 @@
                             <?php echo csrf_field(); ?>
                                 <div class="form-group">
                                     <label>Benutzername:</label>
-                                    <input type="text" class="form-control" value="<?php echo isset($_POST['new-username']) ? $_POST['new-username'] : ''; ?>" name="new-username" maxlength="64" placeholder="Benutzername" required>
+                                    <input type="text" class="form-control" value="<?php echo htmlspecialchars(isset($_POST['new-username']) ? $_POST['new-username'] : '', ENT_QUOTES, 'UTF-8'); ?>" name="new-username" maxlength="64" placeholder="Benutzername" required>
                                 </div>
                                 <div class="form-group">
                                     <label>E-Mail Adresse:</label>
-                                    <input type="email" class="form-control" value="<?php echo isset($_POST['new-email']) ? $_POST['new-email'] : ''; ?>" name="new-email" maxlength="64" placeholder="E-Mail Adresse" required>
+                                    <input type="email" class="form-control" value="<?php echo htmlspecialchars(isset($_POST['new-email']) ? $_POST['new-email'] : '', ENT_QUOTES, 'UTF-8'); ?>" name="new-email" maxlength="64" placeholder="E-Mail Adresse" required>
                                 </div>
                                 <div class="form-group">
                                     <label>Vor-/Nachname:</label>
-                                    <input type="text" class="form-control" value="<?php echo isset($_POST['new-fullname']) ? $_POST['new-fullname'] : ''; ?>" name="new-fullname" maxlength="64" placeholder="Vor-/Namename" required>
+                                    <input type="text" class="form-control" value="<?php echo htmlspecialchars(isset($_POST['new-fullname']) ? $_POST['new-fullname'] : '', ENT_QUOTES, 'UTF-8'); ?>" name="new-fullname" maxlength="64" placeholder="Vor-/Namename" required>
                                 </div>
                                 <?php if(!empty($webmaster_confirm)){ ?>
                                 <input type="hidden" name="new-password" value="<?php echo htmlspecialchars($_POST['new-password'] ?? ''); ?>">
@@ -167,15 +167,15 @@
                                 </tr>
                             	<tr>
                                 	<td class="text-bold">Benutzername:</td>
-                                    <td><?php echo $loginsystem->getUser('username', $id); ?></td>
+                                    <td><?php echo htmlspecialchars($loginsystem->getUser('username', $id), ENT_QUOTES, 'UTF-8'); ?></td>
                                 </tr>
                             	<tr>
                                 	<td class="text-bold">Name:</td>
-                                    <td><?php echo $loginsystem->getUser('first_name', $id); ?> <?php echo $loginsystem->getUser('last_name', $id); ?></td>
+                                    <td><?php echo htmlspecialchars($loginsystem->getUser('first_name', $id), ENT_QUOTES, 'UTF-8'); ?> <?php echo htmlspecialchars($loginsystem->getUser('last_name', $id), ENT_QUOTES, 'UTF-8'); ?></td>
                                 </tr>
                             	<tr>
                                 	<td class="text-bold">E-Mail Adresse:</td>
-                                    <td><?php echo $loginsystem->getUser('email', $id); ?></td>
+                                    <td><?php echo htmlspecialchars($loginsystem->getUser('email', $id), ENT_QUOTES, 'UTF-8'); ?></td>
                                 </tr>
                             	<tr>
                                 	<td class="text-bold">Rang:</td>
@@ -205,15 +205,15 @@
                         <?php echo csrf_field(); ?>
                             <div class="form-group">
                                 <label>Benutzername:</label>
-                                <input type="text" class="form-control" value="<?php echo isset($_POST['edit-username']) ? $_POST['edit-username'] : $loginsystem->getUser('username', $id); ?>" name="edit-username" maxlength="64" placeholder="Benutzername" required>
+                                <input type="text" class="form-control" value="<?php echo htmlspecialchars(isset($_POST['edit-username']) ? $_POST['edit-username'] : $loginsystem->getUser('username', $id), ENT_QUOTES, 'UTF-8'); ?>" name="edit-username" maxlength="64" placeholder="Benutzername" required>
                             </div>
                             <div class="form-group">
                                 <label>E-Mail Adresse:</label>
-                                <input type="email" class="form-control" value="<?php echo isset($_POST['edit-email']) ? $_POST['edit-email'] : $loginsystem->getUser('email', $id); ?>" name="edit-email" maxlength="64" placeholder="E-Mail Adresse" required>
+                                <input type="email" class="form-control" value="<?php echo htmlspecialchars(isset($_POST['edit-email']) ? $_POST['edit-email'] : $loginsystem->getUser('email', $id), ENT_QUOTES, 'UTF-8'); ?>" name="edit-email" maxlength="64" placeholder="E-Mail Adresse" required>
                             </div>
                             <div class="form-group">
                                 <label>Vor-/Nachname:</label>
-                                <input type="text" class="form-control" value="<?php echo isset($_POST['edit-fullname']) ? $_POST['edit-fullname'] : $loginsystem->getUser('first_name', $id).' '.$loginsystem->getUser('last_name', $id); ?>" name="edit-fullname" maxlength="64" placeholder="Vor-/Namename" required>
+                                <input type="text" class="form-control" value="<?php echo htmlspecialchars(isset($_POST['edit-fullname']) ? $_POST['edit-fullname'] : $loginsystem->getUser('first_name', $id).' '.$loginsystem->getUser('last_name', $id), ENT_QUOTES, 'UTF-8'); ?>" name="edit-fullname" maxlength="64" placeholder="Vor-/Namename" required>
                             </div>
                             <?php if($loginsystem->auditRight('user_rank') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
                                 <div class="form-group">
@@ -263,7 +263,7 @@
                         <?php echo csrf_field(); ?>
                             <div class="form-group">
                                 <div class="col-sm-12 text-center f-s-16">
-                                	M&ouml;chtest du den Benutzer "<?php echo $loginsystem->getUser('username', $id); ?>" wirklich l&ouml;schen?
+                                	M&ouml;chtest du den Benutzer "<?php echo htmlspecialchars($loginsystem->getUser('username', $id), ENT_QUOTES, 'UTF-8'); ?>" wirklich l&ouml;schen?
                                 </div>
                                 <div class="col-sm-12 text-center f-s-12">
                                 	Um den Vorgang abzuschlie&szlig;en, gebe bitte dein Passwort zur Best&auml;tigung ein.
@@ -290,7 +290,7 @@
                         <?php echo csrf_field(); ?>
                             <div class="form-group">
                                 <div class="col-sm-12 text-center f-s-14">
-                                	M&ouml;chtest du das Passwort von "<?php echo $loginsystem->getUser('username', $id); ?>" wirklich zur&uuml;cksetzen?
+                                	M&ouml;chtest du das Passwort von "<?php echo htmlspecialchars($loginsystem->getUser('username', $id), ENT_QUOTES, 'UTF-8'); ?>" wirklich zur&uuml;cksetzen?
                                 </div>                                
                                 <div class="col-sm-12 text-center f-s-12">
                                 	Um den Vorgang abzuschlie&szlig;en, gebe bitte dein Passwort zur Best&auml;tigung ein.
@@ -317,7 +317,7 @@
                         <?php echo csrf_field(); ?>
                             <div class="form-group">
                                 <div class="col-sm-12 text-center f-s-14">
-                                	M&ouml;chtest du das Profilbild von "<?php echo $loginsystem->getUser('username', $id); ?>" wirklich entfernen?
+                                	M&ouml;chtest du das Profilbild von "<?php echo htmlspecialchars($loginsystem->getUser('username', $id), ENT_QUOTES, 'UTF-8'); ?>" wirklich entfernen?
                                 </div>                                
                                 <div class="col-sm-12 text-center f-s-12">
                                 	Um den Vorgang abzuschlie&szlig;en, gebe bitte dein Passwort zur Best&auml;tigung ein.
