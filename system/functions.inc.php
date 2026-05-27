@@ -28,6 +28,11 @@ function htmlspecialchar(string $string): string
     return htmlentities($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+function e(mixed $value): string
+{
+    return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
 /**
  * Kürzt und sanitiert einen Eingabewert.
  * $type = "html"  → htmlentities
