@@ -37,6 +37,46 @@ Diese Änderungen können die Funktionalität beeinflussen:
 
 ---
 
+## 🔐 Sicherheitsänderungen (ab v1.2.6 / v1.1.8)
+
+Wer von EASY 2.0 oder einer älteren Fork-Version upgradet, muss folgende Punkte in **eigenen/angepassten Templates** nachpflegen:
+
+### CSRF-Tokens in Formularen
+
+Die folgenden öffentlichen Formulare benötigen jetzt zwingend `<?php echo csrf_field(); ?>` unmittelbar nach dem öffnenden `<form>`-Tag:
+
+| Template | Formular |
+|----------|----------|
+| `templates/login/regist.php` | Registrierung |
+| `templates/login/pwv.php` | Passwort vergessen |
+| `templates/login/pw_reset.php` | Passwort zurücksetzen |
+| `templates/bootstrap/contact.php` | Kontaktformular |
+
+Ohne dieses Feld werden POST-Anfragen mit `Ungültiger CSRF-Token!` abgewiesen.
+
+### XSS-Escaping mit `e()`
+
+Neue Hilfsfunktion `e()` in `functions.inc.php`:
+```php
+echo e($value); // htmlspecialchars mit ENT_QUOTES|ENT_SUBSTITUTE
+```
+
+Alle `$_POST`-Werte in `value=""`-Attributen und Textarea-Inhalten **müssen** mit `e()` escaped werden. Betrifft insbesondere eigene Admin- und Login-Templates.
+
+### Menü-URL-Sanitierung
+
+`sanitize_menu_url()` in `menu.php` blockiert automatisch `javascript:`, `data:`, `vbscript:` und unbekannte URL-Schemata. Bereits gespeicherte URLs mit diesen Schemata werden beim Rendern durch `#` ersetzt — kein DB-Eingriff nötig.
+
+### SMTP-Passwort-Feld
+
+Das `smtp_pass`-Eingabefeld in `templates/adm/settings.php` gibt das gespeicherte Passwort nicht mehr als `value=""` aus. Ein leeres Feld beim Speichern überschreibt das bestehende Passwort **nicht** mehr. Custom-Settings-Templates müssen entsprechend angepasst werden (leeres `value=""`, Guard in `loginsystem.php` ist serverseitig bereits aktiv).
+
+### HTTP 404 bei Fehlerseiten
+
+`includeSite()` in `sites.php` sendet jetzt automatisch `http_response_code(404)` wenn die konfigurierte Fehlerseite ausgeliefert wird. Kein Handlungsbedarf — aber Caches/Proxys müssen ggf. geleert werden.
+
+---
+
 ## 📋 Schritt-für-Schritt Upgrade
 
 ### Schritt 1: Aktuelles System herunterfahren (optional)
@@ -235,6 +275,9 @@ Diese sind **automatisch aktiviert** und erhöhen die Sicherheit.
 - [ ] Test mit verschiedenen Browsern
 - [ ] HTTPS aktiviert (wird empfohlen)
 - [ ] Alte Installation gelöscht (nach Testverlauf)
+- [ ] Custom-Templates: `<?php echo csrf_field(); ?>` in allen öffentlichen Formularen ergänzt
+- [ ] Custom-Templates: `$_POST`-Werte mit `e()` escaped
+- [ ] SMTP-Passwort in den Einstellungen neu gesetzt (wird nicht mehr aus DB vorausgefüllt)
 
 ---
 
