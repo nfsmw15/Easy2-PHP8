@@ -1036,7 +1036,7 @@ class loginsystem extends database
                     $btns[] = '<a href="?p=userlist&c=activate&id='.$row['id'].'&csrf='.$this->sessionData['csrf'].'" title="Aktivieren"><i class="fa fa-fw fa-check"></i></a>';
             }
             
-            if(self::auditRight('user_delete') && $this->checkRank($row['rank']))
+            if(self::auditRight('user_delete') && $this->checkRank($row['rank']) && self::getUser('id') != $row['id'])
                 $btns[] = '<a href="?p=userlist&f=delete&id='.$row['id'].'" title="L&ouml;schen"><i class="fa fa-fw fa-trash"></i></a>';
             
             $btn = implode(' | ', $btns);
