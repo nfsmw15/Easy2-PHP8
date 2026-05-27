@@ -128,5 +128,8 @@ $_layout = in_array($loginsystem->getMainData('layout'), ['navbar', 'dashboard']
         <script src="js/summernote-init.js"></script>
     <?php endif; ?>
     <script src="js/app.js"></script>
+    <?php if (!empty($p) && $p === 'menu'): ?>
+        <script src="js/icon-preview.js"></script>
+    <?php endif; ?>
 </body>
 </html>
