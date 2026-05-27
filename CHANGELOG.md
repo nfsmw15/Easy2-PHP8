@@ -22,6 +22,7 @@ PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
 - **Edit-Button in Userliste**: fehlender `checkRank()`-Check ergänzt — Bearbeiten-Icon wird für höherrangige Benutzer nicht mehr angezeigt
 - **Gast-Rang: `adm/`-Seiten gesperrt** (`sites.php`): `allowSite()` blockiert jetzt alle Seiten mit `dir='adm/'` ohne aktiven Login, unabhängig von DB-Einstellungen
 - **Selbstlöschung im Admin-Panel gesperrt**: Löschen-Icon und Lösch-Formular werden für den eigenen Account nicht mehr angezeigt (`listAllUsers()`, `userlist.php`) — Backend-Schutz war bereits vorhanden
+- **Webmaster-Selbstlöschung über Profil gesperrt**: `removeUserSelf()` prüft `pos=0`-Rang und blockiert; Konto-löschen-Button und `remove_self`-Formular in `profil.php` via `isTopRank()` ausgeblendet
 
 ---
 
