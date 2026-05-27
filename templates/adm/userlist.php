@@ -94,8 +94,25 @@
                                             Anmeldedaten versenden
                                         </label>
                                 </div>
+                                <?php if(!empty($webmaster_confirm)){ ?>
+                                <input type="hidden" name="confirm_webmaster" value="1">
+                                <div class="alert alert-warning">
+                                    <strong><i class="fa fa-warning"></i> Achtung: Mehrere Webmaster-Accounts!</strong><br>
+                                    Es existiert bereits ein Webmaster-Account. Beachte:
+                                    <ul class="mb-2 mt-1">
+                                        <li>Webmaster k&ouml;nnen sich gegenseitig l&ouml;schen und aussperren</li>
+                                        <li>Jeder Webmaster kann weitere Webmaster-Accounts anlegen</li>
+                                        <li>Alle Webmaster haben vollen Zugriff auf das gesamte System</li>
+                                    </ul>
+                                </div>
+                                <?php } ?>
                                 <div class="form-group">
+                                    <?php if(!empty($webmaster_confirm)){ ?>
+                                        <a class="btn btn-default pull-left" href="?p=userlist"><i class="fa fa-times"></i> Abbrechen</a>
+                                        <button class="btn btn-warning pull-right" type="submit"><i class="fa fa-check"></i> Ich habe verstanden &mdash; Trotzdem anlegen</button>
+                                    <?php } else { ?>
                                         <button class="btn btn-success pull-right" type="submit"><i class="fa fa-user-plus"></i> Anlegen</button>
+                                    <?php } ?>
                                 </div>
                             </form>
                         <?php } else echo '<em>Keine Berechtigung Benutzer hinzuzuf&uuml;gen durchzuf&uuml;hren!</em>';	?>
@@ -207,9 +224,26 @@
  							<?php 
 								echo $additional_fields->showFields(0, 'edit-', $id);
 							?>
+                            <?php if(!empty($webmaster_confirm)){ ?>
+                            <input type="hidden" name="confirm_webmaster" value="1">
+                            <div class="alert alert-warning">
+                                <strong><i class="fa fa-warning"></i> Achtung: Mehrere Webmaster-Accounts!</strong><br>
+                                Es existiert bereits ein Webmaster-Account. Beachte:
+                                <ul class="mb-2 mt-1">
+                                    <li>Webmaster k&ouml;nnen sich gegenseitig l&ouml;schen und aussperren</li>
+                                    <li>Jeder Webmaster kann weitere Webmaster-Accounts anlegen</li>
+                                    <li>Alle Webmaster haben vollen Zugriff auf das gesamte System</li>
+                                </ul>
+                            </div>
+                            <?php } ?>
                            <div class="form-group">
-                                <a class="btn btn-warning pull-left" href="#" data-history-back><i class="fa fa-times"></i> Abbrechen</a>
-                                <button class="btn btn-success pull-right" type="submit"><i class="fa fa-floppy-o"></i> Speichern</button>
+                                <?php if(!empty($webmaster_confirm)){ ?>
+                                    <a class="btn btn-default pull-left" href="?p=userlist"><i class="fa fa-times"></i> Abbrechen</a>
+                                    <button class="btn btn-warning pull-right" type="submit"><i class="fa fa-check"></i> Ich habe verstanden &mdash; Trotzdem speichern</button>
+                                <?php } else { ?>
+                                    <a class="btn btn-warning pull-left" href="#" data-history-back><i class="fa fa-times"></i> Abbrechen</a>
+                                    <button class="btn btn-success pull-right" type="submit"><i class="fa fa-floppy-o"></i> Speichern</button>
+                                <?php } ?>
                             </div>
                         </form>
                     </div>
