@@ -29,7 +29,7 @@ Diese Änderungen können die Funktionalität beeinflussen:
 
 | Change | Original EASY 2.0 | PHP 8 Fork | Migrationsbedarf |
 |--------|-------------------|------------|------------------|
-| **Datenbank** | mysqli | PDO | ⚠️ Keine Änderung nötig, automatisch |
+| **Datenbank** | mysqli | PDO | ⚠️ Core automatisch, eigene Erweiterungen prüfen |
 | **Verschlüsselung** | mcrypt (deprecated) | OpenSSL AES-256-GCM | ⚠️ Existierende verschlüsselte Daten könnten problematisch sein |
 | **Typisierung** | Keine | Strict Types (PHP 8) | ✅ Keine Auswirkung auf Nutzer |
 | **Session Sicherheit** | Standard | HttpOnly, Secure, SameSite | ✅ Besser! |
@@ -50,6 +50,7 @@ Wer von EASY 2.0 **v0.9.6 oder älter** upgradet — oder wer unsicher ist, welc
 | **Rang-/Rechte-Daten** | Das Rechte-Modell hat sich geändert; alte `ranks`-Einträge blind zu importieren kann zu unbeabsichtigten Berechtigungen führen |
 | **Menü- und Seiten-URLs** | Historisch gespeicherte Menü-URLs können `javascript:`- oder andere Injection-Werte enthalten; nach dem Import prüfen |
 | **Zusatzfelder (Benutzerdaten)** | Alte Feldwerte wurden ohne XSS-Escaping gespeichert und können gespeicherte Script-Tags enthalten — Inhalte vor dem Import prüfen |
+| **Seiteninhalte / Impressum / Datenschutz** | In `ml_main` gespeicherte HTML-Felder (`impressum_info`, `impressum_content`, `privacy_policy`) sowie selbst erstellte Seiten-Templates prüfen — historisch können dort unsanitierte Inhalte stehen |
 
 ### Empfohlene Vorgehensweise bei alten Installationen
 
@@ -60,7 +61,9 @@ Wer von EASY 2.0 **v0.9.6 oder älter** upgradet — oder wer unsicher ist, welc
 5. **Zusatzfeld-Inhalte** nach dem Import auf gespeicherte Script-Tags prüfen (`SELECT value FROM ml_additional_user_information WHERE value LIKE '%<script%'`)
 6. **Alle Benutzer zum Passwort-Reset zwingen** — kein Benutzer sollte sich mit einem alten Hash anmelden können:
    ```sql
-   -- Alle Passwörter ungültig machen (Benutzer müssen "Passwort vergessen" nutzen):
+   -- Alle Passwörter ungültig machen (Benutzer müssen "Passwort vergessen" nutzen).
+   -- Nur auf gesicherter Kopie / Neuinstallation ausführen!
+   -- Tabellenpräfix ggf. anpassen (Standard: ml_)
    UPDATE ml_user SET password = '' WHERE id > 0;
    ```
 7. **Admin/Webmaster-Accounts bewusst neu anlegen** statt aus der alten DB zu übernehmen
@@ -149,9 +152,9 @@ cp easy2_backup/js/custom.js easy2_new/js/ 2>/dev/null || true
 ```
 
 ### Schritt 5: Datenbank-Migration
-**Die Datenbankstruktur ändert sich NICHT!** 
+**Die Kernstruktur ist weitgehend kompatibel**, aber neue Fork-Versionen bringen zusätzliche Felder und Einstellungen in `ml_main` mit, und die Sicherheitslogik setzt bestimmte DB-Werte voraus. Bei sehr alten Installationen wird eine Neuinstallation mit selektiver Migration empfohlen — siehe Abschnitt [Sehr alte Installationen](#️-sehr-alte-installationen-neuinstallation-empfohlen) weiter oben.
 
-Aber: Wenn Sie in der alten Version verschlüsselte Felder (z.B. Passwörter, API-Keys) haben:
+Wenn Sie in der alten Version verschlüsselte Felder (z.B. Passwörter, API-Keys) haben:
 ```sql
 -- Prüfen welche Spalten encrypted sind:
 SELECT COLUMN_NAME, COLUMN_COMMENT 
@@ -288,8 +291,8 @@ Diese sind **automatisch aktiviert** und erhöhen die Sicherheit.
 |-------|-----------|
 | **Weitergabe von Code** | Sie müssen den geänderten Code unter AGPLv3 veröffentlichen |
 | **Kommerzielle Nutzung** | ✅ Erlaubt (mit Lizenz-Einhaltung) |
-| **Eigene Anpassungen** | Sie müssen Source-Code offenlegen, wenn Sie es weitergeben |
-| **Datenschutz** | AGPLv3 schützt auch bei Web-Services (nicht nur lokale Nutzung) |
+| **Eigene Anpassungen** | Offenlegungspflicht gilt auch wenn Sie das System **öffentlich als Netzwerkdienst betreiben** — nicht nur bei Weitergabe |
+| **Datenschutz** | AGPLv3 schließt die "ASP-Lücke" der GPLv3: Bereitstellen als Webservice zählt als Verbreitung |
 
 **Details**: Siehe [LICENSE.md](LICENSE.md)
 
