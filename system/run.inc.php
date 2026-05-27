@@ -32,6 +32,7 @@ $v = length(isset($_GET['v']) ? $_GET['v'] : '', 64);
 $id	= length(isset($_GET['id']) ? $_GET['id'] : '', 16);
 $error = isset($error) ? $error : '';
 $success = isset($success) ? $success : '';
+$warning = isset($warning) ? $warning : '';
 
 /* Automatic run */
 $loginsystem->cookielogin();
@@ -329,6 +330,18 @@ if($p == 'profil' && $h == 'remove_self_link'){
 
 if($p == 'userlist' && $h == 'create_user_successfully' && !empty($id)){
 	$success = 'Du hast den Benutzer "'.$loginsystem->getUser('username', $id).'" erfolgreich erstellt!';
+}
+
+if($p == 'userlist' && $h == 'multiple_webmaster_warning' && !empty($id)){
+	$success = 'Du hast den Benutzer "'.$loginsystem->getUser('username', $id).'" erfolgreich gespeichert!';
+	$warning = '<strong><i class="fa fa-warning"></i> Achtung: Mehrere Webmaster-Accounts!</strong><br>
+		Es existieren jetzt mehr als ein Webmaster-Account. Beachte folgendes:<br>
+		<ul class="mb-2 mt-1">
+			<li>Webmaster k&ouml;nnen sich gegenseitig l&ouml;schen und aussperren</li>
+			<li>Jeder Webmaster kann weitere Webmaster-Accounts anlegen</li>
+			<li>Alle Webmaster haben vollen Zugriff auf das gesamte System</li>
+		</ul>
+		Stelle sicher, dass alle Webmaster-Accounts vertrauensw&uuml;rdig sind.';
 }
 
 if($p == 'userlist' && $h == 'deactivate_user_successfully' && !empty($id)){
