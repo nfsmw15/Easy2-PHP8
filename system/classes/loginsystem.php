@@ -1116,7 +1116,8 @@ class loginsystem extends database
                                                             
                                                             self::sendMail("welcome.html", $id, $data, $email);
                                                         }
-                                                        header('Location: ?p=userlist&h=create_user_successfully&id='.$id);
+                                                        $wm_warn = ($this->rankPosition($rank) == 0 && database::getAmount('user', 'rank', $rank) > 1) ? 'multiple_webmaster_warning' : 'create_user_successfully';
+                                                        header('Location: ?p=userlist&h='.$wm_warn.'&id='.$id);
                                                         exit();
                                                     } else {
                                                         $error = 'Fehler beim erstellen des Benutzers! Bitte versuche es zu einem sp&auml;teren Zeitpunkt erneut. Der Administrator wurde &uuml;ber das Problem informiert.';
@@ -1269,7 +1270,8 @@ class loginsystem extends database
                                                                 self::sendMail("user_edit.html", $id, $data, $email);
                                                         }
                                                     }
-                                                    header('Location: ?p=userlist&h=edit_user_successfully&id='.$id);
+                                                    $wm_warn = ($this->rankPosition($rank) == 0 && database::getAmount('user', 'rank', $rank) > 1) ? 'multiple_webmaster_warning' : 'edit_user_successfully';
+                                                    header('Location: ?p=userlist&h='.$wm_warn.'&id='.$id);
                                                     exit();
                                                 } else {
                                                     $error = 'Fehler beim bearbeiten des Benutzers! Bitte versuche es zu einem sp&auml;teren Zeitpunkt erneut. Der Administrator wurde &uuml;ber das Problem informiert.';

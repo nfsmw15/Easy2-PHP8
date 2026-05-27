@@ -23,3 +23,18 @@ if (!empty($success)) {
           </div>
         </div>';
 }
+
+if (!empty($warning)) {
+    $error .= '
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="alert alert-warning alert-dismissible fade show">
+                ' . $warning . '
+                <hr class="mt-2 mb-2">
+                <button type="button" class="btn btn-warning btn-sm" data-bs-dismiss="alert">
+                    <i class="fa fa-check"></i> Ich habe verstanden
+                </button>
+            </div>
+          </div>
+        </div>';
+}
