@@ -45,7 +45,7 @@ class additional_fields extends loginsystem{
 			$rtn .= '<tr>
 				<td>'.$row['pos'].'</td>
 				<td>'.htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8').'</td>
-				<td>'.htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8').'</td>
+				<td>'.$row['title'].'</td>
 				<td>'.htmlspecialchars($row['type'], ENT_QUOTES, 'UTF-8').'</td>
 				<td>'.$required.'</td>
 				<td>'.$regist.'</td>
