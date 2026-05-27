@@ -2082,7 +2082,9 @@ class loginsystem extends database
                 $update['smtp_host'] = $smtp_host;
                 $update['smtp_port'] = $smtp_port;
                 $update['smtp_user'] = $smtp_user;
-                $update['smtp_pass'] = $smtp_pass;
+                if (!empty($smtp_pass)) {
+                    $update['smtp_pass'] = $smtp_pass;
+                }
                 $update['smtp_encryption'] = $smtp_enc;
                 $update['layout'] = $layout;
                 $update['osm_embed_url'] = $osm_url;

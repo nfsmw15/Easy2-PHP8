@@ -159,7 +159,7 @@
 								</div>
 								<div class="col-sm-4">
 									<label for="smtp_pass">SMTP Passwort:</label>
-									<input type="password" name="smtp_pass" class="form-control" value="<?php echo isset($_POST['smtp_pass']) ? $_POST['smtp_pass'] : $loginsystem->getMainData('smtp_pass'); ?>" id="smtp_pass" maxlength="256" placeholder="Passwort">
+									<input type="password" name="smtp_pass" class="form-control" id="smtp_pass" maxlength="256" placeholder="Leer lassen, um Passwort beizubehalten" autocomplete="new-password">
 								</div>
 							</div>
 						</div>
