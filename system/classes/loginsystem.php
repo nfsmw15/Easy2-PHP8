@@ -1092,13 +1092,17 @@ class loginsystem extends database
                                                 if(empty($error)){
                                                     $rank = (parent::getAmount('ranks', 'id', $rank) == 1 && self::auditRight('user_rank')) ? $rank : parent::getValue('ranks', '`default`', '1', 'id');
                                                     $password = self::pwhash($password);
+                                                    if($this->rankPosition($rank) == 0 && database::getAmount('user', 'rank', $rank) > 0 && empty($_POST['confirm_webmaster'])){
+                                                        return '__webmaster_confirm__';
+                                                    }
+
                                                     $uik = getCode(32, 'user', 'uik');
-                                                    
+
                                                     $names = explode(' ', $fullname);
                                                     $namesAmount = count($names);
                                                     $last_name = ($namesAmount > 1) ? array_pop($names) : NULL;
                                                     $first_name = implode(' ', $names);
-                                                    
+
                                                     $sql = $this->pq(
                                                         "INSERT INTO `".Prefix."_user` (`username`, `first_name`, `last_name`, `email`, `password`, `active`, `rank`, `uik`, `regdate`) VALUES (?, ?, ?, ?, ?, '1', ?, ?, ?)",
                                                         [$username, $first_name, $last_name, $email, $password, $rank, $uik, time()]
@@ -1116,8 +1120,7 @@ class loginsystem extends database
                                                             
                                                             self::sendMail("welcome.html", $id, $data, $email);
                                                         }
-                                                        $wm_warn = ($this->rankPosition($rank) == 0 && database::getAmount('user', 'rank', $rank) > 1) ? 'multiple_webmaster_warning' : 'create_user_successfully';
-                                                        header('Location: ?p=userlist&h='.$wm_warn.'&id='.$id);
+                                                        header('Location: ?p=userlist&h=create_user_successfully&id='.$id);
                                                         exit();
                                                     } else {
                                                         $error = 'Fehler beim erstellen des Benutzers! Bitte versuche es zu einem sp&auml;teren Zeitpunkt erneut. Der Administrator wurde &uuml;ber das Problem informiert.';
@@ -1210,12 +1213,16 @@ class loginsystem extends database
                                                         $rank = $old_rank;
                                                     }
                                                 }
+                                                if($this->rankPosition($rank) == 0 && self::getUser('rank', $id) != $rank && database::getAmount('user', 'rank', $rank) > 0 && empty($_POST['confirm_webmaster'])){
+                                                    return '__webmaster_confirm__';
+                                                }
+
                                                 // Split name
                                                 $names = explode(' ', $fullname);
                                                 $namesAmount = count($names);
                                                 $last_name = ($namesAmount > 1) ? array_pop($names) : NULL;
                                                 $first_name = implode(' ', $names);
-                                                
+
                                                 $old_name = explode(' ', $old_fullname);
                                                 $old_nameAmount = count($old_name);
                                                 $old_last_name = ($old_nameAmount > 1) ? array_pop($old_name) : NULL;
@@ -1270,8 +1277,7 @@ class loginsystem extends database
                                                                 self::sendMail("user_edit.html", $id, $data, $email);
                                                         }
                                                     }
-                                                    $wm_warn = ($this->rankPosition($rank) == 0 && database::getAmount('user', 'rank', $rank) > 1) ? 'multiple_webmaster_warning' : 'edit_user_successfully';
-                                                    header('Location: ?p=userlist&h='.$wm_warn.'&id='.$id);
+                                                    header('Location: ?p=userlist&h=edit_user_successfully&id='.$id);
                                                     exit();
                                                 } else {
                                                     $error = 'Fehler beim bearbeiten des Benutzers! Bitte versuche es zu einem sp&auml;teren Zeitpunkt erneut. Der Administrator wurde &uuml;ber das Problem informiert.';
