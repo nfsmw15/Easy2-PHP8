@@ -22,9 +22,32 @@ class menu extends sites{
 	protected $main_path = './system/tpl/menu/';
 	
 	public function __construct(){
-		parent::__construct();	
+		parent::__construct();
 	}
-	
+
+	private function sanitize_menu_url(string $url): string|false
+	{
+		if (empty($url)) { return ''; }
+		if (preg_match('/^www\./i', $url)) { $url = 'http://' . $url; }
+		$scheme = parse_url($url, PHP_URL_SCHEME);
+		if ($scheme === false) { return false; }
+		if ($scheme === null) {
+			$colon = strpos($url, ':');
+			if ($colon !== false) {
+				$slash = strpos($url, '/');
+				$query = strpos($url, '?');
+				$sep   = min(
+					$slash !== false ? $slash : PHP_INT_MAX,
+					$query !== false ? $query : PHP_INT_MAX
+				);
+				if ($colon < $sep) { return false; }
+			}
+			return $url;
+		}
+		if (in_array(strtolower($scheme), ['http', 'https', 'mailto'], true)) { return $url; }
+		return false;
+	}
+
 	// Gibt Menue aus
 	public function getMenu($menu = 1, $tpl_dir = 'default'){
 		$rtn = array();
@@ -68,11 +91,12 @@ class menu extends sites{
 				$icon = $icon ?? '';
 				$active = $active ?? '';
 
+				$safe_url = self::sanitize_menu_url($url);
 				$tpl = str_replace('[title]', $title, $tpl);
 				$tpl = str_replace('[icon]', $icon, $tpl);
 				$tpl = str_replace('[id]', $row['id'], $tpl);
 				$tpl = str_replace('[icon_raw]', $icon_raw, $tpl);
-				$tpl = str_replace('[url]', $url, $tpl);
+				$tpl = str_replace('[url]', e($safe_url !== false ? $safe_url : '#'), $tpl);
 				$tpl = str_replace('[target]', $target, $tpl);
 				$tpl = str_replace('[active]', $active, $tpl);
 				if(isset($list))
@@ -131,11 +155,12 @@ class menu extends sites{
 				if($row['sid'] == '13' && parent::getMainData('pwv_active') == 0) $active = NULL; // Passwort vergessen deaktiviert
 				$active = $active ?? '';
 
+				$safe_url = self::sanitize_menu_url($url);
 				$tpl = str_replace('[title]', $title, $tpl);
 				$tpl = str_replace('[id]', $row['id'], $tpl);
 				$tpl = str_replace('[icon]', $icon, $tpl);
 				$tpl = str_replace('[icon_raw]', $icon_raw, $tpl);
-				$tpl = str_replace('[url]', $url, $tpl);
+				$tpl = str_replace('[url]', e($safe_url !== false ? $safe_url : '#'), $tpl);
 				$tpl = str_replace('[target]', $row['target'] ?? '', $tpl);
 				$tpl = str_replace('[active]', $active, $tpl);
 
@@ -181,11 +206,12 @@ class menu extends sites{
 				if($row['sid'] == '13' && parent::getMainData('pwv_active') == 0) $active = NULL; // Passwort vergessen deaktiviert
 				$active = $active ?? '';
 
+				$safe_url = self::sanitize_menu_url($url);
 				$tpl = str_replace('[title]', $title, $tpl);
 				$tpl = str_replace('[icon]', $icon, $tpl);
 				$tpl = str_replace('[id]', $row['id'], $tpl);
 				$tpl = str_replace('[icon_raw]', $icon_raw, $tpl);
-				$tpl = str_replace('[url]', $url, $tpl);
+				$tpl = str_replace('[url]', e($safe_url !== false ? $safe_url : '#'), $tpl);
 				$tpl = str_replace('[target]', $target, $tpl);
 				$tpl = str_replace('[active]', $active, $tpl);
 

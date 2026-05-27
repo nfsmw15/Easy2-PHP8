@@ -310,7 +310,7 @@ class additional_fields extends loginsystem{
 					$field_type = ($row['type'] == 'select') ? 0 : 1;
 					$select = checker($post_val, $values[0], $field_type, $prefix.$row['name']);
 					$search = array("{OPTION_NAME}", "{OPTION_VALUE}", "{SELECTED}", "{NAME}", "{DESCRIPTION}");
-					$replace = array($values[1], $values[0], $select, $prefix.$row['name'], $row['description']);
+					$replace = array(e($values[1]), e($values[0]), $select, e($prefix.$row['name']), e($row['description']));
 					$options[] = str_replace($search, $replace, $load_option_tpl);
 				}
 			}
@@ -321,13 +321,13 @@ class additional_fields extends loginsystem{
 			
 			// Replace variables in tpl
 			$load_tpl = str_replace('{ID}', $row['id'], $load_tpl);
-			$load_tpl = str_replace('{NAME}', $prefix.$row['name'], $load_tpl);
-			$load_tpl = str_replace('{TITLE}', $row['title'].$required, $load_tpl);
-			$load_tpl = str_replace('{TYPE}', $row['type'], $load_tpl);
-			$load_tpl = str_replace('{PLACEHOLDER}', $row['placeholder'], $load_tpl);
-			$load_tpl = str_replace('{MAXLENGTH}', $row['maxlength'], $load_tpl);
-			$load_tpl = str_replace('{DESCRIPTION}', $row['description'], $load_tpl);
-			$load_tpl = str_replace('{VALUE}', $replace_value, $load_tpl);
+			$load_tpl = str_replace('{NAME}', e($prefix.$row['name']), $load_tpl);
+			$load_tpl = str_replace('{TITLE}', e($row['title']).$required, $load_tpl);
+			$load_tpl = str_replace('{TYPE}', e($row['type']), $load_tpl);
+			$load_tpl = str_replace('{PLACEHOLDER}', e($row['placeholder']), $load_tpl);
+			$load_tpl = str_replace('{MAXLENGTH}', e($row['maxlength']), $load_tpl);
+			$load_tpl = str_replace('{DESCRIPTION}', e($row['description']), $load_tpl);
+			$load_tpl = str_replace('{VALUE}', e($replace_value), $load_tpl);
 			$load_tpl = str_replace('{OPTIONS}', implode($option_glue, $options), $load_tpl);
 			
 			$rtn[] = $load_tpl;

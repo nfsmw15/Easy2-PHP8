@@ -7,6 +7,7 @@
 					<h4 class="card-header">Passwort zur&uuml;cksetzen</h4>
 					<div class="card-body">
 						<form action="?p=pw_reset&c=reset&a=<?php echo $a; ?>" method="POST">
+<?php echo csrf_field(); ?>
 							<p>Bitte achte bei der Wahl eines neuen Passwortes auf die Sicherheit. Verwende keine W&ouml;rter wie: Passwort, Facebook, hallo123, administrator. 
                                                         Wir empfehlen ein Passwort zu nutzen, welches aus Gro&szlig;- wie Kleinbuchstaben, Zahlen und Zeichen besteht. 
                                                         Informationen und einen Passwortgenerator kannst du unter folgender Adresse finden: <a href="https://www.passwort-generator.eu/">https://www.passwort-generator.eu/</a></p>

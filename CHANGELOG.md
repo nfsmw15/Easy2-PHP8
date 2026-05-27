@@ -5,6 +5,18 @@ PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
 
 ---
 
+## [1.1.8] – 2026-05-27 – Sicherheits-Patches
+
+### Sicherheit
+- **XSS-Escaping (`e()`)**: Neue Hilfsfunktion `e()` in `functions.inc.php` (`htmlspecialchars` mit `ENT_QUOTES|ENT_SUBSTITUTE`) — alle Benutzer- und DB-Werte in Admin-Templates (`settings.php`, `additional_fields.php`), Login-Templates und Zusatzfelder-Ausgabe über `showFields()` konsequent escaped
+- **CSRF-Schutz für Gäste**: `csrf_field()` generiert Token nun lazy (auch ohne bestehende Session); `run.inc.php` prüft CSRF auch für öffentliche Formulare (`regist`, `pwv`, `pw_reset`, `contact`) — Token in `regist.php`, `pwv.php`, `pw_reset.php` ergänzt
+- **Menü-URL-Sanitierung**: Neue Methode `sanitize_menu_url()` in `menu.php` — blockiert `javascript:`, `data:`, `vbscript:`, `file:` und unbekannte Schemata; relative URLs und `http/https/mailto` erlaubt; alle drei URL-Render-Stellen in `getMenu()`/`getUnderMenu()` abgesichert
+- **HTTP 404 bei Fehlerseiten**: `includeSite()` in `sites.php` setzt `http_response_code(404)` wenn Error-/Fallback-Seite ausgeliefert wird
+- **SMTP-Passwort-Guard**: Leeres `smtp_pass`-Feld in Einstellungen überschreibt das gespeicherte Passwort nicht mehr; Passwort-Feld zeigt `value=""` mit Hinweis-Placeholder
+- **PWV-Fehlermeldung präzisiert**: "Bitte gebe eine gültige E-Mail-Adresse ein!" statt allgemeiner Meldung
+
+---
+
 ## [1.1.7] – 2026-05-27 – Sicherheits-Patches
 
 ### Sicherheit

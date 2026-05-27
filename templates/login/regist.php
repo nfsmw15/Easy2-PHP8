@@ -6,6 +6,7 @@
 				<div class="card h-100">
 					<h4 class="card-header">Registrierung</h4>
 					<form action="?c=regist<?php echo isset($_GET['p']) ? '&p='.$_GET['p'] : NULL;?>" method="POST">
+<?php echo csrf_field(); ?>
 						<div class="card-body">
 							<?php echo $error; ?>
 							<div class="row">
