@@ -46,12 +46,13 @@ auto_remover(); // Clean MySQL-Tabels
 // da csrf_field() den Token für alle Besucher lazy initialisiert.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $__csrf_public = (
-        $c === 'login' ||
-        ($c === 'regist' && $p === 'regist') ||
-        ($c === 'send'   && $p === 'pwv') ||
-        ($c === 'reset'  && $p === 'pw_reset')
+        $c === 'login'
     );
-    $__needs_csrf = !empty($_SESSION['ml_csrfToken']) || ($p === 'contact' && $c === 'send');
+    $__needs_csrf = !empty($_SESSION['ml_csrfToken']) ||
+        ($p === 'contact'  && $c === 'send')   ||
+        ($p === 'regist'   && $c === 'regist') ||
+        ($p === 'pwv'      && $c === 'send')   ||
+        ($p === 'pw_reset' && $c === 'reset');
     if ($__needs_csrf && !$__csrf_public) {
         $__token = $_SESSION['ml_csrfToken'] ?? '';
         $__csrf  = $_POST['csrf'] ?? '';

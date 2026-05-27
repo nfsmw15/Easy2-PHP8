@@ -7,6 +7,7 @@
 					<h4 class="card-header">Passwort vergessen?</h4>
 					<div class="card-body">
 						<form action="?p=pwv&c=send" method="POST">
+							<?php echo csrf_field(); ?>
 							<p>Gebe deine E-Mail Adresse deines Account hier ein. Anschließend wird dir ein Link zugesendet mit dem du dein Passwort zur&uuml;cksetzen kannst.</p>
 							<?php echo $error; ?>
 							<div class="form-group">
