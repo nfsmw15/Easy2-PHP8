@@ -857,7 +857,7 @@ class loginsystem extends database
                                     }
                                 }
                             } else {
-                                $error = 'Du hast aber einen komsichen Namen?! Du hast bestimmt keine Zahlen oder Zeichen in deinem Namen, korrigiere dies bitte :) oder ist dein Name k&uuml;rzer als 6 Buchstaben? o.O Ich glaube nicht ;)';
+                                $error = 'Der eingegebene Name ist nicht g&uuml;ltig. Bitte verwende mindestens 2 Zeichen und keine Zahlen oder Sonderzeichen.';
                             }
                         } else {
                             $error = 'Dieser Benutzername ist nicht erlaubt!';
@@ -1131,7 +1131,7 @@ class loginsystem extends database
                                                 $error = 'Das Passwort muss mindestens aus 6 Zeichen bestehen!';
                                             }
                                         } else {
-                                            $error = 'Du hast aber einen komsichen Namen?! Du hast bestimmt keine Zahlen oder Zeichen in deinem Namen, korrigiere dies bitte :) oder ist dein Name k&uuml;rzer als 6 Buchstaben? o.O Ich glaube nicht ;)';
+                                            $error = 'Der eingegebene Name ist nicht g&uuml;ltig. Bitte verwende mindestens 2 Zeichen und keine Zahlen oder Sonderzeichen.';
                                         }
                                     } else {
                                         $error = 'Der Benutzername enth&auml;lt ung&uuml;tige Zeichen oder ist zu kurz! <br>Erlaubte Zeichen:<br><ul><li>A-Z</li><li>a-z</li><li>0-9</li><li>mindestens 4 Zeichen</li></ul>';
@@ -1140,16 +1140,16 @@ class loginsystem extends database
                                     $error = 'Der Benutzername ist nicht m&ouml;glich!';
                                 }
                             } else {
-                                $error = 'Dei einegegebe E-Mail Adresse hat ein ung&uuml;ltiges Format! Bitte &uuml;berpr&uuml;fe die E-Mail Adresse!';
+                                $error = 'Die eingegebene E-Mail Adresse hat ein ung&uuml;ltiges Format! Bitte &uuml;berpr&uuml;fe die E-Mail Adresse!';
                             }
                         } else {
                             $error = 'Die Passw&ouml;rter stimmen nicht &uuml;berein! Bitte &uuml;berpr&uuml;fe diese!';
                         }
                     } else {
-                        $error = 'Diese E-Mail Adresse wird bereit von einem anderen Benutzer verwendet! Bitte w&auml;hle eine andere!';
+                        $error = 'Diese E-Mail Adresse wird bereits von einem anderen Benutzer verwendet! Bitte w&auml;hle eine andere!';
                     }
                 } else {
-                    $error = 'Dieser Benutzername wird bereit von einem anderen Benutzer verwendet! Bitte w&auml;hle einen anderen!';
+                    $error = 'Dieser Benutzername wird bereits von einem anderen Benutzer verwendet! Bitte w&auml;hle einen anderen!';
                 }
             } else {
                 $error = 'Du musst alle Felder ausf&uuml;llen um einen Benutzer hinzuf&uuml;gen zu k&ouml;nnen!';
@@ -1285,7 +1285,7 @@ class loginsystem extends database
                                                 }
                                             }
                                         } else {
-                                            $error = 'Der hat aber einen komsichen Namen?! Der hat bestimmt keine Zahlen oder Zeichen in seinem Namen, korrigiere dies bitte :) oder ist der Name k&uuml;rzer als 6 Buchstaben? o.O Ich glaube nicht ;)';
+                                            $error = 'Der eingegebene Name ist nicht g&uuml;ltig. Bitte verwende mindestens 2 Zeichen und keine Zahlen oder Sonderzeichen.';
                                         }
                                     } else {
                                         $error = 'Der Benutzername enth&auml;lt ung&uuml;tige Zeichen oder ist zu kurz! <br>Erlaubte Zeichen:<br><ul><li>A-Z</li><li>a-z</li><li>0-9</li><li>mindestens 4 Zeichen</li></ul>';
@@ -1294,13 +1294,13 @@ class loginsystem extends database
                                     $error = 'Der Benutzername ist nicht m&ouml;glich!';
                                 }
                             } else {
-                                $error = 'Dei einegegebe E-Mail Adresse hat ein ung&uuml;ltiges Format! Bitte &uuml;berpr&uuml;fe die E-Mail Adresse!';
+                                $error = 'Die eingegebene E-Mail Adresse hat ein ung&uuml;ltiges Format! Bitte &uuml;berpr&uuml;fe die E-Mail Adresse!';
                             }
                         } else {
-                            $error = 'Dieser Benutzername wird bereit von einem anderen Benutzer verwendet! Bitte w&auml;hle einen anderen!';
+                            $error = 'Dieser Benutzername wird bereits von einem anderen Benutzer verwendet! Bitte w&auml;hle einen anderen!';
                         }
                     } else {
-                        $error = 'Diese E-Mail Adresse wird bereit von einem anderen Benutzer verwendet! Bitte w&auml;hle eine andere!';
+                        $error = 'Diese E-Mail Adresse wird bereits von einem anderen Benutzer verwendet! Bitte w&auml;hle eine andere!';
                     }
                 } else {
                     $error = 'Es m&uuml;ssen alle Felder ausgef&uuml;llt sein!';
@@ -1341,7 +1341,7 @@ class loginsystem extends database
                         errormail('Fehler beim zur&uuml;cksetzen des Passwortes eines Benutzers! Fehler in class loginsystem => function resetUserPasswd() MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
                     }
                 } else {
-                    $error = 'Du hast ein falsches Passwort einegegeben! Bitte gebe dein Passwort ein um den Vorgang abschlie&szlig;en zu k&ouml;nnen.';
+                    $error = 'Du hast ein falsches Passwort eingegeben! Bitte gebe dein Passwort ein um den Vorgang abschlie&szlig;en zu k&ouml;nnen.';
                 }
             } else {
                 $error = 'Ung&uuml;ltiger Benutzer! Dieser Benutzer konnte nicht gefunden werden!';
@@ -1494,7 +1494,7 @@ class loginsystem extends database
                         $error = 'Das standard Profilbild kann nicht entfernt werden!';
                     }
                 } else {
-                    $error = 'Du hast ein falsches Passwort einegegeben! Bitte gebe dein Passwort ein um den Vorgang abschlie&szlig;en zu k&ouml;nnen.';
+                    $error = 'Du hast ein falsches Passwort eingegeben! Bitte gebe dein Passwort ein um den Vorgang abschlie&szlig;en zu k&ouml;nnen.';
                 }
             } else {
                 $error = 'Der Benutzer konnte nicht gefunden werden!';
