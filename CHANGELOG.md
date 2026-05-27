@@ -18,6 +18,7 @@
 - **Gast-Rang: `adm/`-Seiten gesperrt** (`sites.php`): `allowSite()` blockiert jetzt alle Seiten mit `dir='adm/'` ohne aktiven Login, unabhängig von DB-Einstellungen
 - **Selbstlöschung im Admin-Panel gesperrt**: Löschen-Icon und Lösch-Formular werden für den eigenen Account nicht mehr angezeigt (`listAllUsers()`, `userlist.php`) — Backend-Schutz war bereits vorhanden
 - **Webmaster-Selbstlöschung über Profil gesperrt**: `removeUserSelf()` prüft `pos=0`-Rang und blockiert; Konto-löschen-Button und `remove_self`-Formular in `profil.php` via `isTopRank()` ausgeblendet
+- **Warnung bei mehreren Webmaster-Accounts**: `newUser()` und `editUser()` erkennen wenn mehr als ein Webmaster-Account existiert und leiten zu `h=multiple_webmaster_warning` um — gelber Alert mit Liste der Risiken (gegenseitiges Löschen/Aussperren, neue Webmaster anlegen) und "Ich habe verstanden"-Button
 
 ---
 
