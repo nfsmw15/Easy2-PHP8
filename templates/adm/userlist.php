@@ -58,6 +58,18 @@
                                     <label>Vor-/Nachname:</label>
                                     <input type="text" class="form-control" value="<?php echo isset($_POST['new-fullname']) ? $_POST['new-fullname'] : ''; ?>" name="new-fullname" maxlength="64" placeholder="Vor-/Namename" required>
                                 </div>
+                                <?php if(!empty($webmaster_confirm)){ ?>
+                                <input type="hidden" name="new-password" value="<?php echo htmlspecialchars($_POST['new-password'] ?? ''); ?>">
+                                <input type="hidden" name="new-password-confirm" value="<?php echo htmlspecialchars($_POST['new-password-confirm'] ?? ''); ?>">
+                                <div class="form-group">
+                                    <label>Passwort:</label>
+                                    <input type="password" class="form-control" placeholder="(bereits eingegeben)" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Passwort best&auml;tigen:</label>
+                                    <input type="password" class="form-control" placeholder="(bereits eingegeben)" disabled>
+                                </div>
+                                <?php } else { ?>
                                 <div class="form-group">
                                     <label>Passwort:</label>
                                     <input type="password" class="form-control" name="new-password" maxlength="64" placeholder="Passwort" required>
@@ -66,6 +78,7 @@
                                     <label>Passwort best&auml;tigen:</label>
                                     <input type="password" class="form-control" name="new-password-confirm" maxlength="64" placeholder="Passwort best&auml;tigen" required>
                                 </div>
+                                <?php } ?>
 								<?php if($loginsystem->auditRight('user_rank')){ ?>
                                     <div class="form-group">
                                         <label>Rang:</label>
@@ -81,7 +94,7 @@
 									echo $additional_fields->showFields(0, 'new-');
 								?>
                                 <div class="form-group">
-                                        <input type="checkbox" id="send-mail" name="new-send-email" value="1"> 
+                                        <input type="checkbox" id="send-mail" name="new-send-email" value="1" <?php echo !empty($_POST['new-send-email']) ? 'checked' : ''; ?>>
                                         <label for="send-mail" class="cursor">
                                             Anmeldedaten versenden
                                         </label>
