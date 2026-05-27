@@ -33,11 +33,31 @@ class menu extends sites{
 		if (preg_match('/^www\./i', $url)) {
 			$url = 'http://' . $url;
 		}
-		if ($url[0] === '?' || $url[0] === '/') {
+		// parse_url correctly handles ./?c=... as a relative URL (scheme = null)
+		// whereas explode(':', ...) incorrectly treated ./?c=... as an unknown scheme
+		$scheme = parse_url($url, PHP_URL_SCHEME);
+		if ($scheme === false) {
+			return false; // completely unparseable URL
+		}
+		if ($scheme === null) {
+			// Relative URL — no scheme. Extra guard: a colon before the first /
+			// or ? would indicate a hidden scheme (e.g. "evil:attack").
+			$colon = strpos($url, ':');
+			if ($colon !== false) {
+				$slash = strpos($url, '/');
+				$query = strpos($url, '?');
+				$sep   = min(
+					$slash !== false ? $slash : PHP_INT_MAX,
+					$query !== false ? $query : PHP_INT_MAX
+				);
+				if ($colon < $sep) {
+					return false;
+				}
+			}
 			return $url;
 		}
-		$scheme = strtolower((string)explode(':', $url, 2)[0]);
-		if (in_array($scheme, ['http', 'https', 'mailto'], true)) {
+		// Explicit scheme — only allow known-safe ones
+		if (in_array(strtolower($scheme), ['http', 'https', 'mailto'], true)) {
 			return $url;
 		}
 		return false;
