@@ -21,6 +21,7 @@ PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
 - **Privilege-Escalation in Benutzerverwaltung behoben**: `editUser()`, `resetUserPasswd()`, `activateUser()`, `rmUserAvatar()` prüfen jetzt `checkRank()` des Zielusers — ein Administrator konnte bisher Benutzer mit höherem Rang (z.B. Webmaster) bearbeiten, Passwort zurücksetzen und Avatar entfernen
 - **Edit-Button in Userliste**: fehlender `checkRank()`-Check ergänzt — Bearbeiten-Icon wird für höherrangige Benutzer nicht mehr angezeigt
 - **Gast-Rang: `adm/`-Seiten gesperrt** (`sites.php`): `allowSite()` blockiert jetzt alle Seiten mit `dir='adm/'` ohne aktiven Login, unabhängig von DB-Einstellungen
+- **Selbstlöschung im Admin-Panel gesperrt**: Löschen-Icon und Lösch-Formular werden für den eigenen Account nicht mehr angezeigt (`listAllUsers()`, `userlist.php`) — Backend-Schutz war bereits vorhanden
 
 ---
 
