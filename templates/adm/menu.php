@@ -23,16 +23,17 @@
 							</div>
 							<div class="form-group">
 								<label>Icon des Links:</label>
-								<input type="text" name="icon" placeholder="z.B. fa-home" maxlength="32" value="<?php echo htmlspecialchar(isset($_POST['icon']) ? $_POST['icon'] : ''); ?>" class="form-control">
+								<input type="text" name="icon" id="icon-add" placeholder="z.B. fa-home" maxlength="32" value="<?php echo htmlspecialchar(isset($_POST['icon']) ? $_POST['icon'] : ''); ?>" class="form-control" autocomplete="off">
+								<div id="icon-preview-add" class="mt-1" style="min-height:1.4rem;font-size:.95rem;"></div>
 							</div>
-							
+
 							<!--
 							<div class="form-group">
 								<label>Men&uuml;:</label>
 								<select name="menu" class="form-control">
-									<?php 
+									<?php
 										$getMenu = isset($_POST['menu']) ? $_POST['menu'] : NULL;
-										echo $menu->getMenuGroupOptions($getMenu); 
+										echo $menu->getMenuGroupOptions($getMenu);
 									?>
 								</select>
 							</div>-->
@@ -96,16 +97,17 @@
 							</div>
 							<div class="form-group">
 								<label>Icon des Links:</label>
-								<input type="text" name="icon" placeholder="z.B. fa-home" maxlength="32" value="<?php echo htmlspecialchar(isset($_POST['icon']) ? $_POST['icon'] : $menu->getValue('menu', 'id', $id, 'icon')); ?>" class="form-control">
+								<input type="text" name="icon" id="icon-edit" placeholder="z.B. fa-home" maxlength="32" value="<?php echo htmlspecialchar(isset($_POST['icon']) ? $_POST['icon'] : $menu->getValue('menu', 'id', $id, 'icon')); ?>" class="form-control" autocomplete="off">
+								<div id="icon-preview-edit" class="mt-1" style="min-height:1.4rem;font-size:.95rem;"></div>
 							</div>
-							
+
 							<!--
 							<div class="form-group">
 								<label>Men&uuml;:</label>
 								<select name="menu" class="form-control">
-									<?php 
+									<?php
 										$getMenu = isset($_POST['menu']) ? $_POST['menu'] : $menu->getValue('menu', 'id', $id, 'menu');
-										echo $menu->getMenuGroupOptions($getMenu); 
+										echo $menu->getMenuGroupOptions($getMenu);
 									?>
 								</select>
 							</div>-->
@@ -219,7 +221,8 @@
 											$getURL = $menu->getValue('menu', 'id', $id, 'url');
 											$getFILE = $menu->getValue('menu', 'id', $id, 'sid');
 											if(!empty($getURL)){
-												echo '<a href="'.$getURL.'" target="_blank">'.$getURL.'</a>';
+												$_safe_href = preg_match('/^(https?:\/\/|mailto:|\/|\?)/i', $getURL) ? $getURL : '#';
+												echo '<a href="' . e($_safe_href) . '" target="_blank">' . e($getURL) . '</a>';
 											} elseif(!empty($getFILE)) {
 												echo '<a href="?p='.$menu->getSite('url', $getFILE).'" target="_blank">?p='.$menu->getSite('url', $getFILE).'</a>';
 											} else {
@@ -341,5 +344,44 @@
 	</div><!-- /.row -->
 </div>
 
+<script>
+(function () {
+    var VALID = /^[a-zA-Z0-9_\- ]*$/;
 
+    function initIconPreview(inputId, previewId) {
+        var input   = document.getElementById(inputId);
+        var preview = document.getElementById(previewId);
+        if (!input || !preview) return;
 
+        function update() {
+            var val = input.value.trim();
+            preview.innerHTML = '';
+
+            if (!val) return;
+
+            if (!VALID.test(val)) {
+                var warn = document.createElement('span');
+                warn.className = 'text-danger';
+                warn.innerHTML = '<i class="fa fa-times-circle"></i> Ung&uuml;ltige Zeichen &mdash; nur a-z, 0-9, Bindestrich, Unterstrich, Leerzeichen erlaubt';
+                preview.appendChild(warn);
+                return;
+            }
+
+            var wrap = document.createElement('span');
+            wrap.className = 'text-secondary';
+            wrap.appendChild(document.createTextNode('Vorschau: '));
+            var icon = document.createElement('i');
+            icon.className = 'fa fa-fw ' + val;
+            wrap.appendChild(icon);
+            wrap.appendChild(document.createTextNode(' ' + val));
+            preview.appendChild(wrap);
+        }
+
+        input.addEventListener('input', update);
+        update();
+    }
+
+    initIconPreview('icon-add',  'icon-preview-add');
+    initIconPreview('icon-edit', 'icon-preview-edit');
+}());
+</script>

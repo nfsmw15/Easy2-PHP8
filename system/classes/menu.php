@@ -412,7 +412,9 @@ class menu extends sites{
 		$menu   = '1';
 		
 		if(parent::auditRight('menu_add')){
-			if((!empty($icon) || !empty($title)) && $pos != ''){
+			if (!empty($icon) && !preg_match('/^[a-zA-Z0-9_\- ]+$/', $icon)){
+				$error = 'Das Icon enth&auml;lt ung&uuml;ltige Zeichen.';
+			} elseif((!empty($icon) || !empty($title)) && $pos != ''){
 				if((!empty($url) XOR !empty($file) && !empty($target)) || empty($url.$file)){
                     if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
                     
@@ -472,7 +474,9 @@ class menu extends sites{
 		$menu   = '1';
 		
 		if(parent::auditRight('menu_edit')){
-			if((!empty($icon) || !empty($title)) && $pos != ''){
+			if (!empty($icon) && !preg_match('/^[a-zA-Z0-9_\- ]+$/', $icon)){
+				$error = 'Das Icon enth&auml;lt ung&uuml;ltige Zeichen.';
+			} elseif((!empty($icon) || !empty($title)) && $pos != ''){
 				if((!empty($url) XOR !empty($file) && !empty($target)) || empty($url.$file)){
 					if(empty($file) || parent::getAmount('sites', 'id', $file) == 1){
 						if(parent::getAmount('menu', 'id', $id) == 1){
