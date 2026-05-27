@@ -125,7 +125,7 @@
                                 <?php if($loginsystem->auditRight('user_rm_avatar') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
 									<li><a href="./?p=userlist&f=rm_avatar&id=<?php echo $id; ?>"><i class="fa fa-eraser fa-fw"></i> Profilbild entfernen</a></li>
                                	<?php } ?>
-                                <?php if($loginsystem->auditRight('user_delete') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
+                                <?php if($loginsystem->auditRight('user_delete') && $loginsystem->checkRank($loginsystem->getUser('rank', $id)) && $loginsystem->getUser('id') != $id){ ?>
                                 	<li class="divider"></li>
 									<li><a href="./?p=userlist&f=delete&id=<?php echo $id; ?>"><i class="fa fa-trash fa-fw"></i> L&ouml;schen</a></li>
                                 <?php } ?>
@@ -214,7 +214,7 @@
                         </form>
                     </div>
                 </div><!-- /.card -->
-        	<?php } elseif($f == 'delete' && !empty($id) && $loginsystem->auditRight('user_delete') && $loginsystem->checkRank($loginsystem->getUser('rank', $id))){ ?>
+        	<?php } elseif($f == 'delete' && !empty($id) && $loginsystem->auditRight('user_delete') && $loginsystem->checkRank($loginsystem->getUser('rank', $id)) && $loginsystem->getUser('id') != $id){ ?>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <i class="fa fa-trash"></i> Benutzer l&ouml;schen
