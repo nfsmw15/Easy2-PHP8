@@ -67,9 +67,9 @@
       <div class="row">
         <div class="col-lg-8 mb-4">
           <h3>Sende uns eine Nachricht</h3>
-			<?php echo $error; ?>
+			<?php echo $error ?? ''; ?>
           <form name="sentMessage" action="?p=contact&c=send" method="post" id="contactForm" novalidate>
-          <?php echo csrf_field(); ?>
+            <?php echo csrf_field(); ?>
             <div class="control-group form-group">
               <div class="controls">
                 <label>Name: *</label>

@@ -42,22 +42,26 @@ auto_remover(); // Clean MySQL-Tabels
 // cookielogin() läuft zuerst: Session ist vollständig aufgebaut (inkl. Token),
 // bevor der Guard prüft. Öffentliche Aktionen (kein Login nötig) werden
 // explizit whitelisted; alles andere erfordert einen gültigen CSRF-Token.
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_SESSION['ml_csrfToken'])) {
+// Sonderfall contact/send: wird auch ohne eingeloggte Session geprüft,
+// da csrf_field() den Token für alle Besucher lazy initialisiert.
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $__csrf_public = (
         $c === 'login' ||
         ($c === 'regist' && $p === 'regist') ||
         ($c === 'send'   && $p === 'pwv') ||
         ($c === 'reset'  && $p === 'pw_reset')
     );
-    if (!$__csrf_public) {
-        $__csrf = $_POST['csrf'] ?? '';
-        if (empty($__csrf) || !hash_equals($_SESSION['ml_csrfToken'], $__csrf)) {
+    $__needs_csrf = !empty($_SESSION['ml_csrfToken']) || ($p === 'contact' && $c === 'send');
+    if ($__needs_csrf && !$__csrf_public) {
+        $__token = $_SESSION['ml_csrfToken'] ?? '';
+        $__csrf  = $_POST['csrf'] ?? '';
+        if (empty($__csrf) || empty($__token) || !hash_equals($__token, $__csrf)) {
             $error = 'Ung&uuml;ltiger CSRF-Token!';
             $c = '';
         }
-        unset($__csrf);
+        unset($__csrf, $__token);
     }
-    unset($__csrf_public);
+    unset($__csrf_public, $__needs_csrf);
 }
 
 
