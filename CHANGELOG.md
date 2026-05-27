@@ -1,5 +1,22 @@
 # Changelog — EASY 2.0 PHP8 Fork
 
+## [1.1.8] — 2026-05-27
+
+### Sicherheit
+- **Hilfsfunktion `e()` ergänzt**: `htmlspecialchars(ENT_QUOTES|ENT_SUBSTITUTE, UTF-8)` als zentrale Ausgabe-Escapingfunktion
+- **Reflektiertes XSS im Kontaktformular behoben**: POST-Werte `name`, `phone`, `email`, `message` werden jetzt mit `e()` escaped
+- **Reflektiertes XSS im Login-Formular behoben**: `$_POST["login-email"]` im `value`-Attribut wird mit `e()` escaped
+- **CSRF-Schutz für öffentliche Formulare**: Registrierung, Passwort-vergessen und Passwort-zurücksetzen erhalten CSRF-Token; `csrf_field()` generiert Token lazy auch für Gäste; Guard prüft diese Routen unabhängig von `$_SESSION['ml_csrfToken']`
+- **HTTP-Statuscode 404** wird jetzt gesetzt wenn die Error-/404-Seite ausgeliefert wird (`includeSite()`)
+- **Menü-URL-Validation mit `parse_url()` neu implementiert**: `sanitize_menu_url()` erkennt relative URLs korrekt (`./?c=logout&csrf=…` → erlaubt); blockiert `javascript:`, `data:`, `vbscript:`, `file:` und unbekannte Schemes
+- **SMTP-Passwort**: Leeres Passwortfeld im Einstellungsformular überschreibt das gespeicherte Passwort nicht mehr
+- **XSS in Admin-Einstellungen**: POST-Werte in `templates/adm/settings.php` werden mit `e()` escaped
+- **XSS in Zusatzfeldern-Admin**: Eingabe- und Anzeigefelder in `templates/adm/additional_fields.php` sowie `showFields()` in `additional_fields.php` verwenden `e()`
+- **Fehlermeldung Passwort-vergessen präzisiert**: „Bitte gebe eine gültige E-Mail-Adresse ein!" statt „Bitte gebe eine E-Mail Adresse ein!" bei ungültigem Format
+- **EASY_VERSION auf 1.1.8 aktualisiert** (war fälschlicherweise auf 1.1.6)
+
+---
+
 ## [1.1.7] — 2026-05-27
 
 ### Sicherheit

@@ -334,7 +334,7 @@ class loginsystem extends database
                     $error = 'Du hast einen falschen Sicherheitscode eingegeben!';
                 }
             } else {
-                $error = "Bitte gebe eine E-Mail Adresse ein!";
+                $error = "Bitte gebe eine g&uuml;ltige E-Mail-Adresse ein!";
             }
         }
         return $error;
@@ -2081,7 +2081,7 @@ class loginsystem extends database
                 $update['smtp_host'] = $smtp_host;
                 $update['smtp_port'] = $smtp_port;
                 $update['smtp_user'] = $smtp_user;
-                $update['smtp_pass'] = $smtp_pass;
+                if (!empty($smtp_pass)) { $update['smtp_pass'] = $smtp_pass; }
                 $update['smtp_encryption'] = $smtp_enc;
                 $update['osm_embed_url'] = $osm_url;
 

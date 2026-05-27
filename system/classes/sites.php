@@ -86,6 +86,7 @@ class sites extends loginsystem{
 	public function includeSite($pre = false){
 		global $p;
 		$errorsite = parent::getValue('sites', 'errorsite', '1', NULL, false) ?: ['dir' => '', 'filename' => '', 'type' => ''];
+		$is_error_route = false;
 
 		if(!empty($p)){
 			$sql = $this->pq("SELECT * FROM `".Prefix."_sites` WHERE `filename` LIKE ? LIMIT 1", [$p]);
@@ -95,12 +96,15 @@ class sites extends loginsystem{
 					if(file_exists($this->main_path.$row['dir'].$row['filename'].'.'.$row['type']) && is_readable($this->main_path.$row['dir'].$row['filename'].'.'.$row['type'])){
 						$incl = $row['dir'].$row['filename'].'.'.$row['type'];
 					} else {
+						$is_error_route = true;
 						$incl = $errorsite['dir'].$errorsite['filename'].'.'.$errorsite['type'];
 					}
 				} else {
+					$is_error_route = true;
 					$incl = $errorsite['dir'].$errorsite['filename'].'.'.$errorsite['type'];
 				}
 			} else {
+				$is_error_route = true;
 				$incl = $errorsite['dir'].$errorsite['filename'].'.'.$errorsite['type'];
 			}
 		} else {
@@ -119,6 +123,10 @@ class sites extends loginsystem{
 				echo '++++++++++ Fehler beim einbinden der Datei! ++++++++++';
 			}
 			return false;
+		}
+
+		if ($is_error_route && $pre == false) {
+			http_response_code(404);
 		}
 
 		if(file_exists($this->main_path.$incl) && is_readable($this->main_path.$incl)){
