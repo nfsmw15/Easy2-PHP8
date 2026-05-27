@@ -1,5 +1,20 @@
 # Changelog — EASY 2.0 PHP8 Fork (Bootstrap 5)
 
+## [1.2.7] — 2026-05-27
+
+### Sicherheit
+- **Reflected XSS im Kontaktformular behoben**: `name`, `phone`, `email`, `message` wurden bei Validierungsfehler (z.B. falsches Captcha) unescaped zurückgeschrieben — alle vier Felder jetzt mit `e()` abgesichert
+- **Reflected XSS im Login-Formular behoben**: `login-email` wurde unescaped in `value=""` zurückgeschrieben — jetzt mit `e()` abgesichert
+- **CSRF-Schutz für öffentliches Kontaktformular ergänzt**: `csrf_field()` generiert Token jetzt lazy für alle Sessions (auch Gäste); zentraler Guard prüft `contact/send` immer, auch ohne eingeloggte Session
+- **CSRF-Schutz für Registrierung, Passwort-vergessen und Passwort-Reset ergänzt**: `csrf_field()` in `regist.php`, `pwv.php`, `pw_reset.php` eingefügt; `regist/regist`, `send/pwv`, `reset/pw_reset` aus CSRF-Whitelist entfernt und zu strikten Pflichtprüfungen
+- **HTTP 404 bei Fehlerseiten**: `includeSite()` setzt `http_response_code(404)` wenn die konfigurierte Fehlerseite ausgeliefert wird (Seite nicht gefunden, kein `allowSite()`, Datei nicht lesbar) — vorher wurde HTTP 200 gesendet
+- **`sanitize_menu_url()` Regression behoben**: `explode(':', ...)` behandelte `./?c=logout&csrf=[csrf]` fälschlicherweise als unbekanntes Schema → `href="#"`; ersetzt durch `parse_url(PHP_URL_SCHEME)` mit extra Colon-before-Separator-Guard
+
+### Behoben
+- Fehlermeldung bei ungültiger E-Mail im Passwort-vergessen-Formular präzisiert: "Bitte gebe eine gültige E-Mail-Adresse ein!" statt "Bitte gebe eine E-Mail Adresse ein!"
+
+---
+
 ## [1.2.6] — 2026-05-27
 
 ### Sicherheit
