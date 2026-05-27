@@ -15,7 +15,7 @@
 						<?php $rulelist = $rules->listRules($id); ?>
 						<div class="row">
 							<div class="col-md-4">
-								<?php if(empty($f)){ ?>
+								<?php if(empty($f) && $loginsystem->auditRight('rule_new')){ ?>
 									<div class="card">
 										<div class="card-header"><i class="fa fa-plus"></i> Regel hinzuf&uuml;gen</div>
 										<div class="card-body">
@@ -36,7 +36,7 @@
 											</form>
 										</div>
 									</div><!-- /.card -->
-								<?php } elseif($f == 'edit' && !empty($id)){ ?>
+								<?php } elseif($f == 'edit' && !empty($id) && $loginsystem->auditRight('rule_edit')){ ?>
 									<div class="card">
 										<div class="card-header"><i class="fa fa-pencil"></i> Regel bearbeiten <a class="btn btn-sm btn-warning float-end" href="?p=rules">Abbrechen</a></div>
 										<div class="card-body">
@@ -57,7 +57,7 @@
 											</form>
 										</div>
 									</div><!-- /.card -->
-								<?php } elseif($f == 'delete' && !empty($id)){ ?>
+								<?php } elseif($f == 'delete' && !empty($id) && $loginsystem->auditRight('rule_delete')){ ?>
 									<div class="card">
 										<div class="card-header"><i class="fa fa-trash"></i> Regel entfernen <a class="btn btn-sm btn-warning float-end" href="?p=rules">Abbrechen</a></div>
 										<div class="card-body">
