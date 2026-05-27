@@ -37,6 +37,36 @@ Diese Änderungen können die Funktionalität beeinflussen:
 
 ---
 
+## ⚠️ Sehr alte Installationen: Neuinstallation empfohlen
+
+Wer von EASY 2.0 **v0.9.6 oder älter** upgradet — oder wer unsicher ist, welche Daten historisch gespeichert wurden — sollte eine **Neuinstallation mit manueller Datenmigration** einer direkten In-Place-Überschreibung vorziehen.
+
+### Warum Neuinstallation?
+
+| Problem | Erklärung |
+|---------|-----------|
+| **Passwort-Hashes** | Alte MD5/SHA1-Hashes sind nicht kompatibel und gelten als unsicher — alle Benutzer müssen ihr Passwort neu setzen |
+| **Verschlüsselte Daten** | Die Verschlüsselung wurde von mcrypt auf OpenSSL AES-256-GCM umgestellt — alte verschlüsselte Felder können nicht automatisch migriert werden |
+| **Rang-/Rechte-Daten** | Das Rechte-Modell hat sich geändert; alte `ranks`-Einträge blind zu importieren kann zu unbeabsichtigten Berechtigungen führen |
+| **Menü- und Seiten-URLs** | Historisch gespeicherte Menü-URLs können `javascript:`- oder andere Injection-Werte enthalten; nach dem Import prüfen |
+| **Zusatzfelder (Benutzerdaten)** | Alte Feldwerte wurden ohne XSS-Escaping gespeichert und können gespeicherte Script-Tags enthalten — Inhalte vor dem Import prüfen |
+
+### Empfohlene Vorgehensweise bei alten Installationen
+
+1. **Neuinstallation** der PHP 8 Fork auf sauberem Pfad
+2. **Konfiguration** manuell aus der alten `config.user.php` übernehmen
+3. **Nur strukturell harmlose Daten** importieren (z.B. Seiten-Inhalte nach Prüfung)
+4. **Menü-Einträge** nach dem Import auf verdächtige URLs prüfen (`SELECT url FROM ml_menu WHERE url != ''`)
+5. **Zusatzfeld-Inhalte** nach dem Import auf gespeicherte Script-Tags prüfen (`SELECT value FROM ml_additional_user_information WHERE value LIKE '%<script%'`)
+6. **Alle Benutzer zum Passwort-Reset zwingen** — kein Benutzer sollte sich mit einem alten Hash anmelden können:
+   ```sql
+   -- Alle Passwörter ungültig machen (Benutzer müssen "Passwort vergessen" nutzen):
+   UPDATE ml_user SET password = '' WHERE id > 0;
+   ```
+7. **Admin/Webmaster-Accounts bewusst neu anlegen** statt aus der alten DB zu übernehmen
+
+---
+
 ## 🔐 Sicherheitsänderungen (ab v1.2.6 / v1.1.8)
 
 Wer von EASY 2.0 oder einer älteren Fork-Version upgradet, muss folgende Punkte in **eigenen/angepassten Templates** nachpflegen:
@@ -265,6 +295,35 @@ Diese sind **automatisch aktiviert** und erhöhen die Sicherheit.
 
 ---
 
+## 🛡️ Sicherheits-Härtung nach der Migration
+
+Diese Punkte gelten unabhängig davon, ob In-Place-Upgrade oder Neuinstallation:
+
+### Sessions & Cookies
+
+- **Alle aktiven Sessions ungültig machen**: Alte Session-Dateien enthalten keinen CSRF-Token und entsprechen nicht dem neuen Sicherheitsmodell. Entweder den Session-Speicher leeren (`session.save_path` leeren) oder die Session-Tabelle in der DB trunkieren — je nach Hosting-Setup.
+- **Remember-Me-Cookies nicht übernehmen**: Die Cookie-Signatur hat sich geändert. Alte "Eingeloggt bleiben"-Cookies werden nicht akzeptiert und müssen vom Browser gelöscht werden. Bestehende Tokens in der DB können manuell geleert werden:
+  ```sql
+  UPDATE ml_user SET auto_login_code = '', auto_login_time = '' WHERE auto_login_code != '';
+  ```
+
+### Admin-Bereich
+
+- **SMTP-Passwort neu eintragen**: Das Passwort-Feld zeigt nach dem Upgrade keinen gespeicherten Wert mehr an. Einstellungen → SMTP-Passwort neu eingeben und speichern.
+- **Admin/Webmaster-Accounts prüfen**: Sicherstellen, dass nur bekannte Accounts den Webmaster-Rang haben. Mehrere Webmaster gleichzeitig sind ein Sicherheitsrisiko (gegenseitiges Löschen möglich).
+- **Testbenutzer entfernen**: Vor dem Produktiveinsatz alle Testaccounts aus `?p=userlist` löschen.
+
+### Server-Bereinigung
+
+- **Install-Verzeichnis löschen**: Das `install/`-Verzeichnis **muss** nach der Installation entfernt werden — es enthält Setup-Skripte mit direktem DB-Zugriff.
+  ```bash
+  rm -rf /path/to/easy2/install/
+  ```
+- **Security-Header prüfen**: Mit [securityheaders.com](https://securityheaders.com) oder dem Browser-DevTools-Netzwerk-Tab prüfen, ob `HttpOnly`, `Secure`, `SameSite` auf Session-Cookies gesetzt sind und ob HTTPS korrekt erzwungen wird.
+- **Reverse-Proxy**: Falls hinter Nginx/Traefik betrieben, sicherstellen dass `X-Forwarded-Proto: https` korrekt weitergeleitet wird — sonst werden Cookies ohne `Secure`-Flag gesetzt (siehe `is_https()` in `functions.inc.php`).
+
+---
+
 ## ✅ Nach dem Upgrade: Checkliste
 
 - [ ] Installation erfolgreich
@@ -278,6 +337,13 @@ Diese sind **automatisch aktiviert** und erhöhen die Sicherheit.
 - [ ] Custom-Templates: `<?php echo csrf_field(); ?>` in allen öffentlichen Formularen ergänzt
 - [ ] Custom-Templates: `$_POST`-Werte mit `e()` escaped
 - [ ] SMTP-Passwort in den Einstellungen neu gesetzt (wird nicht mehr aus DB vorausgefüllt)
+- [ ] Alte Sessions geleert / Session-Speicher bereinigt
+- [ ] Remember-Me-Tokens in DB geleert (`auto_login_code`)
+- [ ] Alle Benutzer zum Passwort-Reset gezwungen (bei Migration aus EASY 2.0)
+- [ ] Admin/Webmaster-Accounts geprüft — nur bekannte Accounts
+- [ ] Testbenutzer entfernt
+- [ ] `install/`-Verzeichnis gelöscht
+- [ ] Security-Header und Cookie-Flags geprüft (HttpOnly, Secure, SameSite)
 
 ---
 
