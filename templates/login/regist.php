@@ -6,6 +6,7 @@
             <div class="panel panel-primary">
                 <div class="panel-heading"><h4 class="mt0px mb0px">Registrierung</h4></div>
                 <form action="./?c=regist<?php echo isset($_GET['p']) ? '&p='.$_GET['p'] : null; ?>" method="POST">
+                    <?php echo csrf_field(); ?>
                     <div class="panel-body">
                         <?php echo $error; ?>
                         <div class="row">

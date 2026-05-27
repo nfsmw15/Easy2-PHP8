@@ -10,7 +10,7 @@
 							<?php echo $error; ?>
 							<div class="form-group">
 								<label>Benutzername:</label>
-								<input type="text" class="form-control" name="login-email" maxlength="64" placeholder="Benutzername oder E-Mail Adresse" required value="<?php echo isset($_POST["login-email"]) ? $_POST["login-email"] : ''; ?>" />
+								<input type="text" class="form-control" name="login-email" maxlength="64" placeholder="Benutzername oder E-Mail Adresse" required value="<?php echo isset($_POST["login-email"]) ? e($_POST["login-email"]) : ''; ?>" />
 							</div>
 							<div class="form-group">
 								<label>Passwort:</label>

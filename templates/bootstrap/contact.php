@@ -69,32 +69,32 @@
       <div class="row">
         <div class="col-lg-8 mb-4">
           <h3>Sende uns eine Nachricht</h3>
-			<?php echo $error; ?>
+			<?php echo $error ?? ''; ?>
           <form name="sentMessage" action="?p=contact&c=send" method="post" id="contactForm" novalidate>
 <?php echo csrf_field(); ?>
             <div class="control-group form-group">
               <div class="controls">
                 <label>Name: *</label>
-                <input type="text" class="form-control" name="name" maxlength="64" id="name" required value="<?php echo isset($_POST['name']) ? $_POST['name'] : ''; ?>">
+                <input type="text" class="form-control" name="name" maxlength="64" id="name" required value="<?php echo isset($_POST['name']) ? e($_POST['name']) : ''; ?>">
                 <p class="help-block"></p>
               </div>
             </div>
             <div class="control-group form-group">
               <div class="controls">
                 <label>Telefonnummer:</label>
-                <input type="tel" class="form-control" name="phone" maxlength="16" id="phone" required value="<?php echo isset($_POST['phone']) ? $_POST['phone'] : ''; ?>">
+                <input type="tel" class="form-control" name="phone" maxlength="16" id="phone" required value="<?php echo isset($_POST['phone']) ? e($_POST['phone']) : ''; ?>">
               </div>
             </div>
             <div class="control-group form-group">
               <div class="controls">
                 <label>E-Mail Adresse: *</label>
-                <input type="email" class="form-control" name="email" maxlength="64" id="email" required value="<?php echo isset($_POST['email']) ? $_POST['email'] : ''; ?>">
+                <input type="email" class="form-control" name="email" maxlength="64" id="email" required value="<?php echo isset($_POST['email']) ? e($_POST['email']) : ''; ?>">
               </div>
             </div>
             <div class="control-group form-group">
               <div class="controls">
                 <label>Nachricht: *</label>
-                <textarea rows="10" cols="100" class="form-control" name="message" id="message" required maxlength="2048" style="resize:none"><?php echo isset($_POST['message']) ? $_POST['message'] : ''; ?></textarea>
+                <textarea rows="10" cols="100" class="form-control" name="message" id="message" required maxlength="2048" style="resize:none"><?php echo isset($_POST['message']) ? e($_POST['message']) : ''; ?></textarea>
               </div>
             </div>
   			<div><label>Sicherheitscode: *</label></div>

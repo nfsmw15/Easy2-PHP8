@@ -18,7 +18,7 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *********************************************/
 
-define('EASY_VERSION', '1.1.6');
+define('EASY_VERSION', '1.1.8');
 define('EASY_BRANCH',  'bs3');
 
 // ─── Input-Sanitierung ──────────────────────────────────────────────────────
@@ -26,6 +26,11 @@ define('EASY_BRANCH',  'bs3');
 function htmlspecialchar(string $string): string
 {
     return htmlentities($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function e(mixed $value): string
+{
+    return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
 /**
@@ -392,11 +397,10 @@ function is_https(): bool
 
 function csrf_field(): string
 {
-    $token = $_SESSION['ml_csrfToken'] ?? '';
-    if (empty($token)) {
-        return '';
+    if (empty($_SESSION['ml_csrfToken'])) {
+        $_SESSION['ml_csrfToken'] = bin2hex(random_bytes(32));
     }
-    return '<input type="hidden" name="csrf" value="' . htmlspecialchars($token, ENT_QUOTES, 'UTF-8') . '">';
+    return '<input type="hidden" name="csrf" value="' . htmlspecialchars($_SESSION['ml_csrfToken'], ENT_QUOTES, 'UTF-8') . '">';
 }
 
 // ─── Error-Mail (DSGVO: keine Stack-Traces an den Browser) ──────────────────
