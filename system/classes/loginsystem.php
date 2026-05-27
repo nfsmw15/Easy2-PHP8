@@ -334,7 +334,7 @@ class loginsystem extends database
                     $error = 'Du hast einen falschen Sicherheitscode eingegeben!';
                 }
             } else {
-                $error = "Bitte gebe eine E-Mail Adresse ein!";
+                $error = "Bitte gebe eine g&uuml;ltige E-Mail-Adresse ein!";
             }
         }
         return $error;
