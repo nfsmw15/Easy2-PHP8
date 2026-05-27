@@ -44,9 +44,9 @@ class additional_fields extends loginsystem{
 			$btn = implode(' | ', $btn);
 			$rtn .= '<tr>
 				<td>'.$row['pos'].'</td>
-				<td>'.$row['name'].'</td>
-				<td>'.$row['title'].'</td>
-				<td>'.$row['type'].'</td>
+				<td>'.htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8').'</td>
+				<td>'.htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8').'</td>
+				<td>'.htmlspecialchars($row['type'], ENT_QUOTES, 'UTF-8').'</td>
 				<td>'.$required.'</td>
 				<td>'.$regist.'</td>
 				<td>'.$btn.'</td>
@@ -413,12 +413,12 @@ class additional_fields extends loginsystem{
 			
 			if(count($options) < 2){
 				if(!empty($options[0])){
-					$val = $options[0];
-				} else 
-					$val = $row['value'];
-				
+					$val = htmlspecialchars($options[0], ENT_QUOTES, 'UTF-8');
+				} else
+					$val = htmlspecialchars($row['value'], ENT_QUOTES, 'UTF-8');
+
 				if($row['type'] == 'textarea')
-					$val = nl2br($val);				
+					$val = nl2br($val);
 			} else {
 				$org_options = explode('#', $row['options']);
 				for($i = 0; $i < count($org_options); $i++){
@@ -429,12 +429,12 @@ class additional_fields extends loginsystem{
 				$end_options = array();
 				foreach($options as $opt){
 					$load_multi_tpl = $tpl_multi;
-					$end_options[] = str_replace('{OPTION_NAME}', $opt, $load_multi_tpl);
+					$end_options[] = str_replace('{OPTION_NAME}', htmlspecialchars($opt, ENT_QUOTES, 'UTF-8'), $load_multi_tpl);
 				}
 				$val = implode(', ', $end_options);
 			}
-			
-			$load_tpl = str_replace('{TITLE}', $row['title'], $load_tpl);
+
+			$load_tpl = str_replace('{TITLE}', htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8'), $load_tpl);
 			$load_tpl = str_replace('{VALUE}', $val, $load_tpl);
 			$rtn[] = $load_tpl;
 		}
