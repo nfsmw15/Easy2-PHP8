@@ -16,7 +16,9 @@
             <div class="col-sm-3">
 				<img src="<?php echo $loginsystem->getUserAvatar(); ?>" alt="avatar" class="img-responsive box-center">
 				<br>
+				<?php if(!$loginsystem->isTopRank()){ ?>
 				<a class="btn w-100 btn-danger" href="?p=profil&f=remove_self">Konto l&ouml;schen</a>
+				<?php } ?>
             </div><!-- /.col-sm-3 -->
             <div class="col-sm-9 mb-2">
 				<div class="card">
@@ -168,7 +170,7 @@
 					</div>
 				</div><!-- /.col-sm-6 -->
 	        </div><!-- /.row -->
-		<?php } elseif($f == 'remove_self'){ ?>
+		<?php } elseif($f == 'remove_self' && !$loginsystem->isTopRank()){ ?>
        		<div class="row mb-2">
 				<div class="col-sm-6 mt-2 mb-2">
 					<div class="card">

@@ -982,6 +982,9 @@ class loginsystem extends database
     public function removeUserSelf(){
         $passwd = length($_POST['password-actual'] ?? NULL, 64);
         $error = NULL;
+        if($this->rankPosition(self::getUser('rank')) == 0){
+            return 'Als Webmaster kann dein Konto nicht &uuml;ber das Profil gel&ouml;scht werden!';
+        }
         if(self::pwverify($passwd)){
             if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
     
@@ -1153,6 +1156,10 @@ class loginsystem extends database
         return $error;
     }
     
+    public function isTopRank(): bool {
+        return $this->rankPosition(self::getUser('rank')) == 0;
+    }
+
     private function rankPosition($rankid){
         $sql = $this->pq("SELECT `pos` FROM `".Prefix."_ranks` WHERE `id` = ? LIMIT 1", [$rankid]);
         $row = $sql->fetch_assoc();
