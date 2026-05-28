@@ -1,6 +1,8 @@
-# Block execution of all scripts in this directory
-<FilesMatch ".">
-    SetHandler default-handler
+# Kein Directory-Listing
+Options -Indexes -ExecCGI
+
+# PHP-Dateien komplett verweigern (statt php_flag engine off,
+# das auf restriktiven AllowOverride-Configs einen 500 auslösen kann)
+<FilesMatch "\.(php|php\d|phtml|phar)$">
+    Require all denied
 </FilesMatch>
-Options -ExecCGI -Indexes
-php_flag engine off
