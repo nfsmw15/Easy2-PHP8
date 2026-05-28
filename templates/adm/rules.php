@@ -57,7 +57,7 @@
 											</form>
 										</div>
 									</div><!-- /.card -->
-								<?php } elseif($f == 'delete' && !empty($id) && $loginsystem->auditRight('rule_delete')){ ?>
+								<?php } elseif($f == 'delete' && !empty($id) && $loginsystem->auditRight('rule_delete') && $rules->getAmount('rules', 'id', $id) == 1){ ?>
 									<div class="card">
 										<div class="card-header"><i class="fa fa-trash"></i> Regel entfernen <a class="btn btn-sm btn-warning float-end" href="?p=rules">Abbrechen</a></div>
 										<div class="card-body">
