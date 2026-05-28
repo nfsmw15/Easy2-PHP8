@@ -151,8 +151,8 @@ if (!empty($error)) {
     <div id="sidebar-wrapper">
         <ul class="sidebar-nav">
             <li class="sidebar-brand"><a>EASY 2.0 v.<?php echo htmlspecialchars($version, ENT_QUOTES, 'UTF-8'); ?></a></li>
-            <li><a target="_blank" href="https://nfsmw15.de">
-                <i class="fab fa-github"></i> GitHub</a></li>
+            <li><a target="_blank" href="https://github.com/nfsmw15/Easy2-PHP8">
+                <i class="fa-brands fa-github"></i> GitHub</a></li>
         </ul>
         <span style="position:absolute;bottom:0;padding:10px;color:#999">
             Copyright &copy; <?php echo date('Y'); ?> Andreas P.
