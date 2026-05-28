@@ -162,27 +162,27 @@ if($p == 'settings' && $c == 'mainsave'){
 }
 
 // Ranks | Rangverwaltung
-if($p == 'ranks'){
+if($p == 'ranks' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 	if($c == 'new_rank'){
 		$error = $loginsystem->newRank();
 	}
-	
+
 	if($f == 'edit_rank' && $c == 'edit_rank'){
 		$error = $loginsystem->setRank();
 	}
-	
+
 	if($c == 'default_rank'){
 		$error = $loginsystem->setSpecialRank();
 	}
-	
+
 	if($c == 'move_rank_up'){
 		$error = $loginsystem->moveRank("up");
 	}
-	
+
 	if($c == 'move_rank_down'){
 		$error = $loginsystem->moveRank("down");
 	}
-	
+
 	if($f == 'delete_rank' && $c == 'delete_rank'){
 		$error = $loginsystem->removeRank();
 	}

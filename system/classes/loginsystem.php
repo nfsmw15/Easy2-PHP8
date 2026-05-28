@@ -1913,10 +1913,14 @@ class loginsystem extends database
     
     public function removeRank(){
         global $id;
-        $pos = database::getValue('ranks', 'id', $id, 'pos');
         if(self::auditRight('rank_delete')){
             if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
-    
+
+            if(database::getAmount('ranks', 'id', $id) != 1){
+                return 'Dieser Rang existiert nicht!';
+            }
+
+            $pos = database::getValue('ranks', 'id', $id, 'pos');
             $user = database::getAmount('user', 'rank', $id);
             $rank = length($_POST['rank'] ?? '', 16);
             $passwd = length($_POST['passwd'] ?? '', 64);
