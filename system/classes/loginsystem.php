@@ -237,6 +237,8 @@ class loginsystem extends database
         if ($data['attempts'] >= self::RL_MAX_ATTEMPTS) {
             $data['blocked_until'] = time() + self::RL_BLOCK_SECONDS;
         }
+        $dir = __DIR__ . '/../../tmp';
+        if (!is_dir($dir)) @mkdir($dir, 0750, true);
         @file_put_contents($this->rlFile($ip_hash), json_encode($data), LOCK_EX);
     }
 
