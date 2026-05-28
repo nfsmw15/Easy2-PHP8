@@ -239,23 +239,23 @@ if($p == 'sites'){
 }
 
 // Menu | Menue verwalten
-if($p == 'menu'){
+if($p == 'menu' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 	if($c == 'add_menu'){
 		$error = $menu->addMenu();
 	}
-	
+
 	if($c == 'edit' && $f == 'edit'){
 		$error = $menu->editMenu();
 	}
-	
+
 	if($c == 'remove'){
 		$error = $menu->removeMenu();
 	}
-	
+
 	if($c == 'reset_positions' && $f == 'reset_positions'){
 		$error = $menu->resetMenuPositions();
 	}
-	
+
 	if($c == 'fill_gaps'){
 		$error = $menu->fillGapsMenu();
 	}

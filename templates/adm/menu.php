@@ -288,7 +288,10 @@
 							<a class="btn w-100 btn-danger" href="?p=menu&f=reset_positions"><i class="fa fa-eraser"></i> Positionen zur&uuml;cksetzen</a>
 						<?php } ?>
 						<?php if($loginsystem->auditRight('menu_fill_gaps')){ ?>
-							<a class="btn w-100 btn-warning" href="?p=menu&c=fill_gaps"><i class="fa fa-arrows-v"></i> Positionen pr&uuml;fen und beheben</a>
+							<form action="?p=menu&c=fill_gaps" method="post">
+								<?php echo csrf_field(); ?>
+								<button type="submit" class="btn w-100 btn-warning"><i class="fa fa-arrows-v"></i> Positionen pr&uuml;fen und beheben</button>
+							</form>
 						<?php } ?>
 					</div>
 				</div>
