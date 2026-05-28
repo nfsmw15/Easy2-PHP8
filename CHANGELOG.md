@@ -1,5 +1,26 @@
 # Changelog — EASY 2.0 PHP8 Fork (Bootstrap 5)
 
+## [1.2.8] — 2026-05-28
+
+### Sicherheit
+- **Menü-Aktionen POST-only**: `add`, `edit`, `remove`, `reset_positions`, `fill_gaps` nur noch per POST+CSRF ausführbar; `fill_gaps`-GET-Link durch POST-Formular ersetzt
+- **Regel-Löschen**: POST-Guard + Existenz-Check vor DELETE; Bestätigungsbox bei ungültiger ID ausgeblendet
+- **Rang-Löschen**: POST-Guard für gesamten `ranks`-Block; Existenz-Check vor DELETE verhindert Erfolgs-Redirect bei nicht-existierender ID
+- **Sites / Additional Fields**: Bestätigungsbox bei ungültiger ID nicht mehr angezeigt
+- **Login-Enumeration**: beide Fehlermeldungen auf identischen Text vereint
+- **Brute-Force-Rate-Limit**: 5 Fehlversuche → 10 Minuten Sperre pro IP (SHA-256-Hash, dateibasiert in `tmp/`, kein DB-Schema-Change)
+
+### Behoben
+- `avatare/.htaccess`: 500-Fehler durch `php_flag engine off` beseitigt → sauberes 403
+- `tmp/` aus git und Deploy ausgeschlossen (`.gitkeep` für Verzeichnis-Erhalt)
+
+### Installer
+- Bootstrap 4 → 5.3.8; jQuery entfernt; Font-Awesome-Abhängigkeit entfernt
+- DB-Benutzername `maxlength` 16 → 32 (HestiaCP-Limit)
+- Alert-Syntax auf BS5 aktualisiert; GitHub-Icon als inline-SVG
+
+---
+
 ## [1.2.7] — 2026-05-27
 
 ### Sicherheit
