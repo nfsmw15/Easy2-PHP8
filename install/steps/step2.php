@@ -29,7 +29,7 @@
                                     </div>
                                     <div class="form-group <?php echo $install->valid_field["user"]; ?>">
                                         <label>MySQL-Benutzer:</label>
-                                        <input type="text" class="form-control" maxlength="16" name="mysql_user" value="<?php echo isset($_POST['mysql_user']) ? $_POST['mysql_user'] : str_replace('[user]', '', $mysql_data['user']); ?>" placeholder="Benutzername">
+                                        <input type="text" class="form-control" maxlength="32" name="mysql_user" value="<?php echo isset($_POST['mysql_user']) ? $_POST['mysql_user'] : str_replace('[user]', '', $mysql_data['user']); ?>" placeholder="Benutzername">
                                     </div>
                                     <div class="form-group <?php echo $install->valid_field["passwd"]; ?>">
                                         <label>MySQL-Passwort:</label>

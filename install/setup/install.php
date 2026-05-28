@@ -266,7 +266,7 @@ class install
     {
         $error    = '';
         $host     = length($_POST['mysql_host']     ?? '', 64);
-        $user     = length($_POST['mysql_user']     ?? '', 64);
+        $user     = length($_POST['mysql_user']     ?? '', 32);
         $passwd   = $_POST['mysql_passwd']   ?? '';
         $database = length($_POST['mysql_database'] ?? '', 63);
         $prefix   = length($_POST['mysql_prefix']   ?? 'ml_', 16);
