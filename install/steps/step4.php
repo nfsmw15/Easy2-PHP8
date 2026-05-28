@@ -19,32 +19,32 @@
                 	<div class="col-sm-6">
                     	<div class="card">
                         	<div class="card-header">
-                            	<i class="fa fa-user-plus"></i> Account anlegen
+                            	Account anlegen
                             </div>
                             <div class="card-body">
                             	<?php if(!$install->is_user()){ ?>
                                     <form action="index.php?p=step4&c=create_user" method="post">
-										 <div class="form-group <?php echo $install->valid_field["username"]; ?>">
+										 <div class="mb-3 <?php echo $install->valid_field["username"]; ?>">
 											<label>Benutzername:</label>
 											<input type="text" class="form-control input-special" value="<?php echo isset($_POST['new-username']) ? $_POST['new-username'] : ''; ?>" name="new-username" maxlength="64" placeholder="Benutzername" required>
 										</div>
-										<div class="form-group <?php echo $install->valid_field["username"]; ?>">
+										<div class="mb-3 <?php echo $install->valid_field["username"]; ?>">
 											<label>E-Mail Adresse:</label>
 											<input type="email" class="form-control input-special" value="<?php echo isset($_POST['new-email']) ? $_POST['new-email'] : ''; ?>" name="new-email" maxlength="64" placeholder="E-Mail Adresse" required>
 										</div>
-										<div class="form-group <?php echo $install->valid_field["fullname"]; ?>">
+										<div class="mb-3 <?php echo $install->valid_field["fullname"]; ?>">
 											<label>Vor-/Nachname:</label>
 											<input type="text" class="form-control input-special" value="<?php echo isset($_POST['new-fullname']) ? $_POST['new-fullname'] : ''; ?>" name="new-fullname" maxlength="64" placeholder="Vor-/Namename">
 										</div>
-										<div class="form-group <?php echo $install->valid_field["passwd"]; ?>">
+										<div class="mb-3 <?php echo $install->valid_field["passwd"]; ?>">
 											<label>Passwort:</label>
 											<input type="password" class="form-control input-special" name="new-password" maxlength="64" placeholder="Passwort" required>
 										</div>
-										<div class="form-group <?php echo $install->valid_field["pw_co"]; ?>">
+										<div class="mb-3 <?php echo $install->valid_field["pw_co"]; ?>">
 											<label>Passwort best&auml;tigen:</label>
 											<input type="password" class="form-control input-special" name="new-password-confirm" maxlength="64" placeholder="Passwort best&auml;tigen" required>
 										</div>
-                                        <div class="form-group">
+                                        <div class="mb-3">
                                             <a class="btn btn-default" href="index.php?p=step3">zur&uuml;ck</a>
                                             <input type="submit" class="btn btn-success float-end" value="Anlegen &amp; Weiter">
                                         </div>

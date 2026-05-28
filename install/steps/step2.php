@@ -23,27 +23,27 @@
                             </div>
                             <div class="card-body">
                                 <form action="index.php?p=step2&c=mysql" method="post">
-                                    <div class="form-group <?php echo $install->valid_field["host"]; ?>">
+                                    <div class="mb-3 <?php echo $install->valid_field["host"]; ?>">
                                         <label>MySQL-Server / Host:</label>
                                         <input type="text" class="form-control" maxlength="64" name="mysql_host" value="<?php echo isset($_POST['mysql_host']) ? $_POST['mysql_host'] : str_replace('[host]', 'localhost', $mysql_data['host']); ?>" placeholder="MySQL Server / Host">
                                     </div>
-                                    <div class="form-group <?php echo $install->valid_field["user"]; ?>">
+                                    <div class="mb-3 <?php echo $install->valid_field["user"]; ?>">
                                         <label>MySQL-Benutzer:</label>
                                         <input type="text" class="form-control" maxlength="32" name="mysql_user" value="<?php echo isset($_POST['mysql_user']) ? $_POST['mysql_user'] : str_replace('[user]', '', $mysql_data['user']); ?>" placeholder="Benutzername">
                                     </div>
-                                    <div class="form-group <?php echo $install->valid_field["passwd"]; ?>">
+                                    <div class="mb-3 <?php echo $install->valid_field["passwd"]; ?>">
                                         <label>MySQL-Passwort:</label>
                                         <input type="text" class="form-control" maxlength="128" name="mysql_passwd" value="<?php echo isset($_POST['mysql_passwd']) ? $_POST['mysql_passwd'] : str_replace('[pass]', '', $mysql_data['passwd']); ?>" placeholder="Passwort">
                                     </div>
-                                    <div class="form-group <?php echo $install->valid_field["database"]; ?>">
+                                    <div class="mb-3 <?php echo $install->valid_field["database"]; ?>">
                                         <label>MySQL-Datenbankname:</label>
                                         <input type="text" class="form-control" maxlength="63" name="mysql_database" value="<?php echo isset($_POST['mysql_database']) ? $_POST['mysql_database'] : str_replace('[dbna]', '', $mysql_data['database']); ?>" placeholder="Datenbankname">
                                     </div>
-                                    <div class="form-group <?php echo $install->valid_field["prefix"]; ?>">
+                                    <div class="mb-3 <?php echo $install->valid_field["prefix"]; ?>">
                                         <label>MySQL-Pr&auml;fix:</label>
                                         <input type="text" class="form-control" maxlength="16" name="mysql_prefix" value="<?php echo isset($_POST['mysql_prefix']) ? $_POST['mysql_prefix'] : str_replace('[pref]', '', str_replace('_ml', '', $mysql_data['prefix'])); ?>" placeholder="Pr&auml;fix">
                                     </div>
-                                    <div class="form-group">
+                                    <div class="mb-3">
                                         <a class="btn btn-default" href="index.php?p=step1">zur&uuml;ck</a>
                                         <?php if($install->condition){ ?>
                                             <input type="submit" class="btn btn-success float-end" value="Speichern &amp; Weiter">

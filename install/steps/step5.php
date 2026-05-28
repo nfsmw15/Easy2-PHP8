@@ -20,11 +20,11 @@
                 	<div class="col-sm-12">
                     	<div class="card">
                         	<div class="card-header">
-                            	<i class="fa fa-legal"></i> Impressum
+                            	Impressum
                             </div>
                             <div class="card-body">
                                 <form action="index.php?p=step5&c=replace" method="post">
-									<div class="form-group">
+									<div class="mb-3">
 										<blockquote>
 											Wie sich aus &sect; 55 I RStV ergibt trifft einen Anbieter keine Impressumspflicht, 
 											d.h. er kann seine Webseite v&ouml;llig anonym ins World Wide Web stellen, 
@@ -37,12 +37,12 @@
 										<p>Solltest du kein Impressum ben&ouml;tigen, lasse die Felder leer und dr&uuml;cke auf "Weiter".</p>
 									</div>
 									<hr>
-									<div class="form-group">
+									<div class="mb-3">
 										<div class="row">
 											<div class="col-sm-6">
 												<label for="company">Firma:</label>
-												<div class="form-group input-group">
-													<span class="input-group-text"><i class="fa fa-fw fa-building fa-fw"></i></span>
+												<div class="mb-3 input-group">
+													<span class="input-group-text"></span>
 													<input type="text" name="company" class="form-control" id="company" maxlength="64" placeholder="Firma">
 												</div>
 											</div>
@@ -52,12 +52,12 @@
 										</div>
 									</div>
 									<hr>
-									<div class="form-group">
+									<div class="mb-3">
 										<div class="row">
 											<div class="col-sm-6">
 												<label for="name">Vollst&auml;ndiger Name:</label>
-												<div class="form-group input-group">
-													<span class="input-group-text"><i class="fa fa-fw fa-font fa-fw"></i></span>
+												<div class="mb-3 input-group">
+													<span class="input-group-text"></span>
 													<input type="text" name="name" require class="form-control" id="name" maxlength="16" placeholder="Vor-/ Nachname">
 												</div>
 											</div>
@@ -67,11 +67,11 @@
 										</div>
 									</div>
 									<hr>
-									<div class="form-group">
+									<div class="mb-3">
 										<div class="row">
 											<div class="col-sm-6">
 												<label for="adress">Adresse:</label>
-												<div class="form-group">
+												<div class="mb-3">
 													<textarea name="adress" id="adress" rows="4" class="form-control" maxlength="256" placeholder="Max-Mustermann-Straße 54"></textarea>
 												</div>
 											</div>
@@ -81,11 +81,11 @@
 										</div>
 									</div>
 									<hr>
-									<div class="form-group">
+									<div class="mb-3">
 										<div class="row">
 											<div class="col-sm-6">
 												<label for="contact">Kontaktdaten:</label>
-												<div class="form-group">
+												<div class="mb-3">
 													<textarea name="contact" rows="6" id="contact" class="form-control" maxlength="1024" placeholder="Tel.: 01234/5678912345"></textarea>
 												</div>
 											</div>
@@ -95,11 +95,11 @@
 										</div>
 									</div>
 									<hr>
-									<div class="form-group">
+									<div class="mb-3">
 										<div class="row">
 											<div class="col-sm-6">
 												<label for="disclaimer">Haftungsausschluss:</label>
-												<div class="form-group">
+												<div class="mb-3">
 													<textarea name="disclaimer" id="disclaimer" rows="10" class="form-control"></textarea>
 												</div>
 											</div>
@@ -111,7 +111,7 @@
 										</div>
 									</div>
 									<hr>
-									<div class="form-group">
+									<div class="mb-3">
 										<div class="row">
 											<div class="col-sm-6">
 												<input type="submit" class="btn btn-success w-100" value="Weiter">

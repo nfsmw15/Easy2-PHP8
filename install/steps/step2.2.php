@@ -19,7 +19,7 @@
                 <div class="row mb-2">
                     <div class="col-lg-12">
                         <div class="alert alert-success">
-                            <i class="fa fa-check"></i>
+                            
                             Datenbankverbindung erfolgreich &ndash; Server-Version: <strong><?php echo htmlspecialchars($_SESSION['db_version'], ENT_QUOTES, 'UTF-8'); ?></strong>
                         </div>
                     </div>
@@ -43,10 +43,10 @@
                                     	<?php echo $install->show_tables(); ?>
                                     </tbody>
                                 </table>
-                                <a class="btn btn-default" href="index.php?p=step2"><i class="fa fa-arrow-left"></i> zur&uuml;ck</a>
-                                <a class="btn btn-primary" href="index.php?p=step2.2"><i class="fa fa-refresh"></i> Aktualisieren</a>
-                                <a class="btn btn-danger" href="index.php?p=step2.2&c=mysql_del"><i class="fa fa-trash"></i> Existierende l&ouml;schen</a>
-                                <a class="btn btn-warning" href="index.php?p=step2.2&c=mysql_ignore"><i class="fa fa-times"></i> Existierende auslassen</a>
+                                <a class="btn btn-default" href="index.php?p=step2">zur&uuml;ck</a>
+                                <a class="btn btn-primary" href="index.php?p=step2.2">Aktualisieren</a>
+                                <a class="btn btn-danger" href="index.php?p=step2.2&c=mysql_del">Existierende l&ouml;schen</a>
+                                <a class="btn btn-warning" href="index.php?p=step2.2&c=mysql_ignore">Existierende auslassen</a>
                        		</div>
                         </div>
                     </div>

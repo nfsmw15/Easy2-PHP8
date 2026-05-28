@@ -272,25 +272,25 @@ class install
         $prefix   = length($_POST['mysql_prefix']   ?? 'ml_', 16);
 
         $this->valid_field = [
-            'host'     => empty($host)     ? 'has-error' : '',
-            'user'     => empty($user)     ? 'has-error' : '',
-            'database' => empty($database) ? 'has-error' : '',
-            'prefix'   => empty($prefix)   ? 'has-error' : '',
+            'host'     => empty($host)     ? 'border border-danger rounded' : '',
+            'user'     => empty($user)     ? 'border border-danger rounded' : '',
+            'database' => empty($database) ? 'border border-danger rounded' : '',
+            'prefix'   => empty($prefix)   ? 'border border-danger rounded' : '',
         ];
 
-        if (in_array('has-error', $this->valid_field, true)) {
+        if (in_array('border border-danger rounded', $this->valid_field, true)) {
             return 'Bitte alle Felder ausfüllen!';
         }
         if (!preg_match('/^[a-zA-Z0-9_]{1,16}$/', $prefix)) {
-            $this->valid_field['prefix'] = 'has-error';
+            $this->valid_field['prefix'] = 'border border-danger rounded';
             return 'Präfix enthält ungültige Zeichen!';
         }
         if (!preg_match('/^[a-zA-Z0-9_\-]{4,63}$/', $database)) {
-            $this->valid_field['database'] = 'has-error';
+            $this->valid_field['database'] = 'border border-danger rounded';
             return 'Datenbankname enthält ungültige Zeichen!';
         }
         if (!preg_match('/^[a-zA-Z0-9_\-]{1,32}$/', $user)) {
-            $this->valid_field['user'] = 'has-error';
+            $this->valid_field['user'] = 'border border-danger rounded';
             return 'Benutzername enthält ungültige Zeichen!';
         }
 
@@ -298,7 +298,7 @@ class install
             $dsn = 'mysql:host=' . $host . ';dbname=' . $database . ';charset=utf8mb4';
             $db  = new \PDO($dsn, $user, $passwd, [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]);
         } catch (\PDOException $e) {
-            $this->valid_field = array_fill_keys(['host', 'user', 'passwd', 'database'], 'has-error');
+            $this->valid_field = array_fill_keys(['host', 'user', 'passwd', 'database'], 'border border-danger rounded');
             return 'Datenbankverbindung fehlgeschlagen! Bitte Zugangsdaten prüfen.';
         }
 
@@ -546,35 +546,35 @@ class install
         $password_confirm = $_POST['new-password-confirm'] ?? '';
 
         $this->valid_field = [
-            'username' => empty($username) ? 'has-error' : '',
-            'email'    => empty($email)    ? 'has-error' : '',
-            'passwd'   => empty($password) ? 'has-error' : '',
-            'pw_co'    => empty($password_confirm) ? 'has-error' : '',
+            'username' => empty($username) ? 'border border-danger rounded' : '',
+            'email'    => empty($email)    ? 'border border-danger rounded' : '',
+            'passwd'   => empty($password) ? 'border border-danger rounded' : '',
+            'pw_co'    => empty($password_confirm) ? 'border border-danger rounded' : '',
         ];
 
         if (empty($username) || empty($fullname) || empty($email) || empty($password) || empty($password_confirm)) {
             return 'Alle Felder ausfüllen!';
         }
         if (!hash_equals($password, $password_confirm)) {
-            $this->valid_field['passwd'] = $this->valid_field['pw_co'] = 'has-error';
+            $this->valid_field['passwd'] = $this->valid_field['pw_co'] = 'border border-danger rounded';
             return 'Passwörter stimmen nicht überein!';
         }
         if (!check_email($email)) {
-            $this->valid_field['email'] = 'has-error';
+            $this->valid_field['email'] = 'border border-danger rounded';
             return 'Ungültige E-Mail!';
         }
         if (in_array(strtolower($username), $this->username_blacklist, true)) {
-            $this->valid_field['username'] = 'has-error';
+            $this->valid_field['username'] = 'border border-danger rounded';
             return 'Dieser Benutzername ist nicht erlaubt!';
         }
         if (!preg_match('/^[a-zA-Z0-9äöüÄÖÜß_\-]{4,}$/u', $username)) {
-            $this->valid_field['username'] = 'has-error';
+            $this->valid_field['username'] = 'border border-danger rounded';
             return 'Benutzername enthält ungültige Zeichen!';
         }
 
         $minLen = (int)mainout('password_length', $this->pdo);
         if (!pass_control($password, $minLen)) {
-            $this->valid_field['passwd'] = 'has-error';
+            $this->valid_field['passwd'] = 'border border-danger rounded';
             return "Passwort muss mindestens $minLen Zeichen haben!";
         }
 
