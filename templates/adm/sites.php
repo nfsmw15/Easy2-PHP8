@@ -111,7 +111,7 @@
 						</form>
 					</div>
 				</div><!-- /.card -->
-			<?php } elseif($f == 'remove' && !empty($id)){ ?>
+			<?php } elseif($f == 'remove' && !empty($id) && $sites->getAmount('sites', 'id', $id) == 1){ ?>
 				<div class="card mb-2">
 					<div class="card-header"><i class="fa fa-pencil"></i> Seite entfernen <a class="float-end btn btn-sm btn-warning" href="?p=sites">Abbrechen</a></div>
 					<div class="card-body">

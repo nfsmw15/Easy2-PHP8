@@ -220,7 +220,7 @@
 						</form>
 					</div>
 				</div>
-			<?php } elseif($f == 'remove' && !empty($id)){ ?>
+			<?php } elseif($f == 'remove' && !empty($id) && $additional_fields->getAmount('fields', 'id', $id) == 1){ ?>
 				<div class="card">
 					<div class="card-header">
 						<i class="fa fa-pencil"></i> Feld l&ouml;schen
