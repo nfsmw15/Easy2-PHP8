@@ -127,8 +127,8 @@ if ($p === 'step5'   && $c === 'replace')      $error = $install->replace_impres
 if (!empty($error)) {
     $error = '<div class="row"><div class="col-lg-12">
         <div class="alert alert-danger alert-dismissible">
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Schließen"></button>
-            <i class="fa fa-warning"></i> ' . $error . '
+            <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span></button>
+            <i class="fas fa-exclamation-triangle"></i> ' . $error . '
         </div></div></div>';
 }
 ?>
@@ -152,7 +152,7 @@ if (!empty($error)) {
         <ul class="sidebar-nav">
             <li class="sidebar-brand"><a>EASY 2.0 v.<?php echo htmlspecialchars($version, ENT_QUOTES, 'UTF-8'); ?></a></li>
             <li><a target="_blank" href="https://nfsmw15.de">
-                <i class="fa fa-github"></i> GitHub</a></li>
+                <i class="fab fa-github"></i> GitHub</a></li>
         </ul>
         <span style="position:absolute;bottom:0;padding:10px;color:#999">
             Copyright &copy; <?php echo date('Y'); ?> Andreas P.

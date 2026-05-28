@@ -289,7 +289,7 @@ class install
             $this->valid_field['database'] = 'has-error';
             return 'Datenbankname enthält ungültige Zeichen!';
         }
-        if (!preg_match('/^[a-zA-Z0-9_\-]{4,16}$/', $user)) {
+        if (!preg_match('/^[a-zA-Z0-9_\-]{1,32}$/', $user)) {
             $this->valid_field['user'] = 'has-error';
             return 'Benutzername enthält ungültige Zeichen!';
         }
