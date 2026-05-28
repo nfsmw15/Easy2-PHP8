@@ -10,5 +10,9 @@ avatare/*
 # Laufzeit / Cache
 *.log
 
+# Temporäre Dateien – Inhalt niemals einchecken oder deployen
+tmp/*
+!tmp/.gitkeep
+
 # Zip-Pakete
 *.zip
