@@ -207,7 +207,7 @@ if($v == 'remove' && !empty($a)){
 }
 
 // Rules | Regelverwaltung
-if($p == 'rules'){
+if($p == 'rules' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 	if($c == 'new'){
 		$error = $rules->newRule();
 	}
