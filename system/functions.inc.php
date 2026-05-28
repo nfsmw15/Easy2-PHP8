@@ -327,6 +327,14 @@ function auto_remover(): void
         "DELETE FROM `" . Prefix . "_sessions` WHERE (closed = '1' AND last_action < ?) OR (closed = '0' AND logout = '0' AND last_action < ?)"
     );
     $stmt->execute([$time, $time2]);
+
+    // Rate-Limit-Dateien löschen deren Block-Zeitfenster abgelaufen ist
+    $rl_expiry = time() - 3600; // älter als 1 Stunde
+    foreach (glob(__DIR__ . '/../tmp/rl_*.json') ?: [] as $rl_file) {
+        if (@filemtime($rl_file) < $rl_expiry) {
+            @unlink($rl_file);
+        }
+    }
 }
 
 // ─── Kontaktformular ─────────────────────────────────────────────────────────

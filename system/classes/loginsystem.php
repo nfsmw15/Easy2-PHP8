@@ -211,11 +211,54 @@ class loginsystem extends database
      * Anmelden/Abmelden | login/logout
      *********************************************/
     
+    // ── Rate-Limit (Login Brute-Force-Schutz) ────────────────────────────────
+    private const RL_MAX_ATTEMPTS  = 5;
+    private const RL_BLOCK_SECONDS = 600; // 10 Minuten
+
+    private function rlFile(string $ip_hash): string
+    {
+        return __DIR__ . '/../../tmp/rl_' . $ip_hash . '.json';
+    }
+
+    private function getRateLimit(string $ip_hash): array
+    {
+        $file = $this->rlFile($ip_hash);
+        if (!is_readable($file)) return ['attempts' => 0, 'blocked_until' => 0];
+        $data = json_decode(@file_get_contents($file), true);
+        return (is_array($data) && isset($data['attempts'], $data['blocked_until']))
+            ? $data
+            : ['attempts' => 0, 'blocked_until' => 0];
+    }
+
+    private function recordFailedLogin(string $ip_hash): void
+    {
+        $data = $this->getRateLimit($ip_hash);
+        $data['attempts']++;
+        if ($data['attempts'] >= self::RL_MAX_ATTEMPTS) {
+            $data['blocked_until'] = time() + self::RL_BLOCK_SECONDS;
+        }
+        @file_put_contents($this->rlFile($ip_hash), json_encode($data), LOCK_EX);
+    }
+
+    private function clearRateLimit(string $ip_hash): void
+    {
+        $file = $this->rlFile($ip_hash);
+        if (file_exists($file)) @unlink($file);
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
     public function login(){
         $error = '';
         $email = length($_POST['login-email'] ?? '', 64);
         $passwd = length($_POST['login-passwd'] ?? '', 64);
         $remember = length($_POST['login-remember'] ?? 0, 1);
+
+        $ip_hash = hash('sha256', $_SERVER['REMOTE_ADDR'] ?? '');
+        $rate = $this->getRateLimit($ip_hash);
+        if ($rate['blocked_until'] > time()) {
+            return 'Zu viele Fehlversuche. Bitte warte einige Minuten und versuche es erneut.';
+        }
+
         if(!empty($email) && !empty($passwd)){
             $user = $this->pq(
                 "SELECT `password`, `id`, `uik`, `active` FROM `".Prefix."_user` WHERE (`username` = ? OR `email` = ?) LIMIT 1",
@@ -229,6 +272,7 @@ class loginsystem extends database
                         $this->pq("UPDATE `".Prefix."_user` SET `password` = ? WHERE `id` = ?", [$new_hash, $result['id']]);
                     }
                     if($result['active'] == 1){
+                        $this->clearRateLimit($ip_hash);
                         $lc = getCode(32, 'sessions', 'ulc'); // Generate Logincode
                         $sic = getCode(32, 'sessions', 'sic'); // Generate Sessioncode
                         $lt = time(); // Logintime
@@ -256,9 +300,11 @@ class loginsystem extends database
                         $error = 'Dein Account ist nicht freigegeben! Bitte wende dich an den Webadministrator.';
                     }
                 } else {
-                    $error = 'Du hast ein falsches Passwort oder eine falsche E-Mail Adresse / Benutzernamen eingegeben!';
+                    $this->recordFailedLogin($ip_hash);
+                    $error = 'Du hast eine falsche E-Mail Adresse / Benutzernamen oder ein falsches Passwort eingegeben!';
                 }
             } else {
+                $this->recordFailedLogin($ip_hash);
                 $error = 'Du hast eine falsche E-Mail Adresse / Benutzernamen oder ein falsches Passwort eingegeben!';
             }
         } else {
