@@ -60,18 +60,18 @@ class captcha{
 		$chars = $this->chars;
 		
 		for($i = 0; $i < $this->length; $i++){
-			$code .= $chr = $chars[mt_rand(0, strlen($chars)-1)];
+			$code .= $chr = $chars[random_int(0, strlen($chars)-1)];
 			$r = hexdec(substr($this->text_color, 0, 2));
 			$g = hexdec(substr($this->text_color, 2, 2));
 			$b = hexdec(substr($this->text_color, 4, 2));
 			$color = imagecolorallocate($img, $r, $g, $b);
-			$rotation = rand(-25, 25);
+			$rotation = random_int(-25, 25);
 			$x = 5 + $i * (int)(4/3 * $this->font_size - 6);
-			$y = rand((int)(4/3 * $this->font_size), (int)($this->img_height - (4/3 * $this->font_size) / 2));
+			$y = random_int((int)(4/3 * $this->font_size), (int)($this->img_height - (4/3 * $this->font_size) / 2));
 			imagettftext($img, $this->font_size, $rotation, $x, $y, $color, $this->font, $chr);
 		}
-		
-		$_SESSION[$this->name_session] = md5($code);
+
+		$_SESSION[$this->name_session] = $code;
 		header("Content-type: image/png");
 		header("Expires: Sun, 05 Nov 2017 23:35:00 GMT");
 		header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
@@ -85,16 +85,14 @@ class captcha{
 	}
 	
 	function check_captcha($code = NULL){
-		$captcha_code = isset($_SESSION[$this->name_session]) ? $_SESSION[$this->name_session] : NULL;
-		$code = strtoupper($code);
-		if(!empty($captcha_code)){
-			if(!empty($code)){
-				if(md5($code) == $captcha_code){
-					return true;
-				}
+		$captcha_code = $_SESSION[$this->name_session] ?? '';
+		$code = strtoupper((string)$code);
+		if(!empty($captcha_code) && !empty($code)){
+			if(hash_equals($captcha_code, $code)){
+				unset($_SESSION[$this->name_session]);
+				return true;
 			}
 		}
-		   
 		return false;
 	}
 }

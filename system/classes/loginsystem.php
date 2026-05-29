@@ -669,23 +669,32 @@ class loginsystem extends database
             $sets[] = '23456789';
         if(strpos($available_sets, 's') !== false)
             $sets[] = '!@#$%&*?';
+
+        if(empty($sets))
+            throw new \InvalidArgumentException('generatePassword: keine gültige Zeichengruppe angegeben.');
+
         $all = '';
         $password = '';
-        foreach($sets as $set)
-        {
-            $password .= $set[array_rand(str_split($set))];
+        foreach($sets as $set){
+            $password .= $set[random_int(0, strlen($set) - 1)];
             $all .= $set;
         }
-        $all = str_split($all);
         for($i = 0; $i < $length - count($sets); $i++)
-            $password .= $all[array_rand($all)];
-        $password = str_shuffle($password);
+            $password .= $all[random_int(0, strlen($all) - 1)];
+
+        // Fisher-Yates Shuffle mit random_int()
+        $chars = str_split($password);
+        for($i = count($chars) - 1; $i > 0; $i--){
+            $j = random_int(0, $i);
+            [$chars[$i], $chars[$j]] = [$chars[$j], $chars[$i]];
+        }
+        $password = implode('', $chars);
+
         if(!$add_dashes)
             return $password;
         $dash_len = floor(sqrt($length));
         $dash_str = '';
-        while(strlen($password) > $dash_len)
-        {
+        while(strlen($password) > $dash_len){
             $dash_str .= substr($password, 0, $dash_len) . '-';
             $password = substr($password, $dash_len);
         }
