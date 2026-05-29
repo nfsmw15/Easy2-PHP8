@@ -61,7 +61,9 @@ function check_email(string $email): bool
 
 function check_filename(string $string): bool
 {
-    return (bool)preg_match('/^[_a-zA-Z0-9()\s\-.]*\.[a-zA-Z]{1,16}$/', $string);
+    // Nur einfache Dateinamen: name.ext — kein Dotfile, keine mehrfachen Extensions,
+    // kein Pfad-Trenner, nur sichere Typen.
+    return (bool)preg_match('/^[a-zA-Z0-9_-]+\.(php|html|htm|xhtml|tpl|txt|pdf)$/i', $string);
 }
 
 function check_date(string $date, string $format, string $sep): bool
