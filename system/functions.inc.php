@@ -414,12 +414,17 @@ function csrf_field(): string
 function errormail(string $message): void
 {
     global $loginsystem;
-    // Interne Fehlermeldung nur per E-Mail, nie an den Browser
-    $from    = htmlspecialchar((string)$loginsystem->getMainData('site_title'));
-    $subject = 'Fehler auf deiner Homepage';
-    $header  = "From: $from <" . $loginsystem->getMainData('mail_sender') . ">\r\n";
-    $header .= "Mime-Version: 1.0\r\n";
-    $header .= "Content-Type: text/html; charset=utf-8\r\n";
-    $header .= "Content-Transfer-Encoding: quoted-printable\r\n";
-    @mail((string)$loginsystem->getMainData('administrator_mail'), $subject, $message, $header);
+    // Über PHPMailer/SMTP versenden — kein direktes mail().
+    // error_message wird in sendMail() auto-escaped (kein Sonderfall wie 'message').
+    // Fehler in sendMail() selbst → nur error_log(), keine Endlosrekursion.
+    try {
+        $loginsystem->sendMail(
+            'error.html',
+            null,
+            ['subject' => 'Fehler auf deiner Homepage', 'error_message' => $message],
+            (string)$loginsystem->getMainData('administrator_mail')
+        );
+    } catch (\Throwable $e) {
+        error_log('errormail() fehlgeschlagen: ' . $e->getMessage());
+    }
 }
