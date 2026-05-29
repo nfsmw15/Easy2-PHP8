@@ -429,7 +429,8 @@ class sites extends loginsystem{
                 $filename = self::getSite('complete_filename', $id);
 				$filepath = $this->main_path.self::getSite('dir', $id);
 				$file = $filepath.$filename;
-				$mimetyp = filetype($file);
+				$finfo   = new \finfo(FILEINFO_MIME_TYPE);
+				$mimetyp = $finfo->file($file) ?: 'application/octet-stream';
 				
 				set_time_limit(0);
 				header("Pragma: public");
