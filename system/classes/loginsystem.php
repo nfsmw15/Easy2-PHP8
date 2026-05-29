@@ -162,7 +162,8 @@ class loginsystem extends database
                 [$this->sessionData['uik'], $this->sessionData['sic'], $this->sessionData['ult'], $this->sessionData['ulc']]
             );
             $row = $sql->fetch_assoc();
-            if($row['locked'] === '1')
+            // PDO gibt TINYINT als int zurück (EMULATE_PREPARES=false) — loose == statt ===
+            if(($row['locked'] ?? 0) == 1)
                 return true;
         }
         return false;
@@ -171,7 +172,11 @@ class loginsystem extends database
     public function lock(){
         $csrf = length($_GET['csrf'] ?? '', 64);
         if($csrf === $this->sessionData['csrf']){
-            $url = parse_url($this->sessionData['url_old'], PHP_URL_QUERY);
+            // url_old kann leer sein — dann url als Fallback
+            $raw = !empty($this->sessionData['url_old'])
+                ? $this->sessionData['url_old']
+                : $this->sessionData['url'];
+            $url = parse_url($raw, PHP_URL_QUERY) ?? '';
             $sql = $this->pq(
                 "UPDATE `".Prefix."_sessions` SET `locked` = '1', `locked_dir` = ? WHERE `uik` = ? AND `sic` = ? AND `ult` = ? AND `ulc` = ? AND `logout` = '0' AND `closed` = '0'",
                 [$url, $this->sessionData['uik'], $this->sessionData['sic'], $this->sessionData['ult'], $this->sessionData['ulc']]

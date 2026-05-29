@@ -72,7 +72,7 @@ if($c == 'lock'){
 	$error = $loginsystem->lock();
 }
 
-if($c == 'unlock'){
+if($c == 'unlock' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 	$error = $loginsystem->unlock();
 }
 
