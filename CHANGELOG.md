@@ -1,9 +1,36 @@
 # Changelog — EASY 2.0 PHP8 Fork (Bootstrap 5)
 
-## [1.2.9] — 2026-05-29
+## [1.3.0] — 2026-05-29
+
+### Sicherheit
+- **`check_filename()` gehärtet**: Dotfiles (`.htaccess`), mehrfache Extensions (`evil.php.jpg`) und Pfad-Bestandteile blockiert; nur noch `[a-zA-Z0-9_-]+.(php|html|htm|xhtml|tpl|txt|pdf)` erlaubt
+- **Kryptografisch sichere Zufallsfunktionen**: `generatePassword()` nutzt `random_int()` + Fisher-Yates-Shuffle statt `array_rand()`/`str_shuffle()`; Captcha nutzt `random_int()` statt `mt_rand()`/`rand()`
+- **Captcha**: Code als Klartext in Session (statt MD5-Hash); `hash_equals()` statt `==`; Session-Key nach Prüfung gelöscht (einmalige Verwendung)
+- **Sites und Additional Fields**: zustandsändernde Aktionen (`add`, `edit`, `remove`) nur noch per POST+CSRF ausführbar — GET löst keine DB-Änderungen mehr aus
+- **`pw_reset` Token-Verbrauch**: Token wird nach erfolgreichem Reset sofort gelöscht; Formular nur bei gültigem/nicht-abgelaufenem Token angezeigt; alle aktiven Sessions des Users nach Reset geschlossen
+- **Lock/Unlock repariert**: `is_locked()` schlug wegen PDO-Typenvergleich (`int 1 === string '1'`) immer fehl; Unlock-Formular hatte kein `csrf_field()`; `unlock` auf POST beschränkt; Fallback für leere `url_old` in `lock()`
+- **`errormail()` nutzt PHPMailer**: kein direktes `@mail()` mehr; HTML-Template `emailtpl/error.html`; Fehler in `sendMail()` landen in `error_log()` ohne Endlosrekursion
+
+### Behoben
+- **`site_add_successfully_upl_error` ohne Upload**: `null == UPLOAD_ERR_OK` war durch PHP-Typenvergleich `true`; `isset()` + `===` verhindert falschen Upload-Branch
+- **`downloadSite()` MIME-Type**: `filetype()` gab Dateisystem-Typ (`file`) statt MIME-Typ zurück; ersetzt durch `finfo(FILEINFO_MIME_TYPE)` mit Fallback `application/octet-stream`
+- **`pw_reset` für Gäste**: Site-ID 20 fehlte im Gast-Rang → `?p=pw_reset` lieferte 404; in `_ml_ranks.sql` ergänzt
+- **Captcha `random_int()` ValueError**: `min > max` bei `font_size=20`/`img_height=30`; `minY`/`maxY` sicher berechnet
 
 ### Abhängigkeiten
-- **PHPMailer 6.9.3 → 7.1.1** aktualisiert; API vollständig kompatibel, keine Code-Änderungen nötig
+- **PHPMailer 6.9.3 → 7.1.1** aktualisiert; API vollständig kompatibel
+
+### Installer
+- Bootstrap 4 → 5.3.8; jQuery entfernt; Font-Awesome-Abhängigkeit entfernt
+- DB-Benutzername `maxlength` 16 → 32 (HestiaCP-Limit); Regex angepasst
+- Alert-Syntax auf BS5 aktualisiert; GitHub-Icon als inline-SVG
+
+---
+
+## [1.2.9] — 2026-05-29 *(in 1.3.0 aufgegangen)*
+
+### Abhängigkeiten
+- **PHPMailer 6.9.3 → 7.1.1** aktualisiert
 
 ---
 
