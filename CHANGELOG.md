@@ -1,5 +1,12 @@
 # Changelog — EASY 2.0 PHP8 Fork (Bootstrap 5)
 
+## [1.2.9] — 2026-05-29
+
+### Abhängigkeiten
+- **PHPMailer 6.9.3 → 7.1.1** aktualisiert; API vollständig kompatibel, keine Code-Änderungen nötig
+
+---
+
 ## [1.2.8] — 2026-05-28
 
 ### Sicherheit
