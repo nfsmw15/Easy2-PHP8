@@ -231,7 +231,7 @@ class sites extends loginsystem{
 										$tpl = file_get_contents('./system/tpl/default_site.tpl');
 										$tpl = str_replace($search, $replace, $tpl);
 										file_put_contents($this->main_path.$dir.$filename.'.'.$type, $tpl);
-									} elseif($_FILES["file"]["error"] == UPLOAD_ERR_OK){
+									} elseif(isset($_FILES["file"]["error"]) && $_FILES["file"]["error"] === UPLOAD_ERR_OK){
 										// Holt sich alle Paramater zur Datei
 										$tmp_name = $_FILES["file"]['tmp_name'];
 										
@@ -322,7 +322,7 @@ class sites extends loginsystem{
 											$tpl = file_get_contents('./system/tpl/default_site.tpl');
 											$tpl = str_replace($search, $replace, $tpl);
 											file_put_contents($this->main_path.$dir.$filename.'.'.$type, $tpl);
-										} elseif($_FILES["file"]["error"] == UPLOAD_ERR_OK){
+										} elseif(isset($_FILES["file"]["error"]) && $_FILES["file"]["error"] === UPLOAD_ERR_OK){
 											// Holt sich alle Paramater zur Datei
 											$tmp_name = $_FILES["file"]['tmp_name'];
 
