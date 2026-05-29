@@ -67,7 +67,9 @@ class captcha{
 			$color = imagecolorallocate($img, $r, $g, $b);
 			$rotation = random_int(-25, 25);
 			$x = 5 + $i * (int)(4/3 * $this->font_size - 6);
-			$y = random_int((int)(4/3 * $this->font_size), (int)($this->img_height - (4/3 * $this->font_size) / 2));
+			$minY = (int)round($this->font_size * 1.1);
+			$maxY = max($minY, $this->img_height - 3);
+			$y = random_int($minY, $maxY);
 			imagettftext($img, $this->font_size, $rotation, $x, $y, $color, $this->font, $chr);
 		}
 
