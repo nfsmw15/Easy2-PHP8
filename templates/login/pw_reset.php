@@ -6,11 +6,11 @@
 				<div class="card h-100">
 					<h4 class="card-header">Passwort zur&uuml;cksetzen</h4>
 					<div class="card-body">
-						<form action="?p=pw_reset&c=reset&a=<?php echo $a; ?>" method="POST">
+						<?php if($pwr_token_valid): ?>
+						<form action="?p=pw_reset&c=reset&a=<?php echo e($a); ?>" method="POST">
 							<?php echo csrf_field(); ?>
-							<p>Bitte achte bei der Wahl eines neuen Passwortes auf die Sicherheit. Verwende keine W&ouml;rter wie: Passwort, Facebook, hallo123, administrator. 
-                                                        Wir empfehlen ein Passwort zu nutzen, welches aus Gro&szlig;- wie Kleinbuchstaben, Zahlen und Zeichen besteht. 
-                                                        Informationen und einen Passwortgenerator kannst du unter folgender Adresse finden: <a href="https://www.passwort-generator.eu/">https://www.passwort-generator.eu/</a></p>
+							<p>Bitte achte bei der Wahl eines neuen Passwortes auf die Sicherheit. Verwende keine W&ouml;rter wie: Passwort, Facebook, hallo123, administrator.
+							Wir empfehlen ein Passwort zu nutzen, welches aus Gro&szlig;- wie Kleinbuchstaben, Zahlen und Zeichen besteht.</p>
 							<?php echo $error; ?>
 							<div class="form-group">
 								<label>Neues Passwort:</label>
@@ -29,6 +29,10 @@
 								<button type="submit" class="btn btn-success w-100">Passwort zur&uuml;cksetzen</button>
 							</div>
 						</form>
+						<?php else: ?>
+						<div class="alert alert-danger"><?php echo $error; ?></div>
+						<a href="?p=pwv" class="btn btn-primary btn-sm mt-2">Neuen Reset-Link anfordern</a>
+						<?php endif; ?>
 					</div>
 					<div class="card-footer">
 						<a href="?p=login" class="btn btn-primary">zum Login</a>

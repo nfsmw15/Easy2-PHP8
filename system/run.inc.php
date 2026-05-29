@@ -96,6 +96,15 @@ if($p == 'pw_reset' && $c == 'reset'){
 	$error = $loginsystem->password_forget_reset();
 }
 
+// Token-Validierung für Formular-Anzeige (GET und fehlgeschlagene POSTs)
+$pwr_token_valid = false;
+if($p == 'pw_reset'){
+	$pwr_token_valid = $loginsystem->validatePwrToken($a);
+	if(!$pwr_token_valid && empty($error)){
+		$error = 'Dieser Passwort-Reset-Link ist ung&uuml;ltig oder abgelaufen.';
+	}
+}
+
 if($p == 'profil' && $c == 'remove_self'){
 	$error = $loginsystem->removeUserSelf();
 }

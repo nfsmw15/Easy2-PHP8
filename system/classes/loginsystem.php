@@ -388,6 +388,22 @@ class loginsystem extends database
         return $error;
     }
     
+    public function validatePwrToken(string $token): bool
+    {
+        if (empty($token)) return false;
+        $sql = $this->pq(
+            "SELECT `expiry_date` FROM `".Prefix."_codes` WHERE `action` = 'pwr' AND `code` = ? LIMIT 1",
+            [$token]
+        );
+        $row = $sql->fetch_assoc();
+        if (!$row) return false;
+        if ($row['expiry_date'] != '0' && (int)$row['expiry_date'] < time()) {
+            $this->pq("DELETE FROM `".Prefix."_codes` WHERE `code` = ? LIMIT 1", [$token]);
+            return false;
+        }
+        return true;
+    }
+
     public function password_forget_reset(){
         global $a;
         $passwd = length($_POST['pwr_passwd'] ?? NULL, 64);
@@ -402,17 +418,20 @@ class loginsystem extends database
 
                         $pw_length = database::getMainData('password_length');
                         if(strlen($passwd) >= $pw_length){
-                            if(database::getAmount('codes', array('action', 'code'), array('pwr', $a)) == 1){
+                            if(self::validatePwrToken($a)){
                                 $new_passwd = self::pwhash($passwd);
                                 $uik = database::getValue('codes', array('action', 'code'), array('pwr', $a), 'uik');
                                 $sql = $this->pq("UPDATE `".Prefix."_user` SET `password` = ? WHERE `uik` = ?", [$new_passwd, $uik]);
                                 if($sql === true){
+                                    // Token sofort invalidieren
+                                    $this->pq("DELETE FROM `".Prefix."_codes` WHERE `code` = ? LIMIT 1", [$a]);
+                                    // Alle aktiven Sessions des Users schließen
+                                    $this->pq("UPDATE `".Prefix."_sessions` SET `closed` = '1', `logout` = '1' WHERE `uik` = ?", [$uik]);
                                     $data = array();
                                     $data["subject"] = "Dein Passwort zurückgesetzt";
                                     $data["fullname"] = self::getUser('fullname', $uik, 'uik');
                                     $email_address = self::getUser('email', $uik, 'uik');
                                     self::sendMail("password_forget_success.html", self::getUser('id', $uik, 'uik'), $data, $email_address);
-                                    $this->pq("DELETE FROM `".Prefix."_codes` WHERE `code` = ? LIMIT 1", [$a]);
                                     header('Location: '.$_SERVER["SCRIPT_NAME"].'?h=pwr_success');
                                     exit();
                                 } else {
@@ -420,7 +439,7 @@ class loginsystem extends database
                                     errormail('Fehler beim zur&uuml;cksetzen des Passwortes eines Benutzers! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()! MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
                                 }
                             } else {
-                                $error = 'Dieser Link ist nicht g&uuml;tig!';
+                                $error = 'Dieser Passwort-Reset-Link ist ung&uuml;ltig oder abgelaufen.';
                             }
                         } else {
                             $error = 'Dein Passwort ist zu kurz! Die Mindestl&auml;nge muss '.$pw_length.' betragen!';
