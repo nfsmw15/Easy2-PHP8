@@ -230,18 +230,21 @@ if($p == 'rules' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 
 // Sites | Seiten verwalten
 if($p == 'sites'){
-	if($c == 'add_site'){
-		$error = $sites->addSite();
+	if($_SERVER['REQUEST_METHOD'] === 'POST'){
+		if($c == 'add_site'){
+			$error = $sites->addSite();
+		}
+
+		if($c == 'edit' && $f == 'edit'){
+			$error = $sites->editSite();
+		}
+
+		if($c == 'remove' && $f == 'remove'){
+			$error = $sites->removeSite();
+		}
 	}
-	
-	if($c == 'edit' && $f == 'edit'){
-		$error = $sites->editSite();
-	}
-	
-	if($c == 'remove' && $f == 'remove'){
-		$error = $sites->removeSite();
-	}
-	
+
+	// download ist lesend — GET erlaubt
 	if($c == 'download'){
 		$error = $sites->downloadSite();
 	}
@@ -270,15 +273,15 @@ if($p == 'menu' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 	}
 }
 
-if($p == 'additional_fields'){
+if($p == 'additional_fields' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 	if($f == 'new' && $c == 'new'){
 		$error = $additional_fields->addField();
 	}
-	
+
 	if($f == 'edit' && $c == 'edit'){
 		$error = $additional_fields->editField();
 	}
-	
+
 	if($f == 'remove' && $c == 'remove'){
 		$error = $additional_fields->removeField();
 	}
