@@ -162,7 +162,8 @@ class loginsystem extends database
                 [$this->sessionData['uik'], $this->sessionData['sic'], $this->sessionData['ult'], $this->sessionData['ulc']]
             );
             $row = $sql->fetch_assoc();
-            if($row['locked'] === '1')
+            // PDO gibt TINYINT als int zurück (EMULATE_PREPARES=false) — loose == statt ===
+            if(($row['locked'] ?? 0) == 1)
                 return true;
         }
         return false;
@@ -171,7 +172,11 @@ class loginsystem extends database
     public function lock(){
         $csrf = length($_GET['csrf'] ?? '', 64);
         if($csrf === $this->sessionData['csrf']){
-            $url = parse_url($this->sessionData['url_old'], PHP_URL_QUERY);
+            // url_old kann leer sein — dann url als Fallback
+            $raw = !empty($this->sessionData['url_old'])
+                ? $this->sessionData['url_old']
+                : $this->sessionData['url'];
+            $url = parse_url($raw, PHP_URL_QUERY) ?? '';
             $sql = $this->pq(
                 "UPDATE `".Prefix."_sessions` SET `locked` = '1', `locked_dir` = ? WHERE `uik` = ? AND `sic` = ? AND `ult` = ? AND `ulc` = ? AND `logout` = '0' AND `closed` = '0'",
                 [$url, $this->sessionData['uik'], $this->sessionData['sic'], $this->sessionData['ult'], $this->sessionData['ulc']]
@@ -211,11 +216,56 @@ class loginsystem extends database
      * Anmelden/Abmelden | login/logout
      *********************************************/
     
+    // ── Rate-Limit (Login Brute-Force-Schutz) ────────────────────────────────
+    private const RL_MAX_ATTEMPTS  = 5;
+    private const RL_BLOCK_SECONDS = 600; // 10 Minuten
+
+    private function rlFile(string $ip_hash): string
+    {
+        return __DIR__ . '/../../tmp/rl_' . $ip_hash . '.json';
+    }
+
+    private function getRateLimit(string $ip_hash): array
+    {
+        $file = $this->rlFile($ip_hash);
+        if (!is_readable($file)) return ['attempts' => 0, 'blocked_until' => 0];
+        $data = json_decode(@file_get_contents($file), true);
+        return (is_array($data) && isset($data['attempts'], $data['blocked_until']))
+            ? $data
+            : ['attempts' => 0, 'blocked_until' => 0];
+    }
+
+    private function recordFailedLogin(string $ip_hash): void
+    {
+        $data = $this->getRateLimit($ip_hash);
+        $data['attempts']++;
+        if ($data['attempts'] >= self::RL_MAX_ATTEMPTS) {
+            $data['blocked_until'] = time() + self::RL_BLOCK_SECONDS;
+        }
+        $dir = __DIR__ . '/../../tmp';
+        if (!is_dir($dir)) @mkdir($dir, 0750, true);
+        @file_put_contents($this->rlFile($ip_hash), json_encode($data), LOCK_EX);
+    }
+
+    private function clearRateLimit(string $ip_hash): void
+    {
+        $file = $this->rlFile($ip_hash);
+        if (file_exists($file)) @unlink($file);
+    }
+    // ─────────────────────────────────────────────────────────────────────────
+
     public function login(){
         $error = '';
         $email = length($_POST['login-email'] ?? '', 64);
         $passwd = length($_POST['login-passwd'] ?? '', 64);
         $remember = length($_POST['login-remember'] ?? 0, 1);
+
+        $ip_hash = hash('sha256', $_SERVER['REMOTE_ADDR'] ?? '');
+        $rate = $this->getRateLimit($ip_hash);
+        if ($rate['blocked_until'] > time()) {
+            return 'Zu viele Fehlversuche. Bitte warte einige Minuten und versuche es erneut.';
+        }
+
         if(!empty($email) && !empty($passwd)){
             $user = $this->pq(
                 "SELECT `password`, `id`, `uik`, `active` FROM `".Prefix."_user` WHERE (`username` = ? OR `email` = ?) LIMIT 1",
@@ -229,6 +279,7 @@ class loginsystem extends database
                         $this->pq("UPDATE `".Prefix."_user` SET `password` = ? WHERE `id` = ?", [$new_hash, $result['id']]);
                     }
                     if($result['active'] == 1){
+                        $this->clearRateLimit($ip_hash);
                         $lc = getCode(32, 'sessions', 'ulc'); // Generate Logincode
                         $sic = getCode(32, 'sessions', 'sic'); // Generate Sessioncode
                         $lt = time(); // Logintime
@@ -256,9 +307,11 @@ class loginsystem extends database
                         $error = 'Dein Account ist nicht freigegeben! Bitte wende dich an den Webadministrator.';
                     }
                 } else {
-                    $error = 'Du hast ein falsches Passwort oder eine falsche E-Mail Adresse / Benutzernamen eingegeben!';
+                    $this->recordFailedLogin($ip_hash);
+                    $error = 'Du hast eine falsche E-Mail Adresse / Benutzernamen oder ein falsches Passwort eingegeben!';
                 }
             } else {
+                $this->recordFailedLogin($ip_hash);
                 $error = 'Du hast eine falsche E-Mail Adresse / Benutzernamen oder ein falsches Passwort eingegeben!';
             }
         } else {
@@ -340,6 +393,22 @@ class loginsystem extends database
         return $error;
     }
     
+    public function validatePwrToken(string $token): bool
+    {
+        if (empty($token)) return false;
+        $sql = $this->pq(
+            "SELECT `expiry_date` FROM `".Prefix."_codes` WHERE `action` = 'pwr' AND `code` = ? LIMIT 1",
+            [$token]
+        );
+        $row = $sql->fetch_assoc();
+        if (!$row) return false;
+        if ($row['expiry_date'] != '0' && (int)$row['expiry_date'] < time()) {
+            $this->pq("DELETE FROM `".Prefix."_codes` WHERE `code` = ? LIMIT 1", [$token]);
+            return false;
+        }
+        return true;
+    }
+
     public function password_forget_reset(){
         global $a;
         $passwd = length($_POST['pwr_passwd'] ?? NULL, 64);
@@ -354,17 +423,20 @@ class loginsystem extends database
 
                         $pw_length = database::getMainData('password_length');
                         if(strlen($passwd) >= $pw_length){
-                            if(database::getAmount('codes', array('action', 'code'), array('pwr', $a)) == 1){
+                            if(self::validatePwrToken($a)){
                                 $new_passwd = self::pwhash($passwd);
                                 $uik = database::getValue('codes', array('action', 'code'), array('pwr', $a), 'uik');
                                 $sql = $this->pq("UPDATE `".Prefix."_user` SET `password` = ? WHERE `uik` = ?", [$new_passwd, $uik]);
                                 if($sql === true){
+                                    // Token sofort invalidieren
+                                    $this->pq("DELETE FROM `".Prefix."_codes` WHERE `code` = ? LIMIT 1", [$a]);
+                                    // Alle aktiven Sessions des Users schließen
+                                    $this->pq("UPDATE `".Prefix."_sessions` SET `closed` = '1', `logout` = '1' WHERE `uik` = ?", [$uik]);
                                     $data = array();
                                     $data["subject"] = "Dein Passwort zurückgesetzt";
                                     $data["fullname"] = self::getUser('fullname', $uik, 'uik');
                                     $email_address = self::getUser('email', $uik, 'uik');
                                     self::sendMail("password_forget_success.html", self::getUser('id', $uik, 'uik'), $data, $email_address);
-                                    $this->pq("DELETE FROM `".Prefix."_codes` WHERE `code` = ? LIMIT 1", [$a]);
                                     header('Location: '.$_SERVER["SCRIPT_NAME"].'?h=pwr_success');
                                     exit();
                                 } else {
@@ -372,7 +444,7 @@ class loginsystem extends database
                                     errormail('Fehler beim zur&uuml;cksetzen des Passwortes eines Benutzers! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()! MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
                                 }
                             } else {
-                                $error = 'Dieser Link ist nicht g&uuml;tig!';
+                                $error = 'Dieser Passwort-Reset-Link ist ung&uuml;ltig oder abgelaufen.';
                             }
                         } else {
                             $error = 'Dein Passwort ist zu kurz! Die Mindestl&auml;nge muss '.$pw_length.' betragen!';
@@ -602,23 +674,32 @@ class loginsystem extends database
             $sets[] = '23456789';
         if(strpos($available_sets, 's') !== false)
             $sets[] = '!@#$%&*?';
+
+        if(empty($sets))
+            throw new \InvalidArgumentException('generatePassword: keine gültige Zeichengruppe angegeben.');
+
         $all = '';
         $password = '';
-        foreach($sets as $set)
-        {
-            $password .= $set[array_rand(str_split($set))];
+        foreach($sets as $set){
+            $password .= $set[random_int(0, strlen($set) - 1)];
             $all .= $set;
         }
-        $all = str_split($all);
         for($i = 0; $i < $length - count($sets); $i++)
-            $password .= $all[array_rand($all)];
-        $password = str_shuffle($password);
+            $password .= $all[random_int(0, strlen($all) - 1)];
+
+        // Fisher-Yates Shuffle mit random_int()
+        $chars = str_split($password);
+        for($i = count($chars) - 1; $i > 0; $i--){
+            $j = random_int(0, $i);
+            [$chars[$i], $chars[$j]] = [$chars[$j], $chars[$i]];
+        }
+        $password = implode('', $chars);
+
         if(!$add_dashes)
             return $password;
         $dash_len = floor(sqrt($length));
         $dash_str = '';
-        while(strlen($password) > $dash_len)
-        {
+        while(strlen($password) > $dash_len){
             $dash_str .= substr($password, 0, $dash_len) . '-';
             $password = substr($password, $dash_len);
         }
@@ -857,7 +938,7 @@ class loginsystem extends database
                                     }
                                 }
                             } else {
-                                $error = 'Du hast aber einen komsichen Namen?! Du hast bestimmt keine Zahlen oder Zeichen in deinem Namen, korrigiere dies bitte :) oder ist dein Name k&uuml;rzer als 6 Buchstaben? o.O Ich glaube nicht ;)';
+                                $error = 'Der eingegebene Name ist nicht g&uuml;ltig. Bitte verwende mindestens 2 Zeichen und keine Zahlen oder Sonderzeichen.';
                             }
                         } else {
                             $error = 'Dieser Benutzername ist nicht erlaubt!';
@@ -1131,7 +1212,7 @@ class loginsystem extends database
                                                 $error = 'Das Passwort muss mindestens aus 6 Zeichen bestehen!';
                                             }
                                         } else {
-                                            $error = 'Du hast aber einen komsichen Namen?! Du hast bestimmt keine Zahlen oder Zeichen in deinem Namen, korrigiere dies bitte :) oder ist dein Name k&uuml;rzer als 6 Buchstaben? o.O Ich glaube nicht ;)';
+                                            $error = 'Der eingegebene Name ist nicht g&uuml;ltig. Bitte verwende mindestens 2 Zeichen und keine Zahlen oder Sonderzeichen.';
                                         }
                                     } else {
                                         $error = 'Der Benutzername enth&auml;lt ung&uuml;tige Zeichen oder ist zu kurz! <br>Erlaubte Zeichen:<br><ul><li>A-Z</li><li>a-z</li><li>0-9</li><li>mindestens 4 Zeichen</li></ul>';
@@ -1140,16 +1221,16 @@ class loginsystem extends database
                                     $error = 'Der Benutzername ist nicht m&ouml;glich!';
                                 }
                             } else {
-                                $error = 'Dei einegegebe E-Mail Adresse hat ein ung&uuml;ltiges Format! Bitte &uuml;berpr&uuml;fe die E-Mail Adresse!';
+                                $error = 'Die eingegebene E-Mail Adresse hat ein ung&uuml;ltiges Format! Bitte &uuml;berpr&uuml;fe die E-Mail Adresse!';
                             }
                         } else {
                             $error = 'Die Passw&ouml;rter stimmen nicht &uuml;berein! Bitte &uuml;berpr&uuml;fe diese!';
                         }
                     } else {
-                        $error = 'Diese E-Mail Adresse wird bereit von einem anderen Benutzer verwendet! Bitte w&auml;hle eine andere!';
+                        $error = 'Diese E-Mail Adresse wird bereits von einem anderen Benutzer verwendet! Bitte w&auml;hle eine andere!';
                     }
                 } else {
-                    $error = 'Dieser Benutzername wird bereit von einem anderen Benutzer verwendet! Bitte w&auml;hle einen anderen!';
+                    $error = 'Dieser Benutzername wird bereits von einem anderen Benutzer verwendet! Bitte w&auml;hle einen anderen!';
                 }
             } else {
                 $error = 'Du musst alle Felder ausf&uuml;llen um einen Benutzer hinzuf&uuml;gen zu k&ouml;nnen!';
@@ -1285,7 +1366,7 @@ class loginsystem extends database
                                                 }
                                             }
                                         } else {
-                                            $error = 'Der hat aber einen komsichen Namen?! Der hat bestimmt keine Zahlen oder Zeichen in seinem Namen, korrigiere dies bitte :) oder ist der Name k&uuml;rzer als 6 Buchstaben? o.O Ich glaube nicht ;)';
+                                            $error = 'Der eingegebene Name ist nicht g&uuml;ltig. Bitte verwende mindestens 2 Zeichen und keine Zahlen oder Sonderzeichen.';
                                         }
                                     } else {
                                         $error = 'Der Benutzername enth&auml;lt ung&uuml;tige Zeichen oder ist zu kurz! <br>Erlaubte Zeichen:<br><ul><li>A-Z</li><li>a-z</li><li>0-9</li><li>mindestens 4 Zeichen</li></ul>';
@@ -1294,13 +1375,13 @@ class loginsystem extends database
                                     $error = 'Der Benutzername ist nicht m&ouml;glich!';
                                 }
                             } else {
-                                $error = 'Dei einegegebe E-Mail Adresse hat ein ung&uuml;ltiges Format! Bitte &uuml;berpr&uuml;fe die E-Mail Adresse!';
+                                $error = 'Die eingegebene E-Mail Adresse hat ein ung&uuml;ltiges Format! Bitte &uuml;berpr&uuml;fe die E-Mail Adresse!';
                             }
                         } else {
-                            $error = 'Dieser Benutzername wird bereit von einem anderen Benutzer verwendet! Bitte w&auml;hle einen anderen!';
+                            $error = 'Dieser Benutzername wird bereits von einem anderen Benutzer verwendet! Bitte w&auml;hle einen anderen!';
                         }
                     } else {
-                        $error = 'Diese E-Mail Adresse wird bereit von einem anderen Benutzer verwendet! Bitte w&auml;hle eine andere!';
+                        $error = 'Diese E-Mail Adresse wird bereits von einem anderen Benutzer verwendet! Bitte w&auml;hle eine andere!';
                     }
                 } else {
                     $error = 'Es m&uuml;ssen alle Felder ausgef&uuml;llt sein!';
@@ -1341,7 +1422,7 @@ class loginsystem extends database
                         errormail('Fehler beim zur&uuml;cksetzen des Passwortes eines Benutzers! Fehler in class loginsystem => function resetUserPasswd() MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
                     }
                 } else {
-                    $error = 'Du hast ein falsches Passwort einegegeben! Bitte gebe dein Passwort ein um den Vorgang abschlie&szlig;en zu k&ouml;nnen.';
+                    $error = 'Du hast ein falsches Passwort eingegeben! Bitte gebe dein Passwort ein um den Vorgang abschlie&szlig;en zu k&ouml;nnen.';
                 }
             } else {
                 $error = 'Ung&uuml;ltiger Benutzer! Dieser Benutzer konnte nicht gefunden werden!';
@@ -1494,7 +1575,7 @@ class loginsystem extends database
                         $error = 'Das standard Profilbild kann nicht entfernt werden!';
                     }
                 } else {
-                    $error = 'Du hast ein falsches Passwort einegegeben! Bitte gebe dein Passwort ein um den Vorgang abschlie&szlig;en zu k&ouml;nnen.';
+                    $error = 'Du hast ein falsches Passwort eingegeben! Bitte gebe dein Passwort ein um den Vorgang abschlie&szlig;en zu k&ouml;nnen.';
                 }
             } else {
                 $error = 'Der Benutzer konnte nicht gefunden werden!';
@@ -1913,10 +1994,14 @@ class loginsystem extends database
     
     public function removeRank(){
         global $id;
-        $pos = database::getValue('ranks', 'id', $id, 'pos');
         if(self::auditRight('rank_delete')){
             if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
-    
+
+            if(database::getAmount('ranks', 'id', $id) != 1){
+                return 'Dieser Rang existiert nicht!';
+            }
+
+            $pos = database::getValue('ranks', 'id', $id, 'pos');
             $user = database::getAmount('user', 'rank', $id);
             $rank = length($_POST['rank'] ?? '', 16);
             $passwd = length($_POST['passwd'] ?? '', 64);
@@ -1998,6 +2083,7 @@ class loginsystem extends database
         $smtp_user   = length($_POST['smtp_user'] ?? '', 128);
         $smtp_pass   = length($_POST['smtp_pass'] ?? '', 256);
         $smtp_enc    = length($_POST['smtp_encryption'] ?? 'tls', 3);
+        $layout      = in_array($_POST['layout'] ?? 'navbar', ['navbar', 'dashboard']) ? ($_POST['layout'] ?? 'navbar') : 'navbar';
         $osm_url     = html_entity_decode(length($_POST['osm_embed_url'] ?? '', 512, null, 'none'), ENT_QUOTES, 'UTF-8');
         $impress	= length($_POST['impressum_info'] ?? NULL, 4096, null, "sql");
         $imp_cont	= length($_POST['impressum_content'] ?? NULL, 9999999, null, "none");
@@ -2081,10 +2167,13 @@ class loginsystem extends database
                 $update['smtp_host'] = $smtp_host;
                 $update['smtp_port'] = $smtp_port;
                 $update['smtp_user'] = $smtp_user;
-                if (!empty($smtp_pass)) { $update['smtp_pass'] = $smtp_pass; }
+                if (!empty($smtp_pass)) {
+                    $update['smtp_pass'] = $smtp_pass;
+                }
                 $update['smtp_encryption'] = $smtp_enc;
+                $update['layout'] = $layout;
                 $update['osm_embed_url'] = $osm_url;
-
+                
                 foreach($update as $key => $val){
                     $sql = $this->pq("UPDATE `".Prefix."_main` SET `value` = ? WHERE `tag` = ?", [$val, $key]);
                     if($sql === false)

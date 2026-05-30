@@ -96,16 +96,16 @@ class sites extends loginsystem{
 					if(file_exists($this->main_path.$row['dir'].$row['filename'].'.'.$row['type']) && is_readable($this->main_path.$row['dir'].$row['filename'].'.'.$row['type'])){
 						$incl = $row['dir'].$row['filename'].'.'.$row['type'];
 					} else {
-						$is_error_route = true;
 						$incl = $errorsite['dir'].$errorsite['filename'].'.'.$errorsite['type'];
+						$is_error_route = true;
 					}
 				} else {
-					$is_error_route = true;
 					$incl = $errorsite['dir'].$errorsite['filename'].'.'.$errorsite['type'];
+					$is_error_route = true;
 				}
 			} else {
-				$is_error_route = true;
 				$incl = $errorsite['dir'].$errorsite['filename'].'.'.$errorsite['type'];
+				$is_error_route = true;
 			}
 		} else {
 			if(parent::login_session() == true){
@@ -117,16 +117,16 @@ class sites extends loginsystem{
 			}
 		}
 		
+		if ($is_error_route) {
+			http_response_code(404);
+		}
+
 		// Datei einbinden | Including file
 		if(empty($incl)){
 			if($pre == false){
 				echo '++++++++++ Fehler beim einbinden der Datei! ++++++++++';
 			}
 			return false;
-		}
-
-		if ($is_error_route && $pre == false) {
-			http_response_code(404);
 		}
 
 		if(file_exists($this->main_path.$incl) && is_readable($this->main_path.$incl)){
@@ -231,7 +231,7 @@ class sites extends loginsystem{
 										$tpl = file_get_contents('./system/tpl/default_site.tpl');
 										$tpl = str_replace($search, $replace, $tpl);
 										file_put_contents($this->main_path.$dir.$filename.'.'.$type, $tpl);
-									} elseif($_FILES["file"]["error"] == UPLOAD_ERR_OK){
+									} elseif(isset($_FILES["file"]["error"]) && $_FILES["file"]["error"] === UPLOAD_ERR_OK){
 										// Holt sich alle Paramater zur Datei
 										$tmp_name = $_FILES["file"]['tmp_name'];
 										
@@ -322,7 +322,7 @@ class sites extends loginsystem{
 											$tpl = file_get_contents('./system/tpl/default_site.tpl');
 											$tpl = str_replace($search, $replace, $tpl);
 											file_put_contents($this->main_path.$dir.$filename.'.'.$type, $tpl);
-										} elseif($_FILES["file"]["error"] == UPLOAD_ERR_OK){
+										} elseif(isset($_FILES["file"]["error"]) && $_FILES["file"]["error"] === UPLOAD_ERR_OK){
 											// Holt sich alle Paramater zur Datei
 											$tmp_name = $_FILES["file"]['tmp_name'];
 
@@ -429,7 +429,8 @@ class sites extends loginsystem{
                 $filename = self::getSite('complete_filename', $id);
 				$filepath = $this->main_path.self::getSite('dir', $id);
 				$file = $filepath.$filename;
-				$mimetyp = filetype($file);
+				$finfo   = new \finfo(FILEINFO_MIME_TYPE);
+				$mimetyp = $finfo->file($file) ?: 'application/octet-stream';
 				
 				set_time_limit(0);
 				header("Pragma: public");

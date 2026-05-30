@@ -42,6 +42,8 @@ auto_remover(); // Clean MySQL-Tabels
 // cookielogin() läuft zuerst: Session ist vollständig aufgebaut (inkl. Token),
 // bevor der Guard prüft. Öffentliche Aktionen (kein Login nötig) werden
 // explizit whitelisted; alles andere erfordert einen gültigen CSRF-Token.
+// Sonderfall contact/send: wird auch ohne eingeloggte Session geprüft,
+// da csrf_field() den Token für alle Besucher lazy initialisiert.
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $__csrf_public = (
         $c === 'login'
@@ -70,7 +72,7 @@ if($c == 'lock'){
 	$error = $loginsystem->lock();
 }
 
-if($c == 'unlock'){
+if($c == 'unlock' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 	$error = $loginsystem->unlock();
 }
 
@@ -92,6 +94,15 @@ if($p == 'pwv' && $c == 'send'){
 
 if($p == 'pw_reset' && $c == 'reset'){
 	$error = $loginsystem->password_forget_reset();
+}
+
+// Token-Validierung für Formular-Anzeige (GET und fehlgeschlagene POSTs)
+$pwr_token_valid = false;
+if($p == 'pw_reset'){
+	$pwr_token_valid = $loginsystem->validatePwrToken($a);
+	if(!$pwr_token_valid && empty($error)){
+		$error = 'Dieser Passwort-Reset-Link ist ung&uuml;ltig oder abgelaufen.';
+	}
 }
 
 if($p == 'profil' && $c == 'remove_self'){
@@ -160,27 +171,27 @@ if($p == 'settings' && $c == 'mainsave'){
 }
 
 // Ranks | Rangverwaltung
-if($p == 'ranks'){
+if($p == 'ranks' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 	if($c == 'new_rank'){
 		$error = $loginsystem->newRank();
 	}
-	
+
 	if($f == 'edit_rank' && $c == 'edit_rank'){
 		$error = $loginsystem->setRank();
 	}
-	
+
 	if($c == 'default_rank'){
 		$error = $loginsystem->setSpecialRank();
 	}
-	
+
 	if($c == 'move_rank_up'){
 		$error = $loginsystem->moveRank("up");
 	}
-	
+
 	if($c == 'move_rank_down'){
 		$error = $loginsystem->moveRank("down");
 	}
-	
+
 	if($f == 'delete_rank' && $c == 'delete_rank'){
 		$error = $loginsystem->removeRank();
 	}
@@ -205,7 +216,7 @@ if($v == 'remove' && !empty($a)){
 }
 
 // Rules | Regelverwaltung
-if($p == 'rules'){
+if($p == 'rules' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 	if($c == 'new'){
 		$error = $rules->newRule();
 	}
@@ -219,55 +230,58 @@ if($p == 'rules'){
 
 // Sites | Seiten verwalten
 if($p == 'sites'){
-	if($c == 'add_site'){
-		$error = $sites->addSite();
+	if($_SERVER['REQUEST_METHOD'] === 'POST'){
+		if($c == 'add_site'){
+			$error = $sites->addSite();
+		}
+
+		if($c == 'edit' && $f == 'edit'){
+			$error = $sites->editSite();
+		}
+
+		if($c == 'remove' && $f == 'remove'){
+			$error = $sites->removeSite();
+		}
 	}
-	
-	if($c == 'edit' && $f == 'edit'){
-		$error = $sites->editSite();
-	}
-	
-	if($c == 'remove' && $f == 'remove'){
-		$error = $sites->removeSite();
-	}
-	
+
+	// download ist lesend — GET erlaubt
 	if($c == 'download'){
 		$error = $sites->downloadSite();
 	}
 }
 
 // Menu | Menue verwalten
-if($p == 'menu'){
+if($p == 'menu' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 	if($c == 'add_menu'){
 		$error = $menu->addMenu();
 	}
-	
+
 	if($c == 'edit' && $f == 'edit'){
 		$error = $menu->editMenu();
 	}
-	
+
 	if($c == 'remove'){
 		$error = $menu->removeMenu();
 	}
-	
+
 	if($c == 'reset_positions' && $f == 'reset_positions'){
 		$error = $menu->resetMenuPositions();
 	}
-	
+
 	if($c == 'fill_gaps'){
 		$error = $menu->fillGapsMenu();
 	}
 }
 
-if($p == 'additional_fields'){
+if($p == 'additional_fields' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 	if($f == 'new' && $c == 'new'){
 		$error = $additional_fields->addField();
 	}
-	
+
 	if($f == 'edit' && $c == 'edit'){
 		$error = $additional_fields->editField();
 	}
-	
+
 	if($f == 'remove' && $c == 'remove'){
 		$error = $additional_fields->removeField();
 	}

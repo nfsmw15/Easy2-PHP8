@@ -6,6 +6,7 @@
       	<div class="row justify-content-center align-items-center mt-5 row-100">
         	<div class="col-lg-4 mb-5">
                 <form action="?c=unlock" method="POST">
+<?php echo csrf_field(); ?>
                     <div class="form-group text-center text-white">
 						<img src="<?php echo $loginsystem->getUserAvatar(); ?>" class="round_pic">
                         <p class="mt-1"><?php echo $loginsystem->getUser('fullname'); ?></p>
