@@ -1,46 +1,39 @@
 <div class="container">
-    <!-- Page Heading/Breadcrumbs -->
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">
-                <i class="fa fa-list"></i> Men&uuml;
-                <small>verwalten</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="./">&Uuml;bersicht</a>
-                </li>
-                <li>Verwaltung</li>
-                <li class="active">Men&uuml; verwalten</li>
-            </ol>
-        </div>
-    </div>
-    <!-- /.row -->
+    <!-- Page header/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Men&uuml; <small>verwalten</small></h1>
+    <div class="bg-body-tertiary rounded-2 px-3 py-2 mb-3">
+<ol class="breadcrumb mb-0">
+    	<li class="breadcrumb-item"><a href="?">&Uuml;bersicht</a></li>
+  		<li class="breadcrumb-item">Verwaltung</li>
+  		<li class="breadcrumb-item active">Men&uuml; verwalten</li>
+    </ol>
+</div>
 	<?php echo $error; ?>
-	<div class="row">
+	<div class="row mb-4">
 		<div class="col-sm-4">
 			<?php if(empty($f)){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-plus"></i> Men&uuml;punkt hinzuf&uuml;gen</div>
-					<div class="panel-body">
-						<form action="./?p=menu&c=add_menu" method="post">
-<?php echo csrf_field(); ?>
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-plus"></i> Men&uuml;punkt hinzuf&uuml;gen</div>
+					<div class="card-body">
+						<form action="?p=menu&c=add_menu" method="post">
+							<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<label>Name des Links:</label>
-								<input type="text" name="title" placeholder="Name des Links" maxlength="32" value="<?php echo isset($_POST['title']) ? htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8') : ''; ?>" class="form-control">
+								<input type="text" name="title" placeholder="Name des Links" maxlength="32" value="<?php echo htmlspecialchar(isset($_POST['title']) ? $_POST['title'] : ''); ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Icon des Links:</label>
-								<input type="text" name="icon" placeholder="z.B. fa-home" maxlength="32" value="<?php echo isset($_POST['icon']) ? htmlspecialchars($_POST['icon'], ENT_QUOTES, 'UTF-8') : ''; ?>" class="form-control">
+								<input type="text" name="icon" id="icon-add" placeholder="z.B. fa-home" maxlength="32" value="<?php echo htmlspecialchar(isset($_POST['icon']) ? $_POST['icon'] : ''); ?>" class="form-control" autocomplete="off">
+								<div id="icon-preview-add" class="mt-1" style="min-height:1.4rem;font-size:.95rem;"></div>
 							</div>
-							
+
 							<!--
 							<div class="form-group">
 								<label>Men&uuml;:</label>
 								<select name="menu" class="form-control">
-									<?php 
+									<?php
 										$getMenu = isset($_POST['menu']) ? $_POST['menu'] : NULL;
-										echo $menu->getMenuGroupOptions($getMenu); 
+										echo $menu->getMenuGroupOptions($getMenu);
 									?>
 								</select>
 							</div>-->
@@ -66,11 +59,11 @@
 							</div>
 							<div class="form-group">
 								<label>Externe URL: <span class="wp11">(Nur wenn keine Datei ausgew&auml;hlt ist)</span></label>
-								<input type="text" name="url" placeholder="Externe URL" maxlength="1024" value="<?php echo isset($_POST['url']) ? htmlspecialchars($_POST['url'], ENT_QUOTES, 'UTF-8') : ''; ?>" class="form-control">
+								<input type="text" name="url" placeholder="Externe URL" maxlength="1024" value="<?php echo htmlspecialchar(isset($_POST['url']) ? $_POST['url'] : ''); ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Position:</label>
-								<input type="number" name="pos" placeholder="Externe URL" maxlength="3" min="0" max="999" value="<?php echo isset($_POST['pos']) ? htmlspecialchars($_POST['pos'], ENT_QUOTES, 'UTF-8') : '0'; ?>" class="form-control">
+								<input type="number" name="pos" placeholder="Externe URL" maxlength="3" min="0" max="999" value="<?php echo htmlspecialchar(isset($_POST['pos']) ? $_POST['pos'] : '0'); ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Link Target:</label>
@@ -87,33 +80,34 @@
 								</label>
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-block btn-success"><i class="fa fa-plus"></i> Hinzuf&uuml;gen</button>
+								<button type="submit" class="btn w-100 btn-success"><i class="fa fa-plus"></i> Hinzuf&uuml;gen</button>
 							</div>
 						</form>
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'edit' && !empty($id)){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-pencil"></i> Men&uuml;punkt bearbeiten <a class="pull-right btn btn-xs btn-warning" href="./?p=menu">Abbrechen</a></div>
-					<div class="panel-body">
-						<form action="./?p=menu&c=edit&f=edit&id=<?php echo $id; ?>" method="post">
-<?php echo csrf_field(); ?>
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-pencil"></i> Men&uuml;punkt bearbeiten <a class="float-end btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
+					<div class="card-body">
+						<form action="?p=menu&c=edit&f=edit&id=<?php echo $id; ?>" method="post">
+							<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<label>Name des Links:</label>
-								<input type="text" name="title" placeholder="Name des Links" maxlength="32" value="<?php echo isset($_POST['title']) ? htmlspecialchars($_POST['title'], ENT_QUOTES, 'UTF-8') : $menu->getValue('menu', 'id', $id, 'title'); ?>" class="form-control">
+								<input type="text" name="title" placeholder="Name des Links" maxlength="32" value="<?php echo htmlspecialchar(isset($_POST['title']) ? $_POST['title'] : $menu->getValue('menu', 'id', $id, 'title')); ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Icon des Links:</label>
-								<input type="text" name="icon" placeholder="z.B. fa-home" maxlength="32" value="<?php echo isset($_POST['icon']) ? htmlspecialchars($_POST['icon'], ENT_QUOTES, 'UTF-8') : $menu->getValue('menu', 'id', $id, 'icon'); ?>" class="form-control">
+								<input type="text" name="icon" id="icon-edit" placeholder="z.B. fa-home" maxlength="32" value="<?php echo htmlspecialchar(isset($_POST['icon']) ? $_POST['icon'] : $menu->getValue('menu', 'id', $id, 'icon')); ?>" class="form-control" autocomplete="off">
+								<div id="icon-preview-edit" class="mt-1" style="min-height:1.4rem;font-size:.95rem;"></div>
 							</div>
-							
+
 							<!--
 							<div class="form-group">
 								<label>Men&uuml;:</label>
 								<select name="menu" class="form-control">
-									<?php 
+									<?php
 										$getMenu = isset($_POST['menu']) ? $_POST['menu'] : $menu->getValue('menu', 'id', $id, 'menu');
-										echo $menu->getMenuGroupOptions($getMenu); 
+										echo $menu->getMenuGroupOptions($getMenu);
 									?>
 								</select>
 							</div>-->
@@ -139,11 +133,11 @@
 							</div>
 							<div class="form-group">
 								<label>Externe URL: <span class="wp11">(Nur wenn keine Datei ausgew&auml;hlt ist)</span></label>
-								<input type="text" name="url" placeholder="Externe URL" maxlength="1024" value="<?php echo isset($_POST['url']) ? htmlspecialchars($_POST['url'], ENT_QUOTES, 'UTF-8') : $menu->getValue('menu', 'id', $id, 'url'); ?>" class="form-control">
+								<input type="text" name="url" placeholder="Externe URL" maxlength="1024" value="<?php echo htmlspecialchar(isset($_POST['url']) ? $_POST['url'] : $menu->getValue('menu', 'id', $id, 'url')); ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Position:</label>
-								<input type="number" name="pos" maxlength="3" min="0" max="999" value="<?php echo isset($_POST['pos']) ? htmlspecialchars($_POST['pos'], ENT_QUOTES, 'UTF-8') : $menu->getValue('menu', 'id', $id, 'pos'); ?>" class="form-control">
+								<input type="number" name="pos" maxlength="3" min="0" max="999" value="<?php echo htmlspecialchar(isset($_POST['pos']) ? $_POST['pos'] : $menu->getValue('menu', 'id', $id, 'pos')); ?>" class="form-control">
 							</div>
 							<div class="form-group">
 								<label>Link Target:</label>
@@ -160,32 +154,32 @@
 								</label>
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-block btn-success"><i class="fa fa-check"></i> Speichern</button>
+								<button type="submit" class="btn w-100 btn-success"><i class="fa fa-check"></i> Speichern</button>
 							</div>
 						</form>
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'remove' && !empty($id)){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-trash"></i> Men&uuml;punkt l&ouml;schen <a class="pull-right btn btn-xs btn-warning" href="./?p=menu">Abbrechen</a></div>
-					<div class="panel-body">
-						<form action="./?p=menu&c=remove&f=remove&id=<?php echo $id; ?>" method="post">
-<?php echo csrf_field(); ?>
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-trash"></i> Men&uuml;punkt l&ouml;schen <a class="float-end btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
+					<div class="card-body">
+						<form action="?p=menu&c=remove&f=remove&id=<?php echo $id; ?>" method="post">
+							<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<h5>Soll der Men&uuml;punkt "<?php echo $menu->getValue('menu', 'id', $id, 'title'); ?>" wirklich gel&ouml;scht werden?</h5>
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-block btn-danger"><i class="fa fa-trash"></i> Entfernen</button>
+								<button type="submit" class="btn w-100 btn-danger"><i class="fa fa-trash"></i> Entfernen</button>
 							</div>
 						</form>
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'reset_positions'){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-eraser"></i> Men&uuml;positionen resetten <a class="pull-right btn btn-xs btn-warning" href="./?p=menu">Abbrechen</a></div>
-					<div class="panel-body">
-						<form action="./?p=menu&c=reset_positions&f=reset_positions" method="post">
-<?php echo csrf_field(); ?>
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-eraser"></i> Men&uuml;positionen resetten <a class="float-end btn btn-sm btn-warning" href="?p=menu">Abbrechen</a></div>
+					<div class="card-body">
+						<form action="?p=menu&c=reset_positions&f=reset_positions" method="post">
+							<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<h5>Sollen wirklich alle Positionen der Men&uuml;punkte zur&uuml;ckgesetzt werden?</h5>
 								<p>Es wird nach Alphabet sortiert.</p>
@@ -205,15 +199,15 @@
 								<input type="password" name="passwd" maxlength="64" class="form-control" placeholder="Passwort zur Best&auml;tigung">
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-block btn-danger"><i class="fa fa-eraser"></i> Resetten</button>
+								<button type="submit" class="btn w-100 btn-danger"><i class="fa fa-eraser"></i> Resetten</button>
 							</div>
 						</form>
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'view' && !empty($id)){ ?>
-				<div class="panel panel-primary">
-					<div class="panel-heading"><i class="fa fa-info-circle"></i> Men&uuml; Informationen <a class="pull-right btn btn-xs btn-warning" href="./?p=menu">zur&uuml;ck</a></div>
-					<div class="panel-body">
+				<div class="card mb-2">
+					<div class="card-header"><i class="fa fa-info-circle"></i> Men&uuml; Informationen <a class="float-end btn btn-sm btn-warning" href="?p=menu">zur&uuml;ck</a></div>
+					<div class="card-body">
 						<table class="table table-bordered">
 							<tbody>
 								<tr>
@@ -227,9 +221,10 @@
 											$getURL = $menu->getValue('menu', 'id', $id, 'url');
 											$getFILE = $menu->getValue('menu', 'id', $id, 'sid');
 											if(!empty($getURL)){
-												echo '<a href="'.$getURL.'" target="_blank">'.$getURL.'</a>';
+												$_safe_href = preg_match('/^(https?:\/\/|mailto:|\/|\?)/i', $getURL) ? $getURL : '#';
+												echo '<a href="' . e($_safe_href) . '" target="_blank">' . e($getURL) . '</a>';
 											} elseif(!empty($getFILE)) {
-												echo '<a href="./?p='.$menu->getSite('url', $getFILE).'" target="_blank">./?p='.$menu->getSite('url', $getFILE).'</a>';
+												echo '<a href="?p='.$menu->getSite('url', $getFILE).'" target="_blank">?p='.$menu->getSite('url', $getFILE).'</a>';
 											} else {
 												echo 'Pull-Down';
 											}
@@ -286,21 +281,24 @@
 			<?php } ?>
 			
 			<?php if($loginsystem->auditRight('menu_reset_pos') && $loginsystem->auditRight('menu_fill_gaps')){ ?>
-				<div class="panel panel-primary mt15px">
-					<div class="panel-heading"><i class="fa fa-bullseye"></i> Weitere Aktionen</div>
-					<div class="panel-body">
+				<div class="card mt-4">
+					<div class="card-header"><i class="fa fa-bullseye"></i> Weitere Aktionen</div>
+					<div class="card-body">
 						<?php if($loginsystem->auditRight('menu_reset_pos')){ ?>
-							<a class="btn btn-block btn-danger" href="./?p=menu&f=reset_positions"><i class="fa fa-eraser"></i> Positionen zur&uuml;cksetzen</a>
+							<a class="btn w-100 btn-danger" href="?p=menu&f=reset_positions"><i class="fa fa-eraser"></i> Positionen zur&uuml;cksetzen</a>
 						<?php } ?>
 						<?php if($loginsystem->auditRight('menu_fill_gaps')){ ?>
-							<a class="btn btn-block btn-warning" href="./?p=menu&c=fill_gaps"><i class="fa fa-arrows-v"></i> Positionen pr&uuml;fen und beheben</a>
+							<form action="?p=menu&c=fill_gaps" method="post">
+								<?php echo csrf_field(); ?>
+								<button type="submit" class="btn w-100 btn-warning"><i class="fa fa-arrows-v"></i> Positionen pr&uuml;fen und beheben</button>
+							</form>
 						<?php } ?>
 					</div>
 				</div>
 			<?php } ?>
-			<div class="panel panel-primary mt15px">
-				<div class="panel-heading"><i class="fa fa-info-circle"></i> Infos</div>
-				<div class="panel-body">
+			<div class="card mt-4">
+				<div class="card-header"><i class="fa fa-info-circle"></i> Infos</div>
+				<div class="card-body">
 					<strong>Wie erstelle ich was?</strong><br>
 					<p>Um einen Link zu einer Datei zu erstellen, muss mindestens der Name ausgef&uuml;llt und die Datei ausgew&auml;hlt werden.<br>
 					Es kann aber auch ein Link zu einer externen Seite oder einem anderen Verzeichnis erstellt werden.
@@ -348,6 +346,4 @@
 		</div>
 	</div><!-- /.row -->
 </div>
-
-
 

@@ -18,7 +18,7 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *********************************************/
 
-define('EASY_VERSION', '1.1.8');
+define('EASY_VERSION', '1.2.0');
 define('EASY_BRANCH',  'bs3');
 
 // ─── Input-Sanitierung ──────────────────────────────────────────────────────
@@ -61,7 +61,7 @@ function check_email(string $email): bool
 
 function check_filename(string $string): bool
 {
-    return (bool)preg_match('/^[_a-zA-Z0-9()\s\-.]*\.[a-zA-Z]{1,16}$/', $string);
+    return (bool)preg_match('/^[a-zA-Z0-9_-]+\.(php|html|htm|xhtml|tpl|txt|pdf)$/i', $string);
 }
 
 function check_date(string $date, string $format, string $sep): bool
@@ -327,6 +327,13 @@ function auto_remover(): void
         "DELETE FROM `" . Prefix . "_sessions` WHERE (closed = '1' AND last_action < ?) OR (closed = '0' AND logout = '0' AND last_action < ?)"
     );
     $stmt->execute([$time, $time2]);
+
+    $rl_expiry = time() - 3600;
+    foreach (glob(__DIR__ . '/../tmp/rl_*.json') ?: [] as $rl_file) {
+        if (@filemtime($rl_file) < $rl_expiry) {
+            @unlink($rl_file);
+        }
+    }
 }
 
 // ─── Kontaktformular ─────────────────────────────────────────────────────────
@@ -408,12 +415,14 @@ function csrf_field(): string
 function errormail(string $message): void
 {
     global $loginsystem;
-    // Interne Fehlermeldung nur per E-Mail, nie an den Browser
-    $from    = htmlspecialchar((string)$loginsystem->getMainData('site_title'));
-    $subject = 'Fehler auf deiner Homepage';
-    $header  = "From: $from <" . $loginsystem->getMainData('mail_sender') . ">\r\n";
-    $header .= "Mime-Version: 1.0\r\n";
-    $header .= "Content-Type: text/html; charset=utf-8\r\n";
-    $header .= "Content-Transfer-Encoding: quoted-printable\r\n";
-    @mail((string)$loginsystem->getMainData('administrator_mail'), $subject, $message, $header);
+    try {
+        $loginsystem->sendMail(
+            'error.html',
+            null,
+            ['subject' => 'Fehler auf deiner Homepage', 'error_message' => $message],
+            (string)$loginsystem->getMainData('administrator_mail')
+        );
+    } catch (\Throwable $e) {
+        error_log('errormail() fehlgeschlagen: ' . $e->getMessage());
+    }
 }

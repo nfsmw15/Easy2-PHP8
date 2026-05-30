@@ -1,36 +1,27 @@
 <div class="container">
-    <!-- Page Heading/Breadcrumbs -->
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">
-                <i class="fa fa-plus-circle"></i> Zusatzfelder
-            </h1>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="./">&Uuml;bersicht</a>
-                </li>
-                <li>Verwaltung</li>
-                <li>
-                    <a href="./?p=settings">Einstellungen</a>
-                </li>
-                <li class="active">Zusatzfelder verwalten</li>
-            </ol>
-        </div>
-    </div>
-    <!-- /.row -->
+    <!-- Page header/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">Zusatzfelder</h1>
+    <div class="bg-body-tertiary rounded-2 px-3 py-2 mb-3">
+<ol class="breadcrumb mb-0">
+    	<li class="breadcrumb-item"><a href="?">&Uuml;bersicht</a></li>
+  		<li class="breadcrumb-item">Verwaltung</li>
+  		<li class="breadcrumb-item"><a href="?p=settings">Einstellungen</a></li>
+  		<li class="breadcrumb-item active">Zusatzfelder verwalten</li>
+    </ol>
+</div>
     <?php echo $error; ?>
 	<div class="row">
-		<div class="col-sm-12">
-			<div class="clearfix">
+		<div class="col-sm-12 mb-4">
+			<div class="clearfix mb-3">
 				<?php if($f != 'new'){ ?>
-					<a class="btn btn-primary pull-right" href="./?p=additional_fields&f=new"><i class="fa fa-plus"></i> Neues Feld anlegen</a>
+					<a class="btn btn-primary float-end ms-1" href="?p=additional_fields&f=new"><i class="fa fa-plus"></i> Neues Feld anlegen</a>
 					<?php if($f == 'edit' || $f == 'remove' || $f == 'show'){ ?>
-						<a class="btn btn-warning pull-right mr5px" href="./?p=additional_fields"><i class="fa fa-times"></i> Abbrechen</a>
+						<a class="btn btn-warning float-end ms-1" href="?p=additional_fields"><i class="fa fa-times"></i> Abbrechen</a>
 					<?php } ?>
 				<?php } else { ?>
-					<a class="btn btn-warning pull-right" href="./?p=additional_fields"><i class="fa fa-times"></i> Abbrechen</a>
+					<a class="btn btn-warning float-end ms-1" href="?p=additional_fields"><i class="fa fa-times"></i> Abbrechen</a>
 				<?php } ?>
-				<a class="btn btn-info pull-right mr5px" href="./?p=settings"><i class="fa fa-arrow-left"></i> zu den Einstellungen</a>
+				<a class="btn btn-info float-end" href="?p=settings"><i class="fa fa-arrow-left"></i> zu den Einstellungen</a>
 			</div>
 			<?php if(empty($f)){ ?>
 				<div class="table-responsive">
@@ -52,13 +43,13 @@
 					</table>
 				</div><!-- /.table-responsive -->
 			<?php } elseif($f == 'edit' && !empty($id)){ ?>
-				<div class="panel panel-primary mt15px">
-					<div class="panel-heading">
+				<div class="card">
+					<div class="card-header">
 						<i class="fa fa-pencil"></i> Feld bearbeiten
 					</div>
-					<div class="panel-body">
-						<form action="./?p=additional_fields&f=edit&c=edit&id=<?php echo $id; ?>" method="post">
-<?php echo csrf_field(); ?>
+					<div class="card-body">
+						<form action="?p=additional_fields&f=edit&c=edit&id=<?php echo $id; ?>" method="post">
+							<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-6">
@@ -159,9 +150,9 @@
 									<div class="col-sm-6">
 										<label for="regex">Regex-Code</label>
 										<div class="input-group">
-											<span class="input-group-addon">#</span>
+											<span class="input-group-text">#</span>
 											<textarea name="regex" id="regex" class="form-control" placeholder="Regex-Code"><?php echo e(isset($_POST['regex']) ? $_POST['regex'] : $additional_fields->getValue('fields', 'id', $id, 'regex')); ?></textarea>
-											<span class="input-group-addon">#</span>
+											<span class="input-group-text">#</span>
 										</div>
 									</div>
 									<div class="col-sm-6"><br>
@@ -221,22 +212,22 @@
 										</label>
 									</div>
 									<div class="col-sm-6">
-										<button type="submit" class="btn btn-block btn-success mt-3"><i class="fa fa-check"></i> Speichern</button>
+										<button type="submit" class="btn w-100 btn-success mt-3"><i class="fa fa-check"></i> Speichern</button>
 									</div>
 								</div><!-- /.row -->
 							</div><!-- /.form-group -->
-							
+
 						</form>
 					</div>
 				</div>
-			<?php } elseif($f == 'remove' && !empty($id)){ ?>
-				<div class="panel panel-primary mt15px">
-					<div class="panel-heading">
+			<?php } elseif($f == 'remove' && !empty($id) && $additional_fields->getAmount('fields', 'id', $id) == 1){ ?>
+				<div class="card">
+					<div class="card-header">
 						<i class="fa fa-pencil"></i> Feld l&ouml;schen
 					</div>
-					<div class="panel-body">
-						<form action="./?p=additional_fields&f=remove&c=remove&id=<?php echo $id; ?>" method="post">
-<?php echo csrf_field(); ?>
+					<div class="card-body">
+						<form action="?p=additional_fields&f=remove&c=remove&id=<?php echo $id; ?>" method="post">
+							<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-6">
@@ -244,35 +235,35 @@
 										<input type="password" name="password" id="password" class="form-control" placeholder="Passwort" maxlength="64">
 									</div>
 									<div class="col-sm-6">
-										Wenn du das Feld "<?php echo $additional_fields->getValue('fields', 'id', $id, 'name'); ?>" wirklich l&ouml;schen m&ouml;chtest, gebe dein Passwort zur Best&auml;tigung ein.
+										Wenn du das Feld "<?php echo e($additional_fields->getValue('fields', 'id', $id, 'name')); ?>" wirklich l&ouml;schen m&ouml;chtest, gebe dein Passwort zur Best&auml;tigung ein.
 										Mit dem Feld werden alle Feldbezogenen Daten mit enfternt!
 									</div>
 								</div><!-- /.row -->
 							</div><!-- /.form-group -->
-							
+
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-6">
-										<button type="submit" class="btn btn-block btn-danger mt-3"><i class="fa fa-trash"></i> L&ouml;schen</button>
+										<button type="submit" class="btn w-100 btn-danger mt-3"><i class="fa fa-trash"></i> L&ouml;schen</button>
 									</div>
 								</div><!-- /.row -->
 							</div><!-- /.form-group -->
-							
+
 						</form>
 					</div>
 				</div>
 			<?php } elseif($f == 'show' && !empty($id)){ ?>
-				<div class="panel panel-primary mt15px">
-					<div class="panel-heading">
+				<div class="card">
+					<div class="card-header">
 						<i class="fa fa-eye"></i> Feld ansehen
 					</div>
-					<div class="panel-body">
+					<div class="card-body">
 						<div class="table-responsive">
 							<table class="table table-striped">
 								<tbody>
 									<tr>
 										<td class="text-bold">Name:</td>
-										<td><?php echo $additional_fields->getValue('fields', 'id', $id, 'name'); ?></td>
+										<td><?php echo e($additional_fields->getValue('fields', 'id', $id, 'name')); ?></td>
 									</tr>
 									<tr>
 										<td class="text-bold">Titel:</td>
@@ -280,7 +271,7 @@
 									</tr>
 									<tr>
 										<td class="text-bold">Type:</td>
-										<td><?php echo $additional_fields->getValue('fields', 'id', $id, 'type'); ?></td>
+										<td><?php echo e($additional_fields->getValue('fields', 'id', $id, 'type')); ?></td>
 									</tr>
 									<tr>
 										<td class="text-bold">Platzhalter:</td>
@@ -288,27 +279,27 @@
 									</tr>
 									<tr>
 										<td class="text-bold">Maximale L&auml;nge:</td>
-										<td><?php echo $additional_fields->getValue('fields', 'id', $id, 'maxlength'); ?></td>
+										<td><?php echo e($additional_fields->getValue('fields', 'id', $id, 'maxlength')); ?></td>
 									</tr>
 									<tr>
 										<td class="text-bold">Standardwert:</td>
-										<td><?php echo $additional_fields->getValue('fields', 'id', $id, 'value'); ?></td>
+										<td><?php echo e($additional_fields->getValue('fields', 'id', $id, 'value')); ?></td>
 									</tr>
 									<tr>
 										<td class="text-bold">Beschreibung:</td>
-										<td><?php echo nl2br($additional_fields->getValue('fields', 'id', $id, 'description')); ?></td>
+										<td><?php echo nl2br(e($additional_fields->getValue('fields', 'id', $id, 'description'))); ?></td>
 									</tr>
 									<tr>
 										<td class="text-bold">Regex-Code:</td>
-										<td>#<?php echo $additional_fields->getValue('fields', 'id', $id, 'regex'); ?>#<?php echo $additional_fields->getValue('fields', 'id', $id, 'regex_options'); ?></td>
+										<td>#<?php echo e($additional_fields->getValue('fields', 'id', $id, 'regex')); ?>#<?php echo $additional_fields->getValue('fields', 'id', $id, 'regex_options'); ?></td>
 									</tr>
 									<tr>
 										<td class="text-bold">Optionen:</td>
-										<td><?php echo $additional_fields->getValue('fields', 'id', $id, 'options'); ?></td>
+										<td><?php echo e($additional_fields->getValue('fields', 'id', $id, 'options')); ?></td>
 									</tr>
 									<tr>
 										<td class="text-bold">Position:</td>
-										<td><?php echo $additional_fields->getValue('fields', 'id', $id, 'pos'); ?></td>
+										<td><?php echo e($additional_fields->getValue('fields', 'id', $id, 'pos')); ?></td>
 									</tr>
 									<tr>
 										<td class="text-bold">Pflichtfeld:</td>
@@ -324,18 +315,18 @@
 					</div>
 				</div>
 			<?php } elseif($f == 'new'){ ?>
-				<div class="panel panel-primary mt15px">
-					<div class="panel-heading">
+				<div class="card">
+					<div class="card-header">
 						<i class="fa fa-plus"></i> Feld hinzuf&uuml;gen
 					</div>
-					<div class="panel-body">
-						<form action="./?p=additional_fields&f=new&c=new" method="post">
-<?php echo csrf_field(); ?>
+					<div class="card-body">
+						<form action="?p=additional_fields&f=new&c=new" method="post">
+							<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<div class="row">
 									<div class="col-sm-6">
 										<label for="name">Name des Feldes</label>
-										<input type="text" name="name" id="name" class="form-control" placeholder="Name" maxlength="64" value="<?php echo isset($_POST['name']) ? $_POST['name'] : ''; ?>" required>
+										<input type="text" name="name" id="name" class="form-control" placeholder="Name" maxlength="64" value="<?php echo e(isset($_POST['name']) ? $_POST['name'] : ''); ?>" required>
 									</div>
 									<div class="col-sm-6">
 										Hier kann ein Name vergeben werden, welcher im HTML-Code f&uuml;r das Feld verwendet wird.
@@ -348,7 +339,7 @@
 								<div class="row">
 									<div class="col-sm-6">
 										<label for="title">Titel des Feldes</label>
-										<input type="text" name="title" id="title" class="form-control" placeholder="Titel" maxlength="64" value="<?php echo isset($_POST['title']) ? e($_POST['title']) : ''; ?>">
+										<input type="text" name="title" id="title" class="form-control" placeholder="Titel" maxlength="64" value="<?php echo e(isset($_POST['title']) ? $_POST['title'] : ''); ?>">
 									</div>
 									<div class="col-sm-6"><br>
 										Dies ist der Name der dem Benutzer &uuml;ber dem Feld angezeigt wird.
@@ -382,7 +373,7 @@
 								<div class="row">
 									<div class="col-sm-6">
 										<label for="placeholder">Platzhalter</label>
-										<input type="text" name="placeholder" id="placeholder" class="form-control" placeholder="Titel" maxlength="128" value="<?php echo isset($_POST['placeholder']) ? e($_POST['placeholder']) : ''; ?>">
+										<input type="text" name="placeholder" id="placeholder" class="form-control" placeholder="Titel" maxlength="128" value="<?php echo e(isset($_POST['placeholder']) ? $_POST['placeholder'] : ''); ?>">
 									</div>
 									<div class="col-sm-6"><br>
 										Dieser Text erscheint im Feld, wenn es leer ist.
@@ -431,9 +422,9 @@
 									<div class="col-sm-6">
 										<label for="regex">Regex-Code</label>
 										<div class="input-group">
-											<span class="input-group-addon">#</span>
+											<span class="input-group-text">#</span>
 											<textarea name="regex" id="regex" class="form-control" placeholder="Regex-Code"><?php echo e(isset($_POST['regex']) ? $_POST['regex'] : ''); ?></textarea>
-											<span class="input-group-addon">#</span>
+											<span class="input-group-text">#</span>
 										</div>
 									</div>
 									<div class="col-sm-6"><br>
@@ -446,7 +437,7 @@
 								<div class="row">
 									<div class="col-sm-6">
 										<label for="regex_options">Regex Optionen</label>
-										<input type="text" name="regex_options" id="regex_options" class="form-control" placeholder="Regex Optionen" maxlength="8" value="<?php echo isset($_POST['regex_options']) ? e($_POST['regex_options']) : ''; ?>">
+										<input type="text" name="regex_options" id="regex_options" class="form-control" placeholder="Regex Optionen" maxlength="8" value="<?php echo e(isset($_POST['regex_options']) ? $_POST['regex_options'] : ''); ?>">
 									</div>
 									<div class="col-sm-6"><br>
 										Hier kannst du die Regex Optionen eingeben. Wie z.B. i, s, etc.
@@ -493,11 +484,11 @@
 										</label>
 									</div>
 									<div class="col-sm-6">
-										<button type="submit" class="btn btn-block btn-success mt-3"><i class="fa fa-plus"></i> Anlegen</button>
+										<button type="submit" class="btn w-100 btn-success mt-3"><i class="fa fa-plus"></i> Anlegen</button>
 									</div>
 								</div><!-- /.row -->
 							</div><!-- /.form-group -->
-							
+
 						</form>
 					</div>
 				</div>

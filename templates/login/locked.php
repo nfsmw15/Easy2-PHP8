@@ -6,6 +6,7 @@
       	<div class="row mt30px">
         	<div class="col-sm-4 col-sm-offset-4">
                 <form action="./?c=unlock" method="POST">
+<?php echo csrf_field(); ?>
                     <div class="form-group text-center text-white">
 						<img src="<?php echo $loginsystem->getUserAvatar(); ?>" class="round_pic">
                         <p class="locked-name"><?php echo $loginsystem->getUser('fullname'); ?></p>
