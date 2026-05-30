@@ -111,62 +111,65 @@ class updater extends loginsystem
 
     // ─── Backup ───────────────────────────────────────────────────────────────
 
-    public function createBackup(): array
+    public function createBackup(?callable $emit = null): array
     {
-        $log = [];
+        $log    = [];
+        $addLog = function(string $type, string $msg) use (&$log, $emit): void {
+            $log[] = [$type, $msg];
+            if ($emit !== null) ($emit)($type, $msg);
+        };
 
         if (!class_exists('ZipArchive')) {
-            $log[] = ['err', 'PHP ZipArchive-Extension ist nicht verfügbar.'];
+            $addLog('err', 'PHP ZipArchive-Extension ist nicht verfügbar.');
             return ['success' => false, 'error' => $log[0][1], 'log' => $log];
         }
 
         $backupDir = $this->getBackupDir();
-        $log[] = ['ok', 'Backup-Verzeichnis: <code>' . htmlspecialchars($backupDir) . '</code>'];
+        $addLog('ok', 'Backup-Verzeichnis: <code>' . htmlspecialchars($backupDir) . '</code>');
 
         if (!is_dir($backupDir) && !mkdir($backupDir, 0755, true)) {
-            $log[] = ['err', 'Verzeichnis konnte nicht erstellt werden.'];
+            $addLog('err', 'Verzeichnis konnte nicht erstellt werden.');
             return ['success' => false, 'error' => $log[array_key_last($log)][1], 'log' => $log];
         }
-        $log[] = ['ok', 'Verzeichnis bereit.'];
+        $addLog('ok', 'Verzeichnis bereit.');
 
         $htaccess = $backupDir . '.htaccess';
         if (!file_exists($htaccess)) {
             file_put_contents($htaccess, "Order Deny,Allow\nDeny from all\n");
-            $log[] = ['ok', '.htaccess-Schutz gesetzt (Zugriff von außen gesperrt).'];
+            $addLog('ok', '.htaccess-Schutz gesetzt.');
         }
 
         $filename = self::BACKUP_PREFIX . EASY_VERSION . '_' . date('Ymd_His') . '.zip';
         $zipFile  = $backupDir . $filename;
-        $log[] = ['ok', 'Archiv wird erstellt: <code>' . htmlspecialchars($filename) . '</code>'];
+        $addLog('ok', 'Archiv wird erstellt: <code>' . htmlspecialchars($filename) . '</code>');
 
         $zip = new ZipArchive();
         if ($zip->open($zipFile, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
-            $log[] = ['err', 'ZIP-Datei konnte nicht angelegt werden.'];
+            $addLog('err', 'ZIP-Datei konnte nicht angelegt werden.');
             return ['success' => false, 'error' => $log[array_key_last($log)][1], 'log' => $log];
         }
 
         $fileCount = $this->addDirToZip($zip, $this->rootDir);
-        $log[] = ['ok', $fileCount . ' Dateien gesichert.'];
+        $addLog('ok', $fileCount . ' Dateien gepackt.');
 
-        // Datenbank-Dump
-        $log[] = ['ok', 'Datenbank-Dump wird erstellt…'];
+        $addLog('ok', 'Datenbank-Dump wird erstellt…');
         try {
             $sqlDump = $this->createDatabaseDump();
             $zip->addFromString('backup_database.sql', $sqlDump);
-            $log[] = ['ok', 'Datenbank-Dump hinzugefügt (' . self::formatBytes(strlen($sqlDump)) . ').'];
+            $addLog('ok', 'Datenbank-Dump hinzugefügt (' . self::formatBytes(strlen($sqlDump)) . ').');
         } catch (\Throwable $e) {
-            $log[] = ['warn', 'Datenbank-Dump fehlgeschlagen: ' . htmlspecialchars($e->getMessage())];
+            $addLog('warn', 'Datenbank-Dump fehlgeschlagen: ' . htmlspecialchars($e->getMessage()));
         }
 
         $zip->close();
 
         if (!file_exists($zipFile)) {
-            $log[] = ['err', 'Backup-Datei wurde nicht erstellt.'];
+            $addLog('err', 'Backup-Datei wurde nicht erstellt.');
             return ['success' => false, 'error' => $log[array_key_last($log)][1], 'log' => $log];
         }
 
         $size = (int)filesize($zipFile);
-        $log[] = ['ok', 'Fertig: <strong>' . htmlspecialchars($filename) . '</strong> (' . self::formatBytes($size) . ')'];
+        $addLog('ok', 'Fertig: <strong>' . htmlspecialchars($filename) . '</strong> (' . self::formatBytes($size) . ')');
 
         return ['success' => true, 'file' => $zipFile, 'filename' => $filename, 'size' => $size, 'log' => $log];
     }
@@ -197,27 +200,31 @@ class updater extends loginsystem
 
     // ─── Download ─────────────────────────────────────────────────────────────
 
-    public function downloadRelease(string $url): array
+    public function downloadRelease(string $url, ?callable $emit = null): array
     {
-        $log = [];
+        $log    = [];
+        $addLog = function(string $type, string $msg) use (&$log, $emit): void {
+            $log[] = [$type, $msg];
+            if ($emit !== null) ($emit)($type, $msg);
+        };
 
         if (empty($url)) {
-            $log[] = ['err', 'Keine Download-URL vorhanden.'];
+            $addLog('err', 'Keine Download-URL vorhanden.');
             return ['success' => false, 'error' => $log[0][1], 'log' => $log];
         }
 
         if (!str_starts_with($url, 'https://api.github.com/') && !str_starts_with($url, 'https://codeload.github.com/')) {
-            $log[] = ['err', 'Ungültige Download-URL (nur GitHub erlaubt).'];
+            $addLog('err', 'Ungültige Download-URL (nur GitHub erlaubt).');
             return ['success' => false, 'error' => $log[0][1], 'log' => $log];
         }
-        $log[] = ['ok', 'Download-URL validiert.'];
+        $addLog('ok', 'Download-URL validiert.');
 
         $targetFile = $this->tmpDir . self::DOWNLOAD_FILE;
         if (file_exists($targetFile)) {
             unlink($targetFile);
         }
 
-        $log[] = ['ok', 'Verbindung zu GitHub wird hergestellt…'];
+        $addLog('ok', 'Verbindung zu GitHub wird hergestellt…');
 
         $ctx = stream_context_create([
             'http' => [
@@ -232,12 +239,12 @@ class updater extends loginsystem
         $data = @file_get_contents($url, false, $ctx);
 
         if ($data === false || strlen($data) < 100) {
-            $log[] = ['err', 'Download fehlgeschlagen oder Datei zu klein.'];
+            $addLog('err', 'Download fehlgeschlagen oder Datei zu klein.');
             return ['success' => false, 'error' => $log[array_key_last($log)][1], 'log' => $log];
         }
 
         if (substr($data, 0, 2) !== "PK") {
-            $log[] = ['err', 'Heruntergeladene Datei ist kein gültiges ZIP-Archiv.'];
+            $addLog('err', 'Heruntergeladene Datei ist kein gültiges ZIP-Archiv.');
             return ['success' => false, 'error' => $log[array_key_last($log)][1], 'log' => $log];
         }
 
@@ -245,17 +252,21 @@ class updater extends loginsystem
         file_put_contents($targetFile, $data);
         unset($data);
 
-        $log[] = ['ok', 'ZIP-Signatur geprüft (Magic Bytes OK).'];
-        $log[] = ['ok', 'Download abgeschlossen: <strong>' . self::formatBytes($size) . '</strong>'];
+        $addLog('ok', 'ZIP-Signatur geprüft.');
+        $addLog('ok', 'Download abgeschlossen: <strong>' . self::formatBytes($size) . '</strong>');
 
         return ['success' => true, 'file' => $targetFile, 'size' => $size, 'log' => $log];
     }
 
     // ─── Installation ─────────────────────────────────────────────────────────
 
-    public function installUpdate(string $zipFile): array
+    public function installUpdate(string $zipFile, ?callable $emit = null): array
     {
-        $log = [];
+        $log    = [];
+        $addLog = function(string $type, string $msg) use (&$log, $emit): void {
+            $log[] = [$type, $msg];
+            if ($emit !== null) ($emit)($type, $msg);
+        };
 
         if (!class_exists('ZipArchive')) {
             $log[] = ['err', 'PHP ZipArchive-Extension ist nicht verfügbar.'];
@@ -270,7 +281,7 @@ class updater extends loginsystem
 
         $zip = new ZipArchive();
         if ($zip->open($zipFile) !== true) {
-            $log[] = ['err', 'ZIP-Datei konnte nicht geöffnet werden.'];
+            $addLog('err', 'ZIP-Datei konnte nicht geöffnet werden.');
             return ['success' => false, 'error' => $log[array_key_last($log)][1], 'log' => $log];
         }
 
@@ -280,21 +291,22 @@ class updater extends loginsystem
         }
         if (!mkdir($extractDir, 0755, true)) {
             $zip->close();
-            $log[] = ['err', 'Extraktions-Verzeichnis konnte nicht erstellt werden.'];
+            $addLog('err', 'Extraktions-Verzeichnis konnte nicht erstellt werden.');
             return ['success' => false, 'error' => $log[array_key_last($log)][1], 'log' => $log];
         }
 
         $zip->extractTo($extractDir);
         $zip->close();
-        $log[] = ['ok', 'Archiv entpackt.'];
+        $addLog('ok', 'Archiv entpackt.');
 
-        // GitHub-Zipballs haben ein Top-Level-Verzeichnis
         $topDirs   = glob($extractDir . '*', GLOB_ONLYDIR);
         $sourceDir = (count($topDirs) === 1) ? rtrim($topDirs[0], '/') . '/' : $extractDir;
 
-        $filesUpdated  = 0;
-        $filesSkipped  = 0;
-        $errors        = [];
+        $addLog('ok', 'Dateien werden installiert…');
+
+        $filesUpdated = 0;
+        $filesSkipped = 0;
+        $errors       = [];
 
         $iterator = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($sourceDir, RecursiveDirectoryIterator::SKIP_DOTS),
@@ -332,17 +344,17 @@ class updater extends loginsystem
         if (file_exists($zipFile)) {
             unlink($zipFile);
         }
-        $log[] = ['ok', $filesUpdated . ' Dateien aktualisiert.'];
-        if ($filesSkipped > 0) {
-            $log[] = ['warn', $filesSkipped . ' Dateien übersprungen (geschützt oder ausgeschlossen).'];
-        }
 
+        $addLog('ok', $filesUpdated . ' Dateien aktualisiert.');
+        if ($filesSkipped > 0) {
+            $addLog('warn', $filesSkipped . ' Dateien übersprungen (geschützt).');
+        }
         if (!empty($errors)) {
-            $log[] = ['err', count($errors) . ' Dateien konnten nicht kopiert werden: ' . implode(', ', array_slice($errors, 0, 3))];
+            $addLog('err', count($errors) . ' Dateien konnten nicht kopiert werden: ' . implode(', ', array_slice($errors, 0, 3)));
             return ['success' => false, 'error' => $log[array_key_last($log)][1], 'files_updated' => $filesUpdated, 'log' => $log];
         }
 
-        $log[] = ['ok', 'Installation abgeschlossen.'];
+        $addLog('ok', 'Installation abgeschlossen.');
         return ['success' => true, 'files_updated' => $filesUpdated, 'log' => $log];
     }
 
@@ -472,37 +484,40 @@ class updater extends loginsystem
 
     // ─── Rollback aus Backup ─────────────────────────────────────────────────
 
-    public function restoreBackup(string $filename): array
+    public function restoreBackup(string $filename, ?callable $emit = null): array
     {
-        $log = [];
+        $log    = [];
+        $addLog = function(string $type, string $msg) use (&$log, $emit): void {
+            $log[] = [$type, $msg];
+            if ($emit !== null) ($emit)($type, $msg);
+        };
 
         if (!class_exists('ZipArchive')) {
-            $log[] = ['err', 'PHP ZipArchive-Extension ist nicht verfügbar.'];
+            $addLog('err', 'PHP ZipArchive-Extension ist nicht verfügbar.');
             return ['success' => false, 'error' => $log[0][1], 'log' => $log];
         }
 
-        // Dateiname strikt validieren (kein Pfadtrenner)
         if (!preg_match('/^backup_[a-zA-Z0-9._\-]+\.zip$/', $filename)) {
-            $log[] = ['err', 'Ungültiger Backup-Dateiname.'];
+            $addLog('err', 'Ungültiger Backup-Dateiname.');
             return ['success' => false, 'error' => $log[0][1], 'log' => $log];
         }
 
         $backupDir = realpath($this->getBackupDir());
         if ($backupDir === false) {
-            $log[] = ['err', 'Backup-Verzeichnis nicht gefunden.'];
+            $addLog('err', 'Backup-Verzeichnis nicht gefunden.');
             return ['success' => false, 'error' => $log[0][1], 'log' => $log];
         }
         $zipFile = $backupDir . DIRECTORY_SEPARATOR . $filename;
 
         if (!file_exists($zipFile)) {
-            $log[] = ['err', 'Backup-Datei nicht gefunden: <code>' . htmlspecialchars($filename) . '</code>'];
+            $addLog('err', 'Backup-Datei nicht gefunden: <code>' . htmlspecialchars($filename) . '</code>');
             return ['success' => false, 'error' => $log[0][1], 'log' => $log];
         }
-        $log[] = ['ok', 'Backup gefunden: <code>' . htmlspecialchars($filename) . '</code> (' . self::formatBytes((int)filesize($zipFile)) . ')'];
+        $addLog('ok', 'Backup gefunden: <code>' . htmlspecialchars($filename) . '</code> (' . self::formatBytes((int)filesize($zipFile)) . ')');
 
         $zip = new ZipArchive();
         if ($zip->open($zipFile) !== true) {
-            $log[] = ['err', 'ZIP-Datei konnte nicht geöffnet werden.'];
+            $addLog('err', 'ZIP-Datei konnte nicht geöffnet werden.');
             return ['success' => false, 'error' => $log[array_key_last($log)][1], 'log' => $log];
         }
 
@@ -512,18 +527,16 @@ class updater extends loginsystem
         }
         if (!mkdir($extractDir, 0755, true)) {
             $zip->close();
-            $log[] = ['err', 'Extraktions-Verzeichnis konnte nicht erstellt werden.'];
+            $addLog('err', 'Extraktions-Verzeichnis konnte nicht erstellt werden.');
             return ['success' => false, 'error' => $log[array_key_last($log)][1], 'log' => $log];
         }
 
-        // DB-Dump aus ZIP lesen, bevor entpackt wird
         $sqlContent = $zip->getFromName('backup_database.sql');
-
         $zip->extractTo($extractDir);
         $zip->close();
-        $log[] = ['ok', 'Archiv entpackt.'];
+        $addLog('ok', 'Archiv entpackt.');
 
-        // Dateien wiederherstellen
+        $addLog('ok', 'Dateien werden wiederhergestellt…');
         $filesRestored = 0;
         $filesSkipped  = 0;
         $errors        = [];
@@ -536,11 +549,9 @@ class updater extends loginsystem
         foreach ($iterator as $file) {
             $relativePath = substr((string)$file->getRealPath(), strlen($extractDir));
 
-            // DB-Dump-Datei nicht als Projektdatei einspielen
             if ($relativePath === 'backup_database.sql') {
                 continue;
             }
-
             if (in_array($relativePath, $this->installPreserve, true)) {
                 $filesSkipped++;
                 continue;
@@ -561,24 +572,26 @@ class updater extends loginsystem
 
         $this->delTree($extractDir);
 
-        $log[] = ['ok', $filesRestored . ' Dateien wiederhergestellt.'];
+        $addLog('ok', $filesRestored . ' Dateien wiederhergestellt.');
         if ($filesSkipped > 0) {
-            $log[] = ['warn', $filesSkipped . ' Dateien übersprungen (geschützt).'];
+            $addLog('warn', $filesSkipped . ' Dateien übersprungen (geschützt).');
         }
         if (!empty($errors)) {
-            $log[] = ['err', count($errors) . ' Dateien konnten nicht kopiert werden: ' . implode(', ', array_slice($errors, 0, 3))];
+            $addLog('err', count($errors) . ' Dateien konnten nicht kopiert werden: ' . implode(', ', array_slice($errors, 0, 3)));
         }
 
         // Datenbank wiederherstellen
         if ($sqlContent !== false && $sqlContent !== '') {
-            $log[] = ['ok', 'Datenbank-Dump gefunden — wird wiederhergestellt…'];
+            $addLog('ok', 'Datenbank-Dump gefunden — wird wiederhergestellt…');
             $dbResult = $this->restoreDatabaseDump($sqlContent);
-            $log = array_merge($log, $dbResult['log']);
+            foreach ($dbResult['log'] as [$t, $m]) {
+                $addLog($t, $m);
+            }
         } else {
-            $log[] = ['warn', 'Kein Datenbank-Dump im Backup gefunden (älteres Backup ohne DB-Sicherung).'];
+            $addLog('warn', 'Kein Datenbank-Dump im Backup (älteres Backup ohne DB-Sicherung).');
         }
 
-        $log[] = ['ok', 'Wiederherstellung abgeschlossen.'];
+        $addLog('ok', 'Wiederherstellung abgeschlossen.');
 
         if (!empty($errors)) {
             return ['success' => false, 'error' => 'Datei-Fehler beim Einspielen.', 'files_restored' => $filesRestored, 'log' => $log];

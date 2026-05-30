@@ -33,7 +33,6 @@ unset($_SESSION['updater_last_log']);
     </div>
 
     <?php echo $error ?? ''; ?>
-    <?php echo $success ?? ''; ?>
 
     <?php if (!empty($_last_log)): ?>
     <div class="card mb-3">
@@ -104,19 +103,19 @@ unset($_SESSION['updater_last_log']);
                     </form>
 
                     <?php if ($_has_update): ?>
-                    <form method="post" action="?p=update&c=backup">
+                    <form method="post" action="updater_run.php">
                         <?php echo csrf_field(); ?>
+                        <input type="hidden" name="action" value="backup">
                         <input type="hidden" name="target_version" value="<?php echo htmlspecialchars($_avail_ver); ?>">
                         <input type="hidden" name="download_url" value="<?php echo htmlspecialchars($_avail_url); ?>">
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-database"></i> Schritt 1: Backup erstellen &amp; starten
-                            </button>
-                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-database"></i> Schritt 1: Backup erstellen &amp; starten
+                        </button>
                     </form>
                     <?php else: ?>
-                    <form method="post" action="?p=update&c=backup_only">
+                    <form method="post" action="updater_run.php">
                         <?php echo csrf_field(); ?>
+                        <input type="hidden" name="action" value="backup_only">
                         <button type="submit" class="btn btn-outline-primary">
                             <i class="fa fa-database"></i> Nur Backup erstellen
                         </button>
@@ -133,8 +132,9 @@ unset($_SESSION['updater_last_log']);
                     <p><i class="fa fa-file-zip-o"></i> Backup: <code><?php echo htmlspecialchars(basename($_upd_backup)); ?></code></p>
                     <p class="text-muted">Der Wartungsmodus ist aktiviert. Bereit zum Download der Version <strong><?php echo htmlspecialchars($_upd_version); ?></strong>.</p>
                     <div class="d-flex gap-2">
-                        <form method="post" action="?p=update&c=download">
+                        <form method="post" action="updater_run.php">
                             <?php echo csrf_field(); ?>
+                            <input type="hidden" name="action" value="download">
                             <button type="submit" class="btn btn-primary">
                                 <i class="fa fa-download"></i> Schritt 2: Update herunterladen
                             </button>
@@ -156,8 +156,9 @@ unset($_SESSION['updater_last_log']);
                         Die Konfiguration (<code>system/config.inc.php</code>), <code>avatare/</code> und eigene Anpassungen bleiben erhalten.
                     </div>
                     <div class="d-flex gap-2">
-                        <form method="post" action="?p=update&c=install">
+                        <form method="post" action="updater_run.php">
                             <?php echo csrf_field(); ?>
+                            <input type="hidden" name="action" value="install">
                             <button type="submit" class="btn btn-success">
                                 <i class="fa fa-upload"></i> Schritt 3: Update installieren
                             </button>
@@ -207,8 +208,9 @@ unset($_SESSION['updater_last_log']);
                                     <a href="?p=update&c=backup_download&a=<?php echo urlencode($_bk['filename']); ?>" class="btn btn-sm btn-outline-secondary" title="Herunterladen">
                                         <i class="fa fa-download"></i>
                                     </a>
-                                    <form method="post" action="?p=update&c=restore" onsubmit="return confirm('Backup wirklich einspielen?\nDateien UND Datenbank werden auf diesen Stand zurückgesetzt.');" class="d-inline">
+                                    <form method="post" action="updater_run.php" onsubmit="return confirm('Backup wirklich einspielen?\nDateien UND Datenbank werden auf diesen Stand zurückgesetzt.');" class="d-inline">
                                         <?php echo csrf_field(); ?>
+                                        <input type="hidden" name="action" value="restore">
                                         <input type="hidden" name="backup_filename" value="<?php echo htmlspecialchars($_bk['filename']); ?>">
                                         <button type="submit" class="btn btn-sm btn-outline-warning" title="Einspielen"><i class="fa fa-undo"></i> Einspielen</button>
                                     </form>
