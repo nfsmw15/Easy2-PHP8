@@ -1,5 +1,37 @@
 # Changelog — EASY 2.0 PHP8 Fork (Bootstrap 5)
 
+## [1.4.0] — 2026-05-28
+
+### Neu: Auto-Updater
+
+- **Updater-Klasse** (`system/classes/updater.php`): vollständiger In-App-Updater nach Nextcloud-Vorbild
+  - Wartungsmodus (`tmp/maintenance.flag`): Besucher sehen Wartungsseite, Admins haben weiter Zugriff
+  - **Backup**: ZIP-Archiv aller Dateien + MySQL-Dump (`backup_database.sql`) in einem Schritt
+  - **Restore**: Dateien + Datenbank aus Backup wiederherstellen; `config.inc.php` und `*.user.php` werden nie überschrieben
+  - **GitHub-Download**: Release-ZIP von GitHub laden, ZIP-Signatur (Magic Bytes) prüfen
+  - **Installation**: Update entpacken und einspielen, geschützte Dateien und `avatare/`-Verzeichnis werden übersprungen
+  - Backup-Verzeichnis frei konfigurierbar (in DB gespeichert), `.htaccess`-Schutz automatisch gesetzt
+  - Backup-Liste mit Download- und Löschen-Button
+- **Live-Streaming** (`updater_run.php`): eigenständige SSE-Seite (Server-Sent Events)
+  - Terminal-UI lädt sofort, Schritte erscheinen live während der Vorgang läuft
+  - 3-Schritt-Architektur: POST → Redirect → Terminal-UI → SSE-Stream
+  - Session wird vor SSE-Streaming freigegeben (`session_write_close()`) — kein Session-Lock
+  - Fade-in-Animation pro Log-Eintrag
+  - Auto-Redirect zu `?p=update` nach Abschluss
+- **Admin-Seite** (`templates/adm/update.php`): Schritt-für-Schritt-UI
+  - Zeigt aktuellen Stand und verfügbare Version
+  - Ablaufprotokoll der letzten Operation
+  - Notfall-Button zum Deaktivieren des Wartungsmodus
+- **Wartungsseite** (`index.php`): HTTP 503 + `Retry-After`-Header für Besucher während Updates
+- **`?p=update`-Seite selbstregistrierend**: trägt sich beim ersten Aufruf automatisch in die Sites-DB ein
+- `settings.php`: "Update verfügbar"-Badge verlinkt jetzt auf `?p=update` statt auf GitHub
+
+### Sonstiges
+- `loginsystem`: `logout()` mit explizitem `void`-Return-Typ; `lock()`/`unlock()` mit `?string`
+- `run.inc.php`: `@var`-Deklarationen für cross-file Variablen (Intelephense-Kompatibilität)
+
+---
+
 ## [1.3.0] — 2026-05-29
 
 ### Sicherheit

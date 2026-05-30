@@ -18,7 +18,7 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  *********************************************/
 
-define('EASY_VERSION', '1.3.0');
+define('EASY_VERSION', '1.4.0');
 define('EASY_BRANCH',  'bs5');
 
 // ─── Input-Sanitierung ──────────────────────────────────────────────────────
