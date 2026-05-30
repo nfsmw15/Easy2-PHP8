@@ -31,6 +31,7 @@ $_backups     = $updater->listBackups();
     </div>
 
     <?php echo $error ?? ''; ?>
+    <?php echo $success ?? ''; ?>
 
     <?php if ($_maintenance): ?>
     <div class="alert alert-warning d-flex justify-content-between align-items-center">

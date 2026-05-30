@@ -185,42 +185,42 @@ if ($p == 'update' && $updater !== null && $loginsystem->auditRight('mainsave'))
     if ($c == 'save_config' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $__backup_dir = trim($_POST['backup_dir'] ?? '');
         if ($__backup_dir !== '') {
-            // Relativen Pfad zu absolutem umwandeln
             if (!str_starts_with($__backup_dir, '/')) {
                 $__backup_dir = dirname(__DIR__, 2) . '/' . ltrim($__backup_dir, '/');
             }
             $__backup_dir = rtrim($__backup_dir, '/') . '/';
             $updater->setBackupDir($__backup_dir);
-            $success = 'Backup-Pfad gespeichert.';
         }
         unset($__backup_dir);
+        header('Location: ?p=update&h=upd_config_saved');
+        exit();
     }
 
     // Wartungsmodus deaktivieren (Notfall-Button)
     if ($c == 'disable_maintenance' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $updater->disableMaintenance();
-        $success = 'Wartungsmodus deaktiviert.';
+        header('Location: ?p=update&h=upd_maintenance_off');
+        exit();
     }
 
     // Schritt 1: Backup erstellen (+ Wartungsmodus an)
     if ($c == 'backup' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $_upd_target_version = length($_POST['target_version'] ?? '', 32);
-        $_upd_download_url   = trim($_POST['download_url'] ?? '');
+        $__target_ver = length($_POST['target_version'] ?? '', 32);
+        $__dl_url     = trim($_POST['download_url'] ?? '');
 
         $updater->enableMaintenance();
-
         $__result = $updater->createBackup();
         if ($__result['success']) {
             $_SESSION['updater_step']           = 'backup';
             $_SESSION['updater_backup_file']    = $__result['file'];
-            $_SESSION['updater_target_version'] = $_upd_target_version;
-            $_SESSION['updater_download_url']   = $_upd_download_url;
-            $success = 'Backup erstellt: ' . htmlspecialchars(basename($__result['file'])) . ' (' . updater::formatBytes($__result['size']) . ')';
+            $_SESSION['updater_target_version'] = $__target_ver;
+            $_SESSION['updater_download_url']   = $__dl_url;
         } else {
             $updater->disableMaintenance();
             $error = 'Backup fehlgeschlagen: ' . $__result['error'];
         }
-        unset($__result, $_upd_target_version, $_upd_download_url);
+        unset($__result, $__target_ver, $__dl_url);
+        if (empty($error)) { header('Location: ?p=update'); exit(); }
     }
 
     // Nur Backup (ohne Update)
@@ -229,41 +229,44 @@ if ($p == 'update' && $updater !== null && $loginsystem->auditRight('mainsave'))
         if ($__result['success']) {
             $_SESSION['updater_step']        = 'backup_only_done';
             $_SESSION['updater_backup_file'] = $__result['file'];
-            $success = 'Backup erstellt: ' . htmlspecialchars(basename($__result['file'])) . ' (' . updater::formatBytes($__result['size']) . ')';
+            $__name = htmlspecialchars(basename($__result['file']));
+            $__size = updater::formatBytes($__result['size']);
+            unset($__result);
+            header('Location: ?p=update&h=upd_backup_ok&a=' . urlencode("$__name ($__size)"));
+            exit();
         } else {
             $error = 'Backup fehlgeschlagen: ' . $__result['error'];
+            unset($__result);
         }
-        unset($__result);
     }
 
     // Schritt 2: Update herunterladen
     if ($c == 'download' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $_upd_url = $_SESSION['updater_download_url'] ?? '';
-        $__result = $updater->downloadRelease($_upd_url);
+        $__result = $updater->downloadRelease($_SESSION['updater_download_url'] ?? '');
         if ($__result['success']) {
             $_SESSION['updater_step']     = 'download';
             $_SESSION['updater_zip_file'] = $__result['file'];
-            $success = 'Update heruntergeladen (' . updater::formatBytes($__result['size']) . '). Bereit zur Installation.';
         } else {
             $error = 'Download fehlgeschlagen: ' . $__result['error'];
         }
-        unset($__result, $_upd_url);
+        unset($__result);
+        if (empty($error)) { header('Location: ?p=update'); exit(); }
     }
 
     // Schritt 3: Update installieren
     if ($c == 'install' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $_upd_zip = $_SESSION['updater_zip_file'] ?? '';
-        $__result = $updater->installUpdate($_upd_zip);
+        $__result = $updater->installUpdate($_SESSION['updater_zip_file'] ?? '');
         if ($__result['success']) {
             $updater->disableMaintenance();
-            $_upd_version = $_SESSION['updater_target_version'] ?? '';
+            $__n = (int)$__result['files_updated'];
             $_SESSION['updater_step'] = 'done';
-            unset($_SESSION['updater_zip_file'], $_SESSION['updater_download_url'], $_SESSION['updater_backup_file']);
-            $success = 'Update erfolgreich! ' . (int)$__result['files_updated'] . ' Dateien aktualisiert.';
+            unset($_SESSION['updater_zip_file'], $_SESSION['updater_download_url'], $_SESSION['updater_backup_file'], $__result);
+            header('Location: ?p=update&h=upd_install_ok&a=' . $__n);
+            exit();
         } else {
             $error = 'Installation fehlgeschlagen: ' . $__result['error'];
+            unset($__result);
         }
-        unset($__result, $_upd_zip);
     }
 
     // Rollback: Backup wiederherstellen
@@ -274,11 +277,14 @@ if ($p == 'update' && $updater !== null && $loginsystem->auditRight('mainsave'))
             $__result = $updater->restoreBackup($__filename);
             if ($__result['success']) {
                 $updater->disableMaintenance();
-                $success = 'Wiederherstellung erfolgreich! ' . (int)$__result['files_restored'] . ' Dateien wiederhergestellt.';
+                $__n = (int)$__result['files_restored'];
+                unset($__result, $__filename);
+                header('Location: ?p=update&h=upd_restore_ok&a=' . $__n);
+                exit();
             } else {
                 $error = 'Wiederherstellung fehlgeschlagen: ' . $__result['error'];
+                unset($__result);
             }
-            unset($__result);
         }
         unset($__filename);
     }
@@ -626,6 +632,26 @@ if($p == 'additional_fields'){
 	}
 	if($h == 'additional_fields_delete_successfully'){
 		$success = 'Du hast das Zusatzfeld erfolgreich gel&ouml;scht!';
+	}
+}
+
+// Update | Auto-Updater
+
+if($p == 'update'){
+	if($h == 'upd_config_saved'){
+		$success = 'Backup-Pfad erfolgreich gespeichert.';
+	}
+	if($h == 'upd_maintenance_off'){
+		$success = 'Wartungsmodus erfolgreich deaktiviert.';
+	}
+	if($h == 'upd_backup_ok'){
+		$success = 'Backup erfolgreich erstellt: ' . htmlspecialchars($a) . '.';
+	}
+	if($h == 'upd_install_ok'){
+		$success = 'Update erfolgreich installiert! ' . (int)$a . ' Dateien aktualisiert.';
+	}
+	if($h == 'upd_restore_ok'){
+		$success = 'Wiederherstellung erfolgreich! ' . (int)$a . ' Dateien zur&uuml;ckgespielt.';
 	}
 }
 
