@@ -19,6 +19,8 @@ $_has_update  = $_avail_ver !== '' && version_compare($_avail_ver, EASY_VERSION,
 $_maintenance = $updater->isMaintenanceActive();
 $_backupDir   = $updater->getBackupDir();
 $_backups     = $updater->listBackups();
+$_last_log    = $_SESSION['updater_last_log'] ?? [];
+unset($_SESSION['updater_last_log']);
 ?>
 <div class="container">
     <h1 class="mt-4 mb-3">Update</h1>
@@ -32,6 +34,20 @@ $_backups     = $updater->listBackups();
 
     <?php echo $error ?? ''; ?>
     <?php echo $success ?? ''; ?>
+
+    <?php if (!empty($_last_log)): ?>
+    <div class="card mb-3">
+        <div class="card-header"><i class="fa fa-list-ul"></i> Ablaufprotokoll</div>
+        <div class="card-body p-0">
+            <ul class="list-unstyled mb-0 p-3" style="font-size:.9em;font-family:monospace;">
+            <?php foreach ($_last_log as [$_lt, $_lm]): ?>
+                <?php $_licon = match($_lt) { 'ok' => 'fa-check text-success', 'warn' => 'fa-exclamation-triangle text-warning', default => 'fa-times text-danger' }; ?>
+                <li class="mb-1"><i class="fa <?php echo $_licon; ?>"></i> <?php echo $_lm; ?></li>
+            <?php endforeach; ?>
+            </ul>
+        </div>
+    </div>
+    <?php endif; ?>
 
     <?php if ($_maintenance): ?>
     <div class="alert alert-warning d-flex justify-content-between align-items-center">
@@ -186,12 +202,20 @@ $_backups     = $updater->listBackups();
                         <?php foreach ($_backups as $_bk): ?>
                             <li class="list-group-item">
                                 <div class="fw-semibold text-break" style="font-size:.85em;"><?php echo htmlspecialchars($_bk['filename']); ?></div>
-                                <div class="d-flex justify-content-between align-items-center mt-1">
-                                    <small class="text-muted"><?php echo updater::formatBytes($_bk['size']); ?> &mdash; <?php echo date('d.m.Y H:i', $_bk['mtime']); ?></small>
-                                    <form method="post" action="?p=update&c=restore" class="ms-2" onsubmit="return confirm('Backup wirklich einspielen? Die aktuellen Dateien werden überschrieben.');">
+                                <small class="text-muted d-block mb-1"><?php echo updater::formatBytes($_bk['size']); ?> &mdash; <?php echo date('d.m.Y H:i', $_bk['mtime']); ?></small>
+                                <div class="d-flex gap-1 flex-wrap">
+                                    <a href="?p=update&c=backup_download&a=<?php echo urlencode($_bk['filename']); ?>" class="btn btn-sm btn-outline-secondary" title="Herunterladen">
+                                        <i class="fa fa-download"></i>
+                                    </a>
+                                    <form method="post" action="?p=update&c=restore" onsubmit="return confirm('Backup wirklich einspielen?\nDateien UND Datenbank werden auf diesen Stand zurückgesetzt.');" class="d-inline">
                                         <?php echo csrf_field(); ?>
                                         <input type="hidden" name="backup_filename" value="<?php echo htmlspecialchars($_bk['filename']); ?>">
-                                        <button type="submit" class="btn btn-sm btn-outline-warning"><i class="fa fa-undo"></i> Einspielen</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-warning" title="Einspielen"><i class="fa fa-undo"></i> Einspielen</button>
+                                    </form>
+                                    <form method="post" action="?p=update&c=backup_delete" onsubmit="return confirm('Backup wirklich löschen? Dies kann nicht rückgängig gemacht werden.');" class="d-inline">
+                                        <?php echo csrf_field(); ?>
+                                        <input type="hidden" name="backup_filename" value="<?php echo htmlspecialchars($_bk['filename']); ?>">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" title="Löschen"><i class="fa fa-trash"></i></button>
                                     </form>
                                 </div>
                             </li>

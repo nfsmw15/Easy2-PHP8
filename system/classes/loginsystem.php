@@ -320,7 +320,7 @@ class loginsystem extends database
         return $error;
     }
     
-    public function logout($system = false, $header = true){
+    public function logout(bool $system = false, bool $header = true): void {
         $csrf = length($_GET['csrf'] ?? '', 64);
         if($csrf === $this->sessionData['csrf'] || $system){
             $sql = $this->pq("UPDATE `".Prefix."_sessions` SET `closed` = '1', `logout` = '1' WHERE `sic` = ?", [$this->sessionData['sic']]);

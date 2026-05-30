@@ -88,7 +88,7 @@ if($c == 'login'){
 }
 
 if($c == 'logout'){
-	$error = $loginsystem->logout();
+	$loginsystem->logout();
 }
 
 if($p == 'regist' && $c == 'regist'){
@@ -226,13 +226,12 @@ if ($p == 'update' && $updater !== null && $loginsystem->auditRight('mainsave'))
     // Nur Backup (ohne Update)
     if ($c == 'backup_only' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $__result = $updater->createBackup();
+        $_SESSION['updater_last_log'] = $__result['log'] ?? [];
         if ($__result['success']) {
             $_SESSION['updater_step']        = 'backup_only_done';
             $_SESSION['updater_backup_file'] = $__result['file'];
-            $__name = htmlspecialchars(basename($__result['file']));
-            $__size = updater::formatBytes($__result['size']);
             unset($__result);
-            header('Location: ?p=update&h=upd_backup_ok&a=' . urlencode("$__name ($__size)"));
+            header('Location: ?p=update');
             exit();
         } else {
             $error = 'Backup fehlgeschlagen: ' . $__result['error'];
@@ -243,6 +242,7 @@ if ($p == 'update' && $updater !== null && $loginsystem->auditRight('mainsave'))
     // Schritt 2: Update herunterladen
     if ($c == 'download' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $__result = $updater->downloadRelease($_SESSION['updater_download_url'] ?? '');
+        $_SESSION['updater_last_log'] = $__result['log'] ?? [];
         if ($__result['success']) {
             $_SESSION['updater_step']     = 'download';
             $_SESSION['updater_zip_file'] = $__result['file'];
@@ -256,17 +256,38 @@ if ($p == 'update' && $updater !== null && $loginsystem->auditRight('mainsave'))
     // Schritt 3: Update installieren
     if ($c == 'install' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $__result = $updater->installUpdate($_SESSION['updater_zip_file'] ?? '');
+        $_SESSION['updater_last_log'] = $__result['log'] ?? [];
         if ($__result['success']) {
             $updater->disableMaintenance();
-            $__n = (int)$__result['files_updated'];
             $_SESSION['updater_step'] = 'done';
             unset($_SESSION['updater_zip_file'], $_SESSION['updater_download_url'], $_SESSION['updater_backup_file'], $__result);
-            header('Location: ?p=update&h=upd_install_ok&a=' . $__n);
+            header('Location: ?p=update');
             exit();
         } else {
             $error = 'Installation fehlgeschlagen: ' . $__result['error'];
             unset($__result);
         }
+    }
+
+    // Backup herunterladen (GET erlaubt, da kein Schreibzugriff)
+    if ($c == 'backup_download') {
+        $__filename = basename(trim($_GET['a'] ?? ''));
+        if ($__filename !== '' && $updater->sendBackupDownload($__filename)) {
+            exit();
+        }
+        $error = 'Backup-Datei konnte nicht heruntergeladen werden.';
+        unset($__filename);
+    }
+
+    // Backup löschen
+    if ($c == 'backup_delete' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $__filename = basename(trim($_POST['backup_filename'] ?? ''));
+        if ($__filename !== '' && $updater->deleteBackup($__filename)) {
+            header('Location: ?p=update&h=upd_backup_deleted');
+            exit();
+        }
+        $error = 'Backup konnte nicht gelöscht werden.';
+        unset($__filename);
     }
 
     // Rollback: Backup wiederherstellen
@@ -275,13 +296,14 @@ if ($p == 'update' && $updater !== null && $loginsystem->auditRight('mainsave'))
         if ($__filename !== '') {
             $updater->enableMaintenance();
             $__result = $updater->restoreBackup($__filename);
+            $_SESSION['updater_last_log'] = $__result['log'] ?? [];
             if ($__result['success']) {
                 $updater->disableMaintenance();
-                $__n = (int)$__result['files_restored'];
                 unset($__result, $__filename);
-                header('Location: ?p=update&h=upd_restore_ok&a=' . $__n);
+                header('Location: ?p=update&h=upd_restore_ok');
                 exit();
             } else {
+                $updater->disableMaintenance();
                 $error = 'Wiederherstellung fehlgeschlagen: ' . $__result['error'];
                 unset($__result);
             }
@@ -651,7 +673,10 @@ if($p == 'update'){
 		$success = 'Update erfolgreich installiert! ' . (int)$a . ' Dateien aktualisiert.';
 	}
 	if($h == 'upd_restore_ok'){
-		$success = 'Wiederherstellung erfolgreich! ' . (int)$a . ' Dateien zur&uuml;ckgespielt.';
+		$success = 'Wiederherstellung erfolgreich abgeschlossen!';
+	}
+	if($h == 'upd_backup_deleted'){
+		$success = 'Backup erfolgreich gel&ouml;scht.';
 	}
 }
 
