@@ -85,6 +85,31 @@ require_once './system/run.user.php';
 require_once './system/error_handling.php';
 
 $sites->includeSite(true);
+
+// ─── Wartungsmodus ────────────────────────────────────────────────────────────
+// Flag-Datei tmp/maintenance.flag: Besucher sehen Wartungsseite, Admins nicht.
+if (file_exists('./tmp/maintenance.flag') && !$loginsystem->auditRight('mainsave')) {
+    http_response_code(503);
+    header('Retry-After: 300');
+    ?><!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Wartung &mdash; <?php echo htmlspecialchars((string)$loginsystem->getMainData('site_title')); ?></title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="d-flex align-items-center justify-content-center" style="min-height:100vh;background:#f8f9fa;">
+<div class="text-center px-3" style="max-width:520px;">
+    <div style="font-size:4rem;">&#9881;</div>
+    <h1 class="h3 mt-3 mb-2">Wartungsarbeiten</h1>
+    <p class="text-muted">Die Seite wird gerade aktualisiert und ist in K&uuml;rze wieder erreichbar.<br>Bitte versuche es sp&auml;ter noch einmal.</p>
+</div>
+</body>
+</html><?php
+    exit();
+}
+
 $_layout = in_array($loginsystem->getMainData('layout'), ['navbar', 'dashboard'])
     ? $loginsystem->getMainData('layout')
     : 'navbar';

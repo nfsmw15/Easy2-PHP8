@@ -48,7 +48,7 @@
                				$_gh_version_clean = $_gh_version;
                				echo 'Version: <strong>' . htmlspecialchars(EASY_VERSION) . '</strong>';
                				if ($_gh_version_clean !== '' && version_compare($_gh_version_clean, EASY_VERSION, '>')) {
-               					echo ' <a href="https://github.com/nfsmw15/Easy2-PHP8/releases" target="_blank" class="badge bg-warning text-dark ms-1"><i class="fa fa-arrow-up"></i> ' . htmlspecialchars($_gh_version_clean) . ' verfügbar</a>';
+               					echo ' <a href="?p=update" class="badge bg-warning text-dark ms-1"><i class="fa fa-arrow-up"></i> ' . htmlspecialchars($_gh_version_clean) . ' verfügbar</a>';
                				} elseif ($_gh_version !== '') {
                					echo ' <span class="badge bg-success ms-1"><i class="fa fa-check"></i> aktuell</span>';
                				}

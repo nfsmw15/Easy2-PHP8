@@ -37,6 +37,7 @@ if (isset($_GET['captcha']) && $_GET['captcha'] === 'img') {
 
 // Sites, Menu, zusätzliche Felder
 $rules             = (isset($_GET['p']) && $_GET['p'] === 'rules') ? new rules() : null;
+$updater           = (isset($_GET['p']) && $_GET['p'] === 'update') ? new updater() : null;
 $sites             = new sites();
 $menu              = new menu();
 $additional_fields = new additional_fields();

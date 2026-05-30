@@ -170,6 +170,109 @@ if($p == 'settings' && $c == 'mainsave'){
 	$error = $loginsystem->mainSettings();
 }
 
+// Update | Auto-Updater
+
+if ($p == 'update' && $updater !== null && $loginsystem->auditRight('mainsave')) {
+
+    // Backup-Pfad speichern
+    if ($c == 'save_config' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $__backup_dir = trim($_POST['backup_dir'] ?? '');
+        if ($__backup_dir !== '') {
+            // Relativen Pfad zu absolutem umwandeln
+            if (!str_starts_with($__backup_dir, '/')) {
+                $__backup_dir = dirname(__DIR__, 2) . '/' . ltrim($__backup_dir, '/');
+            }
+            $__backup_dir = rtrim($__backup_dir, '/') . '/';
+            $updater->saveConfig(['backup_dir' => $__backup_dir]);
+            $success = 'Backup-Pfad gespeichert.';
+        }
+        unset($__backup_dir);
+    }
+
+    // Wartungsmodus deaktivieren (Notfall-Button)
+    if ($c == 'disable_maintenance' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $updater->disableMaintenance();
+        $success = 'Wartungsmodus deaktiviert.';
+    }
+
+    // Schritt 1: Backup erstellen (+ Wartungsmodus an)
+    if ($c == 'backup' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $_upd_target_version = length($_POST['target_version'] ?? '', 32);
+        $_upd_download_url   = trim($_POST['download_url'] ?? '');
+
+        $updater->enableMaintenance();
+
+        $__result = $updater->createBackup();
+        if ($__result['success']) {
+            $_SESSION['updater_step']           = 'backup';
+            $_SESSION['updater_backup_file']    = $__result['file'];
+            $_SESSION['updater_target_version'] = $_upd_target_version;
+            $_SESSION['updater_download_url']   = $_upd_download_url;
+            $success = 'Backup erstellt: ' . htmlspecialchars(basename($__result['file'])) . ' (' . updater::formatBytes($__result['size']) . ')';
+        } else {
+            $updater->disableMaintenance();
+            $error = 'Backup fehlgeschlagen: ' . $__result['error'];
+        }
+        unset($__result, $_upd_target_version, $_upd_download_url);
+    }
+
+    // Nur Backup (ohne Update)
+    if ($c == 'backup_only' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $__result = $updater->createBackup();
+        if ($__result['success']) {
+            $_SESSION['updater_step']        = 'backup_only_done';
+            $_SESSION['updater_backup_file'] = $__result['file'];
+            $success = 'Backup erstellt: ' . htmlspecialchars(basename($__result['file'])) . ' (' . updater::formatBytes($__result['size']) . ')';
+        } else {
+            $error = 'Backup fehlgeschlagen: ' . $__result['error'];
+        }
+        unset($__result);
+    }
+
+    // Schritt 2: Update herunterladen
+    if ($c == 'download' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $_upd_url = $_SESSION['updater_download_url'] ?? '';
+        $__result = $updater->downloadRelease($_upd_url);
+        if ($__result['success']) {
+            $_SESSION['updater_step']     = 'download';
+            $_SESSION['updater_zip_file'] = $__result['file'];
+            $success = 'Update heruntergeladen (' . updater::formatBytes($__result['size']) . '). Bereit zur Installation.';
+        } else {
+            $error = 'Download fehlgeschlagen: ' . $__result['error'];
+        }
+        unset($__result, $_upd_url);
+    }
+
+    // Schritt 3: Update installieren
+    if ($c == 'install' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $_upd_zip = $_SESSION['updater_zip_file'] ?? '';
+        $__result = $updater->installUpdate($_upd_zip);
+        if ($__result['success']) {
+            $updater->disableMaintenance();
+            $_upd_version = $_SESSION['updater_target_version'] ?? '';
+            $_SESSION['updater_step'] = 'done';
+            unset($_SESSION['updater_zip_file'], $_SESSION['updater_download_url'], $_SESSION['updater_backup_file']);
+            $success = 'Update erfolgreich! ' . (int)$__result['files_updated'] . ' Dateien aktualisiert.';
+        } else {
+            $error = 'Installation fehlgeschlagen: ' . $__result['error'];
+        }
+        unset($__result, $_upd_zip);
+    }
+
+    // Reset: Update-Session löschen
+    if ($c == 'reset') {
+        unset(
+            $_SESSION['updater_step'],
+            $_SESSION['updater_backup_file'],
+            $_SESSION['updater_zip_file'],
+            $_SESSION['updater_target_version'],
+            $_SESSION['updater_download_url']
+        );
+        header('Location: ?p=update');
+        exit();
+    }
+}
+
 // Ranks | Rangverwaltung
 if($p == 'ranks' && $_SERVER['REQUEST_METHOD'] === 'POST'){
 	if($c == 'new_rank'){
