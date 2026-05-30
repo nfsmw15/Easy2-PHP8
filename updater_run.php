@@ -29,7 +29,7 @@ require_once './system/classes.run.php';
 
 // ─── Sicherheits-Checks ───────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: ?p=update'); exit();
+    header('Location: index.php?p=update'); exit();
 }
 
 $__csrf  = $_POST['csrf'] ?? '';
@@ -125,9 +125,9 @@ function done(ok, msg) {
     var cls = ok ? 'alert-success' : 'alert-danger';
     document.getElementById('result-area').innerHTML =
         '<div class="alert ' + cls + '">' + msg + '</div>' +
-        '<a href="?p=update" class="btn btn-primary">Zurück zur Update-Seite</a>';
+        '<a href="index.php?p=update" class="btn btn-primary">Zurück zur Update-Seite</a>';
     document.getElementById('result-area').style.display = '';
-    if (ok) setTimeout(function(){ window.location.href = '?p=update'; }, 4000);
+    if (ok) setTimeout(function(){ window.location.href = 'index.php?p=update'; }, 4000);
 }
 </script>
 <?php
