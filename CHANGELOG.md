@@ -5,6 +5,28 @@ PHP 8 Port von [nfsmw15](https://github.com/nfsmw15)
 
 ---
 
+## [1.2.0] – 2026-05-30 – Sicherheits-Patches
+
+### Sicherheit
+- **`check_filename()` gehärtet**: Dotfiles, mehrfache Extensions, Pfad-Bestandteile blockiert
+- **Kryptografisch sichere Zufallsfunktionen**: `generatePassword()` und Captcha nutzen `random_int()` + Fisher-Yates
+- **Captcha**: Klartext in Session, `hash_equals()`, einmalige Verwendung
+- **Sites / Additional Fields**: zustandsändernde Aktionen nur noch per POST+CSRF
+- **`pw_reset` Token-Verbrauch**: Token nach Reset sofort gelöscht; Formular nur bei gültigem Token; Sessions nach Reset geschlossen
+- **Lock/Unlock**: `is_locked()` PDO-Typenvergleich fix; `csrf_field()` im Unlock-Formular; `unlock` POST-only
+- **`errormail()` nutzt PHPMailer** statt direktem `@mail()`
+
+### Behoben
+- `site_add_successfully_upl_error` ohne Upload (PHP null == 0 Typenvergleich)
+- `downloadSite()` MIME-Type: `filetype()` → `finfo(FILEINFO_MIME_TYPE)`
+- `pw_reset` für Gäste: Site-ID 20 in Gast-Rang ergänzt
+- Captcha `random_int()` ValueError bei min > max
+
+### Abhängigkeiten
+- **PHPMailer 6.9.3 → 7.1.1**
+
+---
+
 ## [1.1.8] – 2026-05-27 – Sicherheits-Patches
 
 ### Sicherheit

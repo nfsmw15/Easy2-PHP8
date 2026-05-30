@@ -1,12 +1,13 @@
-<div class="content-wrapper">
 <div class="container">
     <!-- Page header/Breadcrumbs -->
     <h1 class="mt-4 mb-3">Seiten <small>verwalten</small></h1>
-    <ol class="breadcrumb">
+    <div class="bg-body-tertiary rounded-2 px-3 py-2 mb-3">
+<ol class="breadcrumb mb-0">
     	<li class="breadcrumb-item"><a href="?">&Uuml;bersicht</a></li>
   		<li class="breadcrumb-item">Verwaltung</li>
   		<li class="breadcrumb-item active">Seiten verwalten</li>
     </ol>
+</div>
 	<?php echo $error; ?>
 	<div class="row mb-4">
 		<div class="col-sm-4">
@@ -15,7 +16,7 @@
 					<div class="card-header"><i class="fa fa-plus"></i> Seite hinzuf&uuml;gen</div>
 					<div class="card-body">
 						<form action="?p=sites&c=add_site" method="post" enctype="multipart/form-data">
-<?php echo csrf_field(); ?>
+							<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<label>Seitentitel:</label>
 								<input type="text" name="title" placeholder="Seitentitel" maxlength="32" value="<?php echo htmlspecialchar(isset($_POST['title']) ? $_POST['title'] : ''); ?>" class="form-control">
@@ -55,17 +56,17 @@
 								</label>
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-block btn-success"><i class="fa fa-plus"></i> Hinzuf&uuml;gen</button>
+								<button type="submit" class="btn w-100 btn-success"><i class="fa fa-plus"></i> Hinzuf&uuml;gen</button>
 							</div>
 						</form>
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'edit' && !empty($id)){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-pencil"></i> Seite bearbeiten <a class="float-right btn btn-sm btn-warning" href="?p=sites">Abbrechen</a></div>
+					<div class="card-header"><i class="fa fa-pencil"></i> Seite bearbeiten <a class="float-end btn btn-sm btn-warning" href="?p=sites">Abbrechen</a></div>
 					<div class="card-body">
 						<form action="?p=sites&c=edit&f=edit&id=<?php echo $id; ?>" method="post" enctype="multipart/form-data">
-<?php echo csrf_field(); ?>
+							<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<label>Seitentitel:</label>
 								<input type="text" name="title" placeholder="Seitentitel" maxlength="32" value="<?php echo htmlspecialchar(isset($_POST['title']) ? $_POST['title'] : $sites->getValue('sites', 'id', $id, 'title')); ?>" class="form-control">
@@ -105,17 +106,17 @@
 								</label>
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-block btn-success"><i class="fa fa-check"></i> Speichern</button>
+								<button type="submit" class="btn w-100 btn-success"><i class="fa fa-check"></i> Speichern</button>
 							</div>
 						</form>
 					</div>
 				</div><!-- /.card -->
-			<?php } elseif($f == 'remove' && !empty($id)){ ?>
+			<?php } elseif($f == 'remove' && !empty($id) && $sites->getAmount('sites', 'id', $id) == 1){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-pencil"></i> Seite entfernen <a class="float-right btn btn-sm btn-warning" href="?p=sites">Abbrechen</a></div>
+					<div class="card-header"><i class="fa fa-pencil"></i> Seite entfernen <a class="float-end btn btn-sm btn-warning" href="?p=sites">Abbrechen</a></div>
 					<div class="card-body">
 						<form action="?p=sites&c=remove&f=remove&id=<?php echo $id; ?>" method="post">
-<?php echo csrf_field(); ?>
+							<?php echo csrf_field(); ?>
 							<div class="form-group">
 								<h5>Soll die Seite "<?php echo $sites->getSite('complete_filename', $id);?>" wirklich entfernt werden?</h5>
 							</div>
@@ -128,14 +129,14 @@
 								</label>
 							</div>
 							<div class="form-group">
-								<button type="submit" class="btn btn-block btn-danger"><i class="fa fa-trash"></i> Entfernen</button>
+								<button type="submit" class="btn w-100 btn-danger"><i class="fa fa-trash"></i> Entfernen</button>
 							</div>
 						</form>
 					</div>
 				</div><!-- /.card -->
 			<?php } elseif($f == 'check' && !empty($id)){ ?>
 				<div class="card mb-2">
-					<div class="card-header"><i class="fa fa-info-circle"></i> Seiten Informationen <a class="float-right btn btn-sm btn-warning" href="?p=sites">zur&uuml;ck</a></div>
+					<div class="card-header"><i class="fa fa-info-circle"></i> Seiten Informationen <a class="float-end btn btn-sm btn-warning" href="?p=sites">zur&uuml;ck</a></div>
 					<div class="card-body">
 						<?php 
 							$filename = $sites->getSite('complete_filename', $id);
@@ -238,4 +239,6 @@
 		</div>
 	</div><!-- /.row -->
 </div>
-</div><!-- /.content-wrapper -->
+
+
+

@@ -27,11 +27,21 @@ class menu extends sites{
 
 	private function sanitize_menu_url(string $url): string|false
 	{
-		if (empty($url)) { return ''; }
-		if (preg_match('/^www\./i', $url)) { $url = 'http://' . $url; }
+		if (empty($url)) {
+			return '';
+		}
+		if (preg_match('/^www\./i', $url)) {
+			$url = 'http://' . $url;
+		}
+		// parse_url correctly handles ./?c=... as a relative URL (scheme = null)
+		// whereas explode(':', ...) incorrectly treated ./?c=... as an unknown scheme
 		$scheme = parse_url($url, PHP_URL_SCHEME);
-		if ($scheme === false) { return false; }
+		if ($scheme === false) {
+			return false; // completely unparseable URL
+		}
 		if ($scheme === null) {
+			// Relative URL — no scheme. Extra guard: a colon before the first /
+			// or ? would indicate a hidden scheme (e.g. "evil:attack").
 			$colon = strpos($url, ':');
 			if ($colon !== false) {
 				$slash = strpos($url, '/');
@@ -40,11 +50,16 @@ class menu extends sites{
 					$slash !== false ? $slash : PHP_INT_MAX,
 					$query !== false ? $query : PHP_INT_MAX
 				);
-				if ($colon < $sep) { return false; }
+				if ($colon < $sep) {
+					return false;
+				}
 			}
 			return $url;
 		}
-		if (in_array(strtolower($scheme), ['http', 'https', 'mailto'], true)) { return $url; }
+		// Explicit scheme — only allow known-safe ones
+		if (in_array(strtolower($scheme), ['http', 'https', 'mailto'], true)) {
+			return $url;
+		}
 		return false;
 	}
 
@@ -91,11 +106,11 @@ class menu extends sites{
 				$icon = $icon ?? '';
 				$active = $active ?? '';
 
-				$safe_url = self::sanitize_menu_url($url);
 				$tpl = str_replace('[title]', $title, $tpl);
 				$tpl = str_replace('[icon]', $icon, $tpl);
 				$tpl = str_replace('[id]', $row['id'], $tpl);
 				$tpl = str_replace('[icon_raw]', $icon_raw, $tpl);
+				$safe_url = self::sanitize_menu_url($url);
 				$tpl = str_replace('[url]', e($safe_url !== false ? $safe_url : '#'), $tpl);
 				$tpl = str_replace('[target]', $target, $tpl);
 				$tpl = str_replace('[active]', $active, $tpl);
@@ -155,11 +170,11 @@ class menu extends sites{
 				if($row['sid'] == '13' && parent::getMainData('pwv_active') == 0) $active = NULL; // Passwort vergessen deaktiviert
 				$active = $active ?? '';
 
-				$safe_url = self::sanitize_menu_url($url);
 				$tpl = str_replace('[title]', $title, $tpl);
 				$tpl = str_replace('[id]', $row['id'], $tpl);
 				$tpl = str_replace('[icon]', $icon, $tpl);
 				$tpl = str_replace('[icon_raw]', $icon_raw, $tpl);
+				$safe_url = self::sanitize_menu_url($url);
 				$tpl = str_replace('[url]', e($safe_url !== false ? $safe_url : '#'), $tpl);
 				$tpl = str_replace('[target]', $row['target'] ?? '', $tpl);
 				$tpl = str_replace('[active]', $active, $tpl);
@@ -206,11 +221,11 @@ class menu extends sites{
 				if($row['sid'] == '13' && parent::getMainData('pwv_active') == 0) $active = NULL; // Passwort vergessen deaktiviert
 				$active = $active ?? '';
 
-				$safe_url = self::sanitize_menu_url($url);
 				$tpl = str_replace('[title]', $title, $tpl);
 				$tpl = str_replace('[icon]', $icon, $tpl);
 				$tpl = str_replace('[id]', $row['id'], $tpl);
 				$tpl = str_replace('[icon_raw]', $icon_raw, $tpl);
+				$safe_url = self::sanitize_menu_url($url);
 				$tpl = str_replace('[url]', e($safe_url !== false ? $safe_url : '#'), $tpl);
 				$tpl = str_replace('[target]', $target, $tpl);
 				$tpl = str_replace('[active]', $active, $tpl);
@@ -276,7 +291,8 @@ class menu extends sites{
 			} elseif(!empty($row['sid'])) {
 				$content = '<a target="'.$row['target'].'" href="?p='.parent::getSite('url', $row['sid']).'">?p='.parent::getSite('url', $row['sid']).'</a>';
 			} else {
-				$content = '<a target="'.$row['target'].'" href="'.$row['url'].'">'.$row['url'].'</a>';
+				$safe_url = self::sanitize_menu_url($row['url'] ?? '');
+				$content = '<a target="' . e($row['target']) . '" href="' . e($safe_url !== false ? $safe_url : '#') . '">' . e($row['url']) . '</a>';
 			}
 			
 			
@@ -307,7 +323,8 @@ class menu extends sites{
 			} elseif(!empty($row['sid'])) {
 				$content = '<a target="'.$row['target'].'" href="?p='.parent::getSite('url', $row['sid']).'">?p='.parent::getSite('url', $row['sid']).'</a>';
 			} else {
-				$content = '<a target="'.$row['target'].'" href="'.$row['url'].'">'.$row['url'].'</a>';
+				$safe_url = self::sanitize_menu_url($row['url'] ?? '');
+				$content = '<a target="' . e($row['target']) . '" href="' . e($safe_url !== false ? $safe_url : '#') . '">' . e($row['url']) . '</a>';
 			}
 			
 			
@@ -343,7 +360,8 @@ class menu extends sites{
 			} elseif(!empty($row['sid'])) {
 				$content = '<a target="'.$row['target'].'" href="?p='.parent::getSite('url', $row['sid']).'">?p='.parent::getSite('url', $row['sid']).'</a>';
 			} else {
-				$content = '<a target="'.$row['target'].'" href="'.$row['url'].'">'.$row['url'].'</a>';
+				$safe_url = self::sanitize_menu_url($row['url'] ?? '');
+				$content = '<a target="' . e($row['target']) . '" href="' . e($safe_url !== false ? $safe_url : '#') . '">' . e($row['url']) . '</a>';
 			}
 			
 			$btn[] = '<a href="?p=menu&f=view&id='.$row['id'].'"><i class="fa fa-eye"></i></a>';
@@ -414,28 +432,36 @@ class menu extends sites{
 		$menu   = '1';
 		
 		if(parent::auditRight('menu_add')){
-			if((!empty($icon) || !empty($title)) && $pos != ''){
+			if (!empty($icon) && !preg_match('/^[a-zA-Z0-9_\- ]+$/', $icon)){
+				$error = 'Das Icon enth&auml;lt ung&uuml;ltige Zeichen.';
+			} elseif((!empty($icon) || !empty($title)) && $pos != ''){
 				if((!empty($url) XOR !empty($file) && !empty($target)) || empty($url.$file)){
                     if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
                     
                     if(empty($file) || parent::getAmount('sites', 'id', $file) == 1){
-						// passe Position an
-						if(self::autoPosition($pos, $under, 0)){
-							if(!empty($url) && preg_match('/^www.(.*)/si', $url))
-								$url = 'http://'.$url;
-							$sql = $this->pq(
-								"INSERT INTO `".Prefix."_menu` (`title`, `icon`, `under`, `sid`, `url`, `target`, `link_type`, `menu`, `pos`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-								[$title, $icon, $under, $file, $url, $target, $type, $menu, $pos]
-							);
-							if($sql !== false){
-								header('Location: ?p=menu&h=menu_add_successfully');
-								exit();
-							} else {
-								$error = 'Fehler beim erstellen des Men&uuml;punktes! Bitte versuche es sp&auml;ter erneut.';
-								errormail('Fehler beim erstellen eines Men&uuml;punktes! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()! MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
+						if (!empty($url)) {
+							$url = self::sanitize_menu_url($url);
+							if ($url === false) {
+								$error = 'Die externe URL ist nicht erlaubt. Bitte verwende http:// oder https://.';
 							}
-						} else {
-							$error = 'Fehler beim anpassen der Positionen! Bitte versuche es sp&auml;ter erneut.';
+						}
+						if (empty($error)) {
+							// passe Position an
+							if(self::autoPosition($pos, $under, 0)){
+								$sql = $this->pq(
+									"INSERT INTO `".Prefix."_menu` (`title`, `icon`, `under`, `sid`, `url`, `target`, `link_type`, `menu`, `pos`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+									[$title, $icon, $under, $file, $url, $target, $type, $menu, $pos]
+								);
+								if($sql !== false){
+									header('Location: ?p=menu&h=menu_add_successfully');
+									exit();
+								} else {
+									$error = 'Fehler beim erstellen des Men&uuml;punktes! Bitte versuche es sp&auml;ter erneut.';
+									errormail('Fehler beim erstellen eines Men&uuml;punktes! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()! MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
+								}
+							} else {
+								$error = 'Fehler beim anpassen der Positionen! Bitte versuche es sp&auml;ter erneut.';
+							}
 						}
 					} else {
 						$error = 'Die Datei existiert nicht!';
@@ -468,37 +494,45 @@ class menu extends sites{
 		$menu   = '1';
 		
 		if(parent::auditRight('menu_edit')){
-			if((!empty($icon) || !empty($title)) && $pos != ''){
+			if (!empty($icon) && !preg_match('/^[a-zA-Z0-9_\- ]+$/', $icon)){
+				$error = 'Das Icon enth&auml;lt ung&uuml;ltige Zeichen.';
+			} elseif((!empty($icon) || !empty($title)) && $pos != ''){
 				if((!empty($url) XOR !empty($file) && !empty($target)) || empty($url.$file)){
 					if(empty($file) || parent::getAmount('sites', 'id', $file) == 1){
 						if(parent::getAmount('menu', 'id', $id) == 1){
                             if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
                             
                             if($under != $id){
-								// passe Position an
-								$autoPos = true;
-								$old_pos = parent::getValue('menu', 'id', $id, 'pos');
-								if($old_pos > $pos){
-									$autoPos = self::autoPosition($pos, $under, 0, $old_pos);
-								} elseif($old_pos < $pos){
-									$autoPos = self::autoPosition($old_pos, $under, 1, $pos);
-								}
-								if($autoPos == true){
-									if(!empty($url) && preg_match('/^www.(.*)/si', $url))
-										$url = 'http://'.$url;
-									$sql = $this->pq(
-										"UPDATE `".Prefix."_menu` SET `title` = ?, `icon` = ?, `under` = ?, `sid` = ?, `url` = ?, `target` = ?, `link_type` = ?, `menu` = ?, `pos` = ? WHERE `id` = ?",
-										[$title, $icon, $under, $file, $url, $target, $type, $menu, $pos, $id]
-									);
-									if($sql !== false){
-										header('Location: ?p=menu&h=menu_edit_successfully');
-										exit();
-									} else {
-										$error = 'Fehler beim bearbeiten des Men&uuml;punktes! Bitte versuche es sp&auml;ter erneut.';
-										errormail('Fehler beim bearbeiten eines Men&uuml;punktes! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()! MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
+								if (!empty($url)) {
+									$url = self::sanitize_menu_url($url);
+									if ($url === false) {
+										$error = 'Die externe URL ist nicht erlaubt. Bitte verwende http:// oder https://.';
 									}
-								} else {
-									$error = 'Fehler beim anpassen der Positionen! Bitte versuche es sp&auml;ter erneut.';
+								}
+								if (empty($error)) {
+									// passe Position an
+									$autoPos = true;
+									$old_pos = parent::getValue('menu', 'id', $id, 'pos');
+									if($old_pos > $pos){
+										$autoPos = self::autoPosition($pos, $under, 0, $old_pos);
+									} elseif($old_pos < $pos){
+										$autoPos = self::autoPosition($old_pos, $under, 1, $pos);
+									}
+									if($autoPos == true){
+										$sql = $this->pq(
+											"UPDATE `".Prefix."_menu` SET `title` = ?, `icon` = ?, `under` = ?, `sid` = ?, `url` = ?, `target` = ?, `link_type` = ?, `menu` = ?, `pos` = ? WHERE `id` = ?",
+											[$title, $icon, $under, $file, $url, $target, $type, $menu, $pos, $id]
+										);
+										if($sql !== false){
+											header('Location: ?p=menu&h=menu_edit_successfully');
+											exit();
+										} else {
+											$error = 'Fehler beim bearbeiten des Men&uuml;punktes! Bitte versuche es sp&auml;ter erneut.';
+											errormail('Fehler beim bearbeiten eines Men&uuml;punktes! Fehler in class '.__CLASS__.' => function '.__FUNCTION__.'()! MySQL-Fehler '.$this->mysql->errno.': '.$this->mysql->error);
+										}
+									} else {
+										$error = 'Fehler beim anpassen der Positionen! Bitte versuche es sp&auml;ter erneut.';
+									}
 								}
 							} else {
 								$error = 'Der Link kann nicht unter sich selbst eingeordnet werden!';

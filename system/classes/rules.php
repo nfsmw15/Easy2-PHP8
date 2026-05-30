@@ -104,7 +104,11 @@ class rules extends loginsystem{
 		global $id;
 		if(parent::auditRight('rule_delete')){
             if(DEMO_MODE){ return "In der DEMO nicht möglich!"; }
-            
+
+            if(parent::getAmount('rules', 'id', $id) != 1){
+                return 'Diese Regel existiert nicht!';
+            }
+
             $sql = $this->pq("DELETE FROM `".Prefix."_rules` WHERE `id` = ? LIMIT 1", [$id]);
 			if($sql){
 				header('Location: ?p=rules&h=rule_remove_successfully');
