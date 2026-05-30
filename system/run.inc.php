@@ -183,7 +183,7 @@ if ($p == 'update' && $updater !== null && $loginsystem->auditRight('mainsave'))
                 $__backup_dir = dirname(__DIR__, 2) . '/' . ltrim($__backup_dir, '/');
             }
             $__backup_dir = rtrim($__backup_dir, '/') . '/';
-            $updater->saveConfig(['backup_dir' => $__backup_dir]);
+            $updater->setBackupDir($__backup_dir);
             $success = 'Backup-Pfad gespeichert.';
         }
         unset($__backup_dir);

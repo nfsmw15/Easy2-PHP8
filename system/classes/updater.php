@@ -13,14 +13,12 @@ class updater extends loginsystem
 {
     private string $rootDir;
     private string $tmpDir;
-    private string $configFile;
-    private array  $config;
 
-    private const GITHUB_REPO    = 'nfsmw15/Easy2-PHP8';
     private const MAINTENANCE_FLAG = 'maintenance.flag';
     private const DOWNLOAD_FILE    = 'update_download.zip';
     private const EXTRACT_DIR      = 'update_extract/';
     private const BACKUP_PREFIX    = 'backup_';
+    private const DB_BACKUP_DIR    = 'updater_backup_dir';
 
     // Pfade die beim Backup ausgelassen werden
     private array $backupExclude = ['tmp/', 'avatare/'];
@@ -40,35 +38,33 @@ class updater extends loginsystem
     public function __construct()
     {
         parent::__construct();
-        $this->rootDir    = dirname(dirname(__DIR__)) . '/';
-        $this->tmpDir     = $this->rootDir . 'tmp/';
-        $this->configFile = $this->tmpDir . '.updater.json';
-        $this->loadConfig();
+        $this->rootDir = dirname(dirname(__DIR__)) . '/';
+        $this->tmpDir  = $this->rootDir . 'tmp/';
         $this->ensurePageRegistered();
     }
 
-    // ─── Konfiguration ────────────────────────────────────────────────────────
+    // ─── Backup-Verzeichnis (in DB gespeichert) ───────────────────────────────
 
-    private function loadConfig(): void
+    public function getBackupDir(): string
     {
-        $defaults = ['backup_dir' => $this->rootDir . 'tmp/backups/'];
-        if (file_exists($this->configFile)) {
-            $json = json_decode((string)file_get_contents($this->configFile), true);
-            $this->config = is_array($json) ? array_merge($defaults, $json) : $defaults;
+        $val = $this->getMainData(self::DB_BACKUP_DIR);
+        return (is_string($val) && $val !== '' && $val !== 'Einstellung nicht gefunden!')
+            ? $val
+            : $this->rootDir . 'tmp/backups/';
+    }
+
+    public function setBackupDir(string $path): void
+    {
+        $exists = $this->pq(
+            "SELECT COUNT(*) AS cnt FROM `" . Prefix . "_main` WHERE `tag` = ?",
+            [self::DB_BACKUP_DIR]
+        );
+        $row = $exists->fetch_assoc();
+        if ((int)($row['cnt'] ?? 0) > 0) {
+            $this->pq("UPDATE `" . Prefix . "_main` SET `value` = ? WHERE `tag` = ?", [$path, self::DB_BACKUP_DIR]);
         } else {
-            $this->config = $defaults;
+            $this->pq("INSERT INTO `" . Prefix . "_main` (`tag`, `value`) VALUES (?, ?)", [self::DB_BACKUP_DIR, $path]);
         }
-    }
-
-    public function saveConfig(array $data): void
-    {
-        $this->config = array_merge($this->config, $data);
-        file_put_contents($this->configFile, json_encode($this->config, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-    }
-
-    public function getConfig(?string $key = null): mixed
-    {
-        return $key === null ? $this->config : ($this->config[$key] ?? null);
     }
 
     // ─── Selbstregistrierung der Update-Seite in der DB ──────────────────────
@@ -121,7 +117,7 @@ class updater extends loginsystem
             return ['success' => false, 'error' => 'PHP ZipArchive-Extension ist nicht verfügbar.'];
         }
 
-        $backupDir = (string)$this->getConfig('backup_dir');
+        $backupDir = $this->getBackupDir();
         if (!is_dir($backupDir) && !mkdir($backupDir, 0755, true)) {
             return ['success' => false, 'error' => 'Backup-Verzeichnis konnte nicht erstellt werden: ' . htmlspecialchars($backupDir)];
         }
@@ -319,7 +315,7 @@ class updater extends loginsystem
 
     public function listBackups(): array
     {
-        $backupDir = (string)$this->getConfig('backup_dir');
+        $backupDir = $this->getBackupDir();
         if (!is_dir($backupDir)) {
             return [];
         }

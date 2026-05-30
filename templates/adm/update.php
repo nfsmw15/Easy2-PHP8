@@ -15,7 +15,7 @@ $_avail_ver   = $_avail['version'];
 $_avail_url   = $_avail['url'];
 $_has_update  = $_avail_ver !== '' && version_compare($_avail_ver, EASY_VERSION, '>');
 $_maintenance = $updater->isMaintenanceActive();
-$_backupDir   = (string)$updater->getConfig('backup_dir');
+$_backupDir   = $updater->getBackupDir();
 $_backups     = $updater->listBackups();
 ?>
 <div class="container">
