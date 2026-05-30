@@ -305,9 +305,9 @@ Diese Punkte gelten unabhängig davon, ob In-Place-Upgrade oder Neuinstallation:
 ### Sessions & Cookies
 
 - **Alle aktiven Sessions ungültig machen**: Alte Session-Dateien enthalten keinen CSRF-Token und entsprechen nicht dem neuen Sicherheitsmodell. Entweder den Session-Speicher leeren (`session.save_path` leeren) oder die Session-Tabelle in der DB trunkieren — je nach Hosting-Setup.
-- **Remember-Me-Cookies nicht übernehmen**: Die Cookie-Signatur hat sich geändert. Alte "Eingeloggt bleiben"-Cookies werden nicht akzeptiert und müssen vom Browser gelöscht werden. Bestehende Tokens in der DB können manuell geleert werden:
+- **Remember-Me-Cookies nicht übernehmen**: Die Cookie-Signatur hat sich geändert. Alte "Eingeloggt bleiben"-Cookies werden nicht akzeptiert — Nutzer müssen sich nach dem Upgrade neu anmelden. Remember-Me-Daten werden ausschließlich in der Sessions-Tabelle verwaltet (kein `auto_login_code`-Feld in `ml_user`). Alle aktiven Sessions lassen sich so schließen:
   ```sql
-  UPDATE ml_user SET auto_login_code = '', auto_login_time = '' WHERE auto_login_code != '';
+  UPDATE ml_sessions SET closed = '1', logout = '1' WHERE closed = '0';
   ```
 
 ### Admin-Bereich
@@ -341,7 +341,7 @@ Diese Punkte gelten unabhängig davon, ob In-Place-Upgrade oder Neuinstallation:
 - [ ] Custom-Templates: `$_POST`-Werte mit `e()` escaped
 - [ ] SMTP-Passwort in den Einstellungen neu gesetzt (wird nicht mehr aus DB vorausgefüllt)
 - [ ] Alte Sessions geleert / Session-Speicher bereinigt
-- [ ] Remember-Me-Tokens in DB geleert (`auto_login_code`)
+- [ ] Aktive Sessions in `ml_sessions` geschlossen (`closed=1, logout=1`)
 - [ ] Alle Benutzer zum Passwort-Reset gezwungen (bei Migration aus EASY 2.0)
 - [ ] Admin/Webmaster-Accounts geprüft — nur bekannte Accounts
 - [ ] Testbenutzer entfernt

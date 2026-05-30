@@ -6,7 +6,7 @@
 - **`check_filename()` gehärtet**: Dotfiles (`.htaccess`), mehrfache Extensions (`evil.php.jpg`) und Pfad-Bestandteile blockiert; nur noch `[a-zA-Z0-9_-]+.(php|html|htm|xhtml|tpl|txt|pdf)` erlaubt
 - **Kryptografisch sichere Zufallsfunktionen**: `generatePassword()` nutzt `random_int()` + Fisher-Yates-Shuffle statt `array_rand()`/`str_shuffle()`; Captcha nutzt `random_int()` statt `mt_rand()`/`rand()`
 - **Captcha**: Code als Klartext in Session (statt MD5-Hash); `hash_equals()` statt `==`; Session-Key nach Prüfung gelöscht (einmalige Verwendung)
-- **Sites und Additional Fields**: zustandsändernde Aktionen (`add`, `edit`, `remove`) nur noch per POST+CSRF ausführbar — GET löst keine DB-Änderungen mehr aus
+- **Sites und Additional Fields**: `add_site`, `edit`, `remove` nur noch per POST+CSRF; `download` bleibt lesend per GET
 - **`pw_reset` Token-Verbrauch**: Token wird nach erfolgreichem Reset sofort gelöscht; Formular nur bei gültigem/nicht-abgelaufenem Token angezeigt; alle aktiven Sessions des Users nach Reset geschlossen
 - **Lock/Unlock repariert**: `is_locked()` schlug wegen PDO-Typenvergleich (`int 1 === string '1'`) immer fehl; Unlock-Formular hatte kein `csrf_field()`; `unlock` auf POST beschränkt; Fallback für leere `url_old` in `lock()`
 - **`errormail()` nutzt PHPMailer**: kein direktes `@mail()` mehr; HTML-Template `emailtpl/error.html`; Fehler in `sendMail()` landen in `error_log()` ohne Endlosrekursion
@@ -19,6 +19,22 @@
 
 ### Abhängigkeiten
 - **PHPMailer 6.9.3 → 7.1.1** aktualisiert; API vollständig kompatibel
+
+### Tests / Audit
+- Live-Security-Audit auf Testinstanz durchgeführt:
+  - XSS-Retest (Reflected + Stored)
+  - CSRF-Retest aller zustandsändernden Aktionen
+  - Rechteprüfung Gast / Mitglied / Administrator / Webmaster
+  - PHPMailer-Mailversand (Kontaktformular, Passwort-Reset, Registrierung)
+  - Passwort-Reset-Flow inkl. Token-Einmal-Verbrauch
+  - Registrierung / Aktivierung / Selbstlöschung
+  - Remember-Me und Session-Invalidierung nach Passwort-Reset
+  - Logout und Session-Invalidierung
+  - Lock / Unlock
+  - Avatar- und Datei-Upload-Checks
+  - Seitenverwaltung inkl. Download-MIME-Type
+  - Public-File-Scan (`.git`, Config-, Backup-, Doku-Dateien)
+- Testdaten nach Abschluss entfernt
 
 ### Installer
 - Bootstrap 4 → 5.3.8; jQuery entfernt; Font-Awesome-Abhängigkeit entfernt
