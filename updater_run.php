@@ -112,7 +112,14 @@ if ($mode === 'ui') {
             max-height: 55vh;
             overflow-y: auto;
         }
-        #log-box li { padding: 2px 0; }
+        #log-box li {
+            padding: 2px 0;
+            animation: fadein .25s ease-in;
+        }
+        @keyframes fadein {
+            from { opacity: 0; transform: translateX(-6px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
         .log-ok   { color: #3fb950; }
         .log-warn { color: #d29922; }
         .log-err  { color: #f85149; }
