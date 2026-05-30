@@ -1,4 +1,6 @@
 <?php
+/** @var loginsystem $loginsystem */
+/** @var updater $updater */
 // Zugriffsschutz: nur Admins mit mainsave-Recht
 if (!$loginsystem->auditRight('mainsave')) {
     echo '<div class="container"><div class="alert alert-danger mt-4"><i class="fa fa-ban"></i> Keine Berechtigung.</div></div>';
@@ -181,10 +183,15 @@ $_backups     = $updater->listBackups();
                     <?php else: ?>
                         <ul class="list-group list-group-flush">
                         <?php foreach ($_backups as $_bk): ?>
-                            <li class="list-group-item d-flex justify-content-between align-items-start">
-                                <div class="me-2" style="min-width:0;">
-                                    <div class="fw-semibold text-break" style="font-size:.85em;"><?php echo htmlspecialchars($_bk['filename']); ?></div>
+                            <li class="list-group-item">
+                                <div class="fw-semibold text-break" style="font-size:.85em;"><?php echo htmlspecialchars($_bk['filename']); ?></div>
+                                <div class="d-flex justify-content-between align-items-center mt-1">
                                     <small class="text-muted"><?php echo updater::formatBytes($_bk['size']); ?> &mdash; <?php echo date('d.m.Y H:i', $_bk['mtime']); ?></small>
+                                    <form method="post" action="?p=update&c=restore" class="ms-2" onsubmit="return confirm('Backup wirklich einspielen? Die aktuellen Dateien werden überschrieben.');">
+                                        <?php echo csrf_field(); ?>
+                                        <input type="hidden" name="backup_filename" value="<?php echo htmlspecialchars($_bk['filename']); ?>">
+                                        <button type="submit" class="btn btn-sm btn-outline-warning"><i class="fa fa-undo"></i> Einspielen</button>
+                                    </form>
                                 </div>
                             </li>
                         <?php endforeach; ?>

@@ -336,6 +336,93 @@ class updater extends loginsystem
         return $backups;
     }
 
+    // ─── Rollback aus Backup ─────────────────────────────────────────────────
+
+    public function restoreBackup(string $filename): array
+    {
+        if (!class_exists('ZipArchive')) {
+            return ['success' => false, 'error' => 'PHP ZipArchive-Extension ist nicht verfügbar.'];
+        }
+
+        // Dateiname strikt validieren: nur backup_*.zip, kein Pfadtrenner
+        if (!preg_match('/^backup_[a-zA-Z0-9._\-]+\.zip$/', $filename) || str_contains($filename, '/') || str_contains($filename, '\\')) {
+            return ['success' => false, 'error' => 'Ungültiger Backup-Dateiname.'];
+        }
+
+        $zipFile = $this->getBackupDir() . $filename;
+
+        // Sicherstellen dass die Datei wirklich im Backup-Verzeichnis liegt
+        if (realpath($zipFile) !== realpath($this->getBackupDir()) . DIRECTORY_SEPARATOR . $filename) {
+            return ['success' => false, 'error' => 'Backup-Datei liegt außerhalb des erlaubten Verzeichnisses.'];
+        }
+
+        if (!file_exists($zipFile)) {
+            return ['success' => false, 'error' => 'Backup-Datei nicht gefunden.'];
+        }
+
+        $zip = new ZipArchive();
+        if ($zip->open($zipFile) !== true) {
+            return ['success' => false, 'error' => 'ZIP-Datei konnte nicht geöffnet werden.'];
+        }
+
+        $extractDir = $this->tmpDir . 'restore_extract/';
+
+        if (is_dir($extractDir)) {
+            $this->delTree($extractDir);
+        }
+
+        if (!mkdir($extractDir, 0755, true)) {
+            $zip->close();
+            return ['success' => false, 'error' => 'Extraktions-Verzeichnis konnte nicht erstellt werden.'];
+        }
+
+        $zip->extractTo($extractDir);
+        $zip->close();
+
+        // Backup-Archive haben kein Top-Level-Verzeichnis (direkt gepackt)
+        $filesRestored = 0;
+        $errors        = [];
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($extractDir, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        foreach ($iterator as $file) {
+            $relativePath = substr((string)$file->getRealPath(), strlen($extractDir));
+
+            // config.inc.php niemals überschreiben
+            if (in_array($relativePath, $this->installPreserve, true)) {
+                continue;
+            }
+
+            $destFile = $this->rootDir . $relativePath;
+            $destDir  = dirname($destFile);
+
+            if (!is_dir($destDir)) {
+                mkdir($destDir, 0755, true);
+            }
+
+            if (copy((string)$file->getRealPath(), $destFile)) {
+                $filesRestored++;
+            } else {
+                $errors[] = $relativePath;
+            }
+        }
+
+        $this->delTree($extractDir);
+
+        if (!empty($errors)) {
+            return [
+                'success'        => false,
+                'error'          => 'Einige Dateien konnten nicht wiederhergestellt werden: ' . implode(', ', array_slice($errors, 0, 5)),
+                'files_restored' => $filesRestored,
+            ];
+        }
+
+        return ['success' => true, 'files_restored' => $filesRestored];
+    }
+
     // ─── GitHub-Version aus Session holen ────────────────────────────────────
 
     public function getAvailableVersion(): array

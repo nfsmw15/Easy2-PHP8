@@ -17,6 +17,13 @@
 *********************************************/
 
 
+/** @var loginsystem $loginsystem */
+/** @var updater|null $updater */
+/** @var rules|null $rules */
+/** @var sites $sites */
+/** @var menu $menu */
+/** @var additional_fields $additional_fields */
+
 $a = length(isset($_GET['a']) ? $_GET['a'] : '', 64);
 $b = length(isset($_GET['b']) ? $_GET['b'] : '', 64);
 $c = length(isset($_GET['c']) ? $_GET['c'] : '', 64);
@@ -257,6 +264,23 @@ if ($p == 'update' && $updater !== null && $loginsystem->auditRight('mainsave'))
             $error = 'Installation fehlgeschlagen: ' . $__result['error'];
         }
         unset($__result, $_upd_zip);
+    }
+
+    // Rollback: Backup wiederherstellen
+    if ($c == 'restore' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $__filename = basename(trim($_POST['backup_filename'] ?? ''));
+        if ($__filename !== '') {
+            $updater->enableMaintenance();
+            $__result = $updater->restoreBackup($__filename);
+            if ($__result['success']) {
+                $updater->disableMaintenance();
+                $success = 'Wiederherstellung erfolgreich! ' . (int)$__result['files_restored'] . ' Dateien wiederhergestellt.';
+            } else {
+                $error = 'Wiederherstellung fehlgeschlagen: ' . $__result['error'];
+            }
+            unset($__result);
+        }
+        unset($__filename);
     }
 
     // Reset: Update-Session löschen

@@ -169,7 +169,7 @@ class loginsystem extends database
         return false;
     }
     
-    public function lock(){
+    public function lock(): ?string {
         $csrf = length($_GET['csrf'] ?? '', 64);
         if($csrf === $this->sessionData['csrf']){
             // url_old kann leer sein — dann url als Fallback
@@ -193,7 +193,7 @@ class loginsystem extends database
         return $error;
     }
     
-    public function unlock(){
+    public function unlock(): ?string {
         $passwd = length($_POST['locked-passwd'] ?? '', 32);
         if(self::pwverify($passwd)){
             $sql = $this->pq(
