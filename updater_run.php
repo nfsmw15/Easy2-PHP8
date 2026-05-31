@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 /**
- * EASY 2.0 — Live-Updater Runner (SSE-basiert)
+ * EASY 2.0 — Live-Updater Terminal
  *
- * Modus POST  → CSRF prüfen, Params in Session, Redirect zu ?run=TOKEN
- * Modus GET ?run=TOKEN → Terminal-UI sofort laden, SSE-Verbindung starten
- * Modus GET ?stream=TOKEN → SSE-Endpunkt, läuft parallel zur UI
+ * POST          → CSRF prüfen, Params speichern, Redirect zu ?run=TOKEN
+ * GET ?run=TOKEN → Terminal-Seite; alle Schritte laufen hier, kein Seitenwechsel
+ * GET ?stream=TOKEN&step=STEP → SSE-Endpunkt für einen Schritt
  */
 
 // ─── Session ──────────────────────────────────────────────────────────────────
@@ -32,7 +32,7 @@ if (!$loginsystem->auditRight('mainsave')) {
     header('Location: index.php'); exit();
 }
 
-// ─── Modus bestimmen ─────────────────────────────────────────────────────────
+// ─── Modus ───────────────────────────────────────────────────────────────────
 if (isset($_GET['stream'])) {
     $mode = 'stream';
 } elseif (isset($_GET['run'])) {
@@ -42,53 +42,54 @@ if (isset($_GET['stream'])) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// MODUS 1 — POST: CSRF prüfen, Params speichern, Redirect
+// MODUS 1 — POST: CSRF prüfen, Token erzeugen, Redirect
 // ═══════════════════════════════════════════════════════════════════════════════
 if ($mode === 'post') {
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         header('Location: index.php?p=update'); exit();
     }
-
     $__csrf  = $_POST['csrf'] ?? '';
     $__token = $_SESSION['ml_csrfToken'] ?? '';
     if (empty($__csrf) || !hash_equals($__token, $__csrf)) {
         http_response_code(403); exit('Ungültiger CSRF-Token.');
     }
 
-    $runToken = bin2hex(random_bytes(16));
-    $_SESSION['updater_run_token']  = $runToken;
-    $_SESSION['updater_run_action'] = $_POST['action'] ?? '';
-    $_SESSION['updater_run_params'] = [
+    $sessionToken = bin2hex(random_bytes(16));
+    $_SESSION['updater_token']  = $sessionToken;
+    $_SESSION['updater_action'] = $_POST['action'] ?? '';
+    $_SESSION['updater_params'] = [
         'target_version'  => length($_POST['target_version']  ?? '', 32),
         'download_url'    => trim($_POST['download_url']    ?? ''),
         'backup_filename' => basename(trim($_POST['backup_filename'] ?? '')),
     ];
 
-    header('Location: updater_run.php?run=' . urlencode($runToken));
+    header('Location: updater_run.php?run=' . urlencode($sessionToken));
     exit();
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// MODUS 2 — UI: Terminal-Seite sofort ausliefern
+// MODUS 2 — UI: Terminal-Seite (alle Schritte, kein Seitenwechsel)
 // ═══════════════════════════════════════════════════════════════════════════════
 if ($mode === 'ui') {
     $runToken = $_GET['run'] ?? '';
-    if ($runToken !== ($_SESSION['updater_run_token'] ?? '')) {
+    if ($runToken !== ($_SESSION['updater_token'] ?? '')) {
         header('Location: index.php?p=update'); exit();
     }
 
-    $action = $_SESSION['updater_run_action'] ?? '';
-    $_titles = [
-        'backup'      => 'Backup wird erstellt…',
-        'backup_only' => 'Backup wird erstellt…',
-        'download'    => 'Update wird heruntergeladen…',
-        'install'     => 'Update wird installiert…',
-        'restore'     => 'Backup wird eingespielt…',
-    ];
-    $pageTitle = htmlspecialchars($_titles[$action] ?? 'Vorgang läuft…');
+    $action    = (string)($_SESSION['updater_action'] ?? '');
+    $params    = (array)($_SESSION['updater_params']  ?? []);
     $siteName  = htmlspecialchars((string)$loginsystem->getMainData('site_title'));
     $bsTheme   = ($_COOKIE['easy2_theme'] ?? 'light') === 'dark' ? 'dark' : 'light';
-    $streamUrl = 'updater_run.php?stream=' . urlencode($runToken);
+
+    $titles = [
+        'backup'      => 'Update wird eingespielt…',
+        'backup_only' => 'Backup wird erstellt…',
+        'restore'     => 'Backup wird eingespielt…',
+    ];
+    $pageTitle = htmlspecialchars($titles[$action] ?? 'Vorgang läuft…');
+
+    // Schrittfolge für Update (backup → download → install)
+    $isUpdate = ($action === 'backup');
     ?>
 <!DOCTYPE html>
 <html lang="de" data-bs-theme="<?php echo $bsTheme; ?>">
@@ -109,20 +110,15 @@ if ($mode === 'ui') {
             border-radius: .5rem;
             padding: 1rem 1.25rem;
             min-height: 180px;
-            max-height: 55vh;
+            max-height: 60vh;
             overflow-y: auto;
         }
-        #log-box li {
-            padding: 2px 0;
-            animation: fadein .25s ease-in;
-        }
-        @keyframes fadein {
-            from { opacity: 0; transform: translateX(-6px); }
-            to   { opacity: 1; transform: translateX(0); }
-        }
+        #log-box li { padding: 2px 0; animation: fadein .2s ease-in; }
+        @keyframes fadein { from { opacity:0; transform:translateX(-6px); } to { opacity:1; transform:translateX(0); } }
         .log-ok   { color: #3fb950; }
         .log-warn { color: #d29922; }
         .log-err  { color: #f85149; }
+        .step-divider { border-top: 1px solid #30363d; margin: .5rem 0; }
     </style>
 </head>
 <body>
@@ -132,10 +128,16 @@ if ($mode === 'ui') {
         <span id="page-title"><?php echo $pageTitle; ?></span>
     </h4>
     <div id="log-box"><ul class="list-unstyled mb-0" id="log-list"></ul></div>
-    <div id="result-area" class="mt-3" style="display:none;"></div>
+    <div id="action-area" class="mt-3"></div>
 </div>
 
 <script>
+var TOKEN   = <?php echo json_encode($runToken); ?>;
+var ACTION  = <?php echo json_encode($action); ?>;
+var PARAMS  = <?php echo json_encode($params); ?>;
+var IS_UPDATE = <?php echo $isUpdate ? 'true' : 'false'; ?>;
+var currentSrc = null;
+
 function addLog(type, msg) {
     var icons = {ok: '<i class="fa fa-check"></i>', warn: '<i class="fa fa-exclamation-triangle"></i>', err: '<i class="fa fa-times"></i>'};
     var li = document.createElement('li');
@@ -146,37 +148,96 @@ function addLog(type, msg) {
     box.scrollTop = box.scrollHeight;
 }
 
-function finish(ok, msg) {
+function addDivider(label) {
+    var li = document.createElement('li');
+    li.className = 'step-divider';
+    li.innerHTML = '<small class="text-secondary">' + label + '</small>';
+    document.getElementById('log-list').appendChild(li);
+}
+
+function setTitle(title) {
+    document.getElementById('page-title').textContent = title;
+}
+
+function stopSpinner() {
     document.getElementById('spinner').style.display = 'none';
-    document.getElementById('page-title').textContent = ok ? 'Abgeschlossen' : 'Fehler aufgetreten';
-    var cls  = ok ? 'alert-success' : 'alert-danger';
-    var btn  = ok ? 'btn-primary' : 'btn-warning';
-    var area = document.getElementById('result-area');
-    area.innerHTML = '<div class="alert ' + cls + '">' + msg + '</div>'
-                   + '<a href="index.php?p=update" class="btn ' + btn + '">Zurück zur Update-Seite</a>';
-    area.style.display = '';
+}
+
+function showNextButton(label, icon, step, btnClass) {
+    var area = document.getElementById('action-area');
+    area.innerHTML = '<button class="btn ' + btnClass + '" id="next-btn" onclick="runStep(\'' + step + '\')">'
+        + '<i class="fa ' + icon + '"></i> ' + label + '</button>'
+        + ' <a href="index.php?p=update&c=reset" class="btn btn-outline-secondary ms-2">Abbrechen</a>';
+}
+
+function showDone(ok, msg) {
+    stopSpinner();
+    var cls = ok ? 'alert-success' : 'alert-danger';
+    var btn = ok ? 'btn-primary' : 'btn-warning';
+    document.getElementById('action-area').innerHTML =
+        '<div class="alert ' + cls + '">' + msg + '</div>'
+        + '<a href="index.php?p=update" class="btn ' + btn + '">Zurück zur Update-Seite</a>';
     if (ok) setTimeout(function(){ window.location.href = 'index.php?p=update'; }, 4000);
 }
 
-// SSE-Verbindung aufbauen
-var src = new EventSource(<?php echo json_encode($streamUrl); ?>);
+function runStep(step) {
+    // Button während Lauf deaktivieren
+    var btn = document.getElementById('next-btn');
+    if (btn) btn.disabled = true;
+    document.getElementById('action-area').innerHTML = '';
+    document.getElementById('spinner').style.display = '';
 
-src.onmessage = function(e) {
-    try {
-        var data = JSON.parse(e.data);
-        if (data.done !== undefined) {
-            src.close();
-            finish(data.ok === true, data.msg || '');
-        } else {
-            addLog(data.type, data.msg);
-        }
-    } catch(ex) {}
-};
+    addDivider('— ' + stepLabel(step) + ' —');
 
-src.onerror = function() {
-    src.close();
-    finish(false, 'Verbindung zum Server unterbrochen.');
-};
+    var url = 'updater_run.php?stream=' + encodeURIComponent(TOKEN) + '&step=' + encodeURIComponent(step);
+    currentSrc = new EventSource(url);
+
+    currentSrc.onmessage = function(e) {
+        try {
+            var data = JSON.parse(e.data);
+            if (data.done !== undefined) {
+                currentSrc.close();
+                onStepDone(step, data.ok === true, data.msg || '');
+            } else {
+                addLog(data.type, data.msg);
+            }
+        } catch(ex) {}
+    };
+
+    currentSrc.onerror = function() {
+        currentSrc.close();
+        stopSpinner();
+        showDone(false, 'Verbindung unterbrochen.');
+    };
+}
+
+function stepLabel(step) {
+    var labels = {backup:'Backup erstellt', download:'Download', install:'Installation', backup_only:'Backup', restore:'Wiederherstellung'};
+    return labels[step] || step;
+}
+
+function onStepDone(step, ok, msg) {
+    stopSpinner();
+    if (!ok) { showDone(false, msg); return; }
+
+    if (step === 'backup' && IS_UPDATE) {
+        addLog('ok', msg);
+        setTitle('Schritt 2: Update herunterladen');
+        showNextButton('Schritt 2: Update herunterladen', 'fa-download', 'download', 'btn-primary');
+    } else if (step === 'download') {
+        addLog('ok', msg);
+        setTitle('Schritt 3: Update installieren');
+        showNextButton('Schritt 3: Update installieren', 'fa-upload', 'install', 'btn-success');
+    } else {
+        // backup_only, install, restore — fertig
+        showDone(true, msg);
+    }
+}
+
+// Ersten Schritt automatisch starten
+window.addEventListener('load', function() {
+    runStep(ACTION);
+});
 </script>
 <script src="js/bootstrap.min.js"></script>
 </body>
@@ -186,30 +247,25 @@ src.onerror = function() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// MODUS 3 — STREAM: SSE-Endpunkt
+// MODUS 3 — STREAM: SSE-Endpunkt für einen Schritt
 // ═══════════════════════════════════════════════════════════════════════════════
 if ($mode === 'stream') {
     $runToken = $_GET['stream'] ?? '';
-    if ($runToken !== ($_SESSION['updater_run_token'] ?? '')) {
+    $step     = $_GET['step']   ?? '';
+
+    if ($runToken !== ($_SESSION['updater_token'] ?? '')) {
         http_response_code(403);
         echo 'data: ' . json_encode(['done' => true, 'ok' => false, 'msg' => 'Ungültiger Token.']) . "\n\n";
         exit();
     }
 
-    $action = (string)($_SESSION['updater_run_action'] ?? '');
-    $params = (array)($_SESSION['updater_run_params'] ?? []);
-
-    // Token invalidieren, dann Session freigeben (wichtig: PHP sperrt Session während SSE!)
-    unset($_SESSION['updater_run_token'], $_SESSION['updater_run_action'], $_SESSION['updater_run_params']);
+    $params = (array)($_SESSION['updater_params'] ?? []);
     session_write_close();
 
-    // SSE-Header
     header('Content-Type: text/event-stream');
     header('Cache-Control: no-cache, no-store');
     header('X-Accel-Buffering: no');
-    if (function_exists('apache_setenv')) {
-        apache_setenv('no-gzip', '1');
-    }
+    if (function_exists('apache_setenv')) apache_setenv('no-gzip', '1');
     ini_set('zlib.output_compression', '0');
     while (ob_get_level() > 0) ob_end_clean();
 
@@ -226,7 +282,7 @@ if ($mode === 'stream') {
     set_time_limit(300);
 
     try {
-        switch ($action) {
+        switch ($step) {
 
             case 'backup':
                 $emit('ok', 'Wartungsmodus wird aktiviert…');
@@ -238,10 +294,10 @@ if ($mode === 'stream') {
                         'step'           => 'backup',
                         'backup_file'    => $r['file'],
                         'target_version' => $params['target_version'] ?? '',
-                        'download_url'   => $params['download_url'] ?? '',
+                        'download_url'   => $params['download_url']   ?? '',
                     ]);
                     $ok      = true;
-                    $doneMsg = 'Backup erfolgreich erstellt. Weiter mit <strong>Schritt 2: Herunterladen</strong>.';
+                    $doneMsg = 'Backup erfolgreich erstellt.';
                 } else {
                     $updater->disableMaintenance();
                     $doneMsg = 'Backup fehlgeschlagen: ' . ($r['error'] ?? '');
@@ -268,7 +324,7 @@ if ($mode === 'stream') {
                     $progress['zip_file'] = $r['file'];
                     $updater->setProgress($progress);
                     $ok      = true;
-                    $doneMsg = 'Download abgeschlossen. Weiter mit <strong>Schritt 3: Installieren</strong>.';
+                    $doneMsg = 'Download abgeschlossen.';
                 } else {
                     $doneMsg = 'Download fehlgeschlagen: ' . ($r['error'] ?? '');
                 }
@@ -306,7 +362,7 @@ if ($mode === 'stream') {
                 break;
 
             default:
-                $doneMsg = 'Unbekannte Aktion: ' . htmlspecialchars($action);
+                $doneMsg = 'Unbekannter Schritt.';
         }
     } catch (\Throwable $e) {
         $doneMsg = 'Unerwarteter Fehler: ' . htmlspecialchars($e->getMessage());
