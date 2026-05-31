@@ -197,7 +197,7 @@ function runStep(step) {
             var data = JSON.parse(e.data);
             if (data.done !== undefined) {
                 currentSrc.close();
-                onStepDone(step, data.ok === true, data.msg || '');
+                onStepDone(step, data.ok === true, data.msg || '', data);
             } else {
                 addLog(data.type, data.msg);
             }
@@ -216,14 +216,26 @@ function stepLabel(step) {
     return labels[step] || step;
 }
 
-function onStepDone(step, ok, msg) {
+function onStepDone(step, ok, msg, data) {
     stopSpinner();
     if (!ok) { showDone(false, msg); return; }
 
     if (step === 'backup' && IS_UPDATE) {
         addLog('ok', msg);
         setTitle('Schritt 2: Update herunterladen');
-        showNextButton('Schritt 2: Update herunterladen', 'fa-download', 'download', 'btn-primary');
+        var dlBtn = '';
+        if (data && data.backup_filename) {
+            dlBtn = '<a href="index.php?p=update&c=backup_download&a=' + encodeURIComponent(data.backup_filename) + '" '
+                  + 'class="btn btn-outline-secondary" title="Backup jetzt herunterladen">'
+                  + '<i class="fa fa-download"></i> Backup herunterladen</a>';
+        }
+        var area = document.getElementById('action-area');
+        area.innerHTML = '<div class="d-flex gap-2 flex-wrap">'
+            + '<button class="btn btn-primary" id="next-btn" onclick="runStep(\'download\')">'
+            + '<i class="fa fa-download"></i> Schritt 2: Update herunterladen</button>'
+            + dlBtn
+            + '<a href="index.php?p=update&c=reset" class="btn btn-outline-secondary">Abbrechen</a>'
+            + '</div>';
     } else if (step === 'download') {
         addLog('ok', msg);
         setTitle('Schritt 3: Update installieren');
@@ -296,8 +308,9 @@ if ($mode === 'stream') {
                         'target_version' => $params['target_version'] ?? '',
                         'download_url'   => $params['download_url']   ?? '',
                     ]);
-                    $ok      = true;
-                    $doneMsg = 'Backup erfolgreich erstellt.';
+                    $ok             = true;
+                    $doneMsg        = 'Backup erfolgreich erstellt.';
+                    $extraData      = ['backup_filename' => basename($r['file'])];
                 } else {
                     $updater->disableMaintenance();
                     $doneMsg = 'Backup fehlgeschlagen: ' . ($r['error'] ?? '');
@@ -368,7 +381,8 @@ if ($mode === 'stream') {
         $doneMsg = 'Unerwarteter Fehler: ' . htmlspecialchars($e->getMessage());
     }
 
-    echo 'data: ' . json_encode(['done' => true, 'ok' => $ok, 'msg' => $doneMsg]) . "\n\n";
+    $donePayload = array_merge(['done' => true, 'ok' => $ok, 'msg' => $doneMsg], $extraData ?? []);
+    echo 'data: ' . json_encode($donePayload) . "\n\n";
     flush();
     exit();
 }
