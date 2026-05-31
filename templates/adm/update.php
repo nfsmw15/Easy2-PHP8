@@ -7,10 +7,11 @@ if (!$loginsystem->auditRight('mainsave')) {
     return;
 }
 
-$_upd_step    = $_SESSION['updater_step'] ?? '';
-$_upd_backup  = $_SESSION['updater_backup_file'] ?? '';
-$_upd_zip     = $_SESSION['updater_zip_file'] ?? '';
-$_upd_version = $_SESSION['updater_target_version'] ?? '';
+$_upd_progress = $updater->getProgress();
+$_upd_step     = $_upd_progress['step']           ?? '';
+$_upd_backup   = $_upd_progress['backup_file']    ?? '';
+$_upd_zip      = $_upd_progress['zip_file']       ?? '';
+$_upd_version  = $_upd_progress['target_version'] ?? '';
 
 $_avail       = $updater->getAvailableVersion();
 $_avail_ver   = $_avail['version'];

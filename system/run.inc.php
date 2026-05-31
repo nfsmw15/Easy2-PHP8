@@ -210,72 +210,6 @@ if ($p == 'update' && $updater !== null && $loginsystem->auditRight('mainsave'))
         exit();
     }
 
-    // Schritt 1: Backup erstellen (+ Wartungsmodus an)
-    if ($c == 'backup' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $__target_ver = length($_POST['target_version'] ?? '', 32);
-        $__dl_url     = trim($_POST['download_url'] ?? '');
-
-        $updater->enableMaintenance();
-        $__result = $updater->createBackup();
-        if ($__result['success']) {
-            $_SESSION['updater_step']           = 'backup';
-            $_SESSION['updater_backup_file']    = $__result['file'];
-            $_SESSION['updater_target_version'] = $__target_ver;
-            $_SESSION['updater_download_url']   = $__dl_url;
-        } else {
-            $updater->disableMaintenance();
-            $error = 'Backup fehlgeschlagen: ' . $__result['error'];
-        }
-        unset($__result, $__target_ver, $__dl_url);
-        if (empty($error)) { header('Location: ?p=update'); exit(); }
-    }
-
-    // Nur Backup (ohne Update)
-    if ($c == 'backup_only' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $__result = $updater->createBackup();
-        $_SESSION['updater_last_log'] = $__result['log'] ?? [];
-        if ($__result['success']) {
-            $_SESSION['updater_step']        = 'backup_only_done';
-            $_SESSION['updater_backup_file'] = $__result['file'];
-            unset($__result);
-            header('Location: ?p=update');
-            exit();
-        } else {
-            $error = 'Backup fehlgeschlagen: ' . $__result['error'];
-            unset($__result);
-        }
-    }
-
-    // Schritt 2: Update herunterladen
-    if ($c == 'download' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $__result = $updater->downloadRelease($_SESSION['updater_download_url'] ?? '');
-        $_SESSION['updater_last_log'] = $__result['log'] ?? [];
-        if ($__result['success']) {
-            $_SESSION['updater_step']     = 'download';
-            $_SESSION['updater_zip_file'] = $__result['file'];
-        } else {
-            $error = 'Download fehlgeschlagen: ' . $__result['error'];
-        }
-        unset($__result);
-        if (empty($error)) { header('Location: ?p=update'); exit(); }
-    }
-
-    // Schritt 3: Update installieren
-    if ($c == 'install' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $__result = $updater->installUpdate($_SESSION['updater_zip_file'] ?? '');
-        $_SESSION['updater_last_log'] = $__result['log'] ?? [];
-        if ($__result['success']) {
-            $updater->disableMaintenance();
-            $_SESSION['updater_step'] = 'done';
-            unset($_SESSION['updater_zip_file'], $_SESSION['updater_download_url'], $_SESSION['updater_backup_file'], $__result);
-            header('Location: ?p=update');
-            exit();
-        } else {
-            $error = 'Installation fehlgeschlagen: ' . $__result['error'];
-            unset($__result);
-        }
-    }
-
     // Backup herunterladen (GET erlaubt, da kein Schreibzugriff)
     if ($c == 'backup_download') {
         $__filename = basename(trim($_GET['a'] ?? ''));
@@ -297,37 +231,10 @@ if ($p == 'update' && $updater !== null && $loginsystem->auditRight('mainsave'))
         unset($__filename);
     }
 
-    // Rollback: Backup wiederherstellen
-    if ($c == 'restore' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        $__filename = basename(trim($_POST['backup_filename'] ?? ''));
-        if ($__filename !== '') {
-            $updater->enableMaintenance();
-            $__result = $updater->restoreBackup($__filename);
-            $_SESSION['updater_last_log'] = $__result['log'] ?? [];
-            if ($__result['success']) {
-                $updater->disableMaintenance();
-                unset($__result, $__filename);
-                header('Location: ?p=update&h=upd_restore_ok');
-                exit();
-            } else {
-                $updater->disableMaintenance();
-                $error = 'Wiederherstellung fehlgeschlagen: ' . $__result['error'];
-                unset($__result);
-            }
-        }
-        unset($__filename);
-    }
-
-    // Reset: Update-Session löschen
+    // Reset: Fortschritt-Datei löschen
     if ($c == 'reset') {
-        unset(
-            $_SESSION['updater_step'],
-            $_SESSION['updater_backup_file'],
-            $_SESSION['updater_zip_file'],
-            $_SESSION['updater_target_version'],
-            $_SESSION['updater_download_url']
-        );
-        header('Location: ?p=update');
+        $updater->clearProgress();
+        header('Location: index.php?p=update');
         exit();
     }
 }

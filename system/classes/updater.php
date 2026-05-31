@@ -44,6 +44,39 @@ class updater extends loginsystem
         $this->ensurePageRegistered();
     }
 
+    // ─── Schritt-Fortschritt (tmp/updater_progress.json) ────────────────────────
+
+    private function progressFile(): string
+    {
+        return $this->tmpDir . 'updater_progress.json';
+    }
+
+    public function setProgress(array $data): void
+    {
+        if (!is_dir($this->tmpDir)) {
+            mkdir($this->tmpDir, 0755, true);
+        }
+        file_put_contents($this->progressFile(), json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+    }
+
+    public function getProgress(): array
+    {
+        $file = $this->progressFile();
+        if (!file_exists($file)) {
+            return ['step' => ''];
+        }
+        $data = json_decode((string)file_get_contents($file), true);
+        return is_array($data) ? $data : ['step' => ''];
+    }
+
+    public function clearProgress(): void
+    {
+        $file = $this->progressFile();
+        if (file_exists($file)) {
+            unlink($file);
+        }
+    }
+
     // ─── Backup-Verzeichnis (in DB gespeichert) ───────────────────────────────
 
     public function getBackupDir(): string

@@ -234,13 +234,12 @@ if ($mode === 'stream') {
                 $emit('ok', 'Wartungsmodus aktiv.');
                 $r = $updater->createBackup($emit, true);
                 if ($r['success']) {
-                    // Session für step-tracking kurz öffnen
-                    session_start();
-                    $_SESSION['updater_step']           = 'backup';
-                    $_SESSION['updater_backup_file']    = $r['file'];
-                    $_SESSION['updater_target_version'] = $params['target_version'] ?? '';
-                    $_SESSION['updater_download_url']   = $params['download_url'] ?? '';
-                    session_write_close();
+                    $updater->setProgress([
+                        'step'           => 'backup',
+                        'backup_file'    => $r['file'],
+                        'target_version' => $params['target_version'] ?? '',
+                        'download_url'   => $params['download_url'] ?? '',
+                    ]);
                     $ok      = true;
                     $doneMsg = 'Backup erfolgreich erstellt. Weiter mit <strong>Schritt 2: Herunterladen</strong>.';
                 } else {
@@ -252,10 +251,7 @@ if ($mode === 'stream') {
             case 'backup_only':
                 $r = $updater->createBackup($emit);
                 if ($r['success']) {
-                    session_start();
-                    $_SESSION['updater_step']        = 'backup_only_done';
-                    $_SESSION['updater_backup_file'] = $r['file'];
-                    session_write_close();
+                    $updater->setProgress(['step' => 'backup_only_done', 'backup_file' => $r['file']]);
                     $ok      = true;
                     $doneMsg = 'Backup erfolgreich erstellt.';
                 } else {
@@ -264,15 +260,13 @@ if ($mode === 'stream') {
                 break;
 
             case 'download':
-                session_start();
-                $url = (string)($_SESSION['updater_download_url'] ?? $params['download_url'] ?? '');
-                session_write_close();
+                $progress = $updater->getProgress();
+                $url      = (string)($progress['download_url'] ?? $params['download_url'] ?? '');
                 $r = $updater->downloadRelease($url, $emit);
                 if ($r['success']) {
-                    session_start();
-                    $_SESSION['updater_step']     = 'download';
-                    $_SESSION['updater_zip_file'] = $r['file'];
-                    session_write_close();
+                    $progress['step']     = 'download';
+                    $progress['zip_file'] = $r['file'];
+                    $updater->setProgress($progress);
                     $ok      = true;
                     $doneMsg = 'Download abgeschlossen. Weiter mit <strong>Schritt 3: Installieren</strong>.';
                 } else {
@@ -281,17 +275,13 @@ if ($mode === 'stream') {
                 break;
 
             case 'install':
-                session_start();
-                $zip = (string)($_SESSION['updater_zip_file'] ?? '');
-                session_write_close();
+                $progress = $updater->getProgress();
+                $zip      = (string)($progress['zip_file'] ?? '');
                 $r = $updater->installUpdate($zip, $emit);
                 if ($r['success']) {
                     $emit('ok', 'Wartungsmodus wird deaktiviert…');
                     $updater->disableMaintenance();
-                    session_start();
-                    $_SESSION['updater_step'] = 'done';
-                    unset($_SESSION['updater_zip_file'], $_SESSION['updater_download_url'], $_SESSION['updater_backup_file']);
-                    session_write_close();
+                    $updater->setProgress(['step' => 'done']);
                     $ok      = true;
                     $doneMsg = 'Update erfolgreich installiert!';
                 } else {
