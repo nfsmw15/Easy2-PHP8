@@ -67,15 +67,16 @@ unset($_SESSION['updater_last_log']);
             <div class="card mb-3">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <span><i class="fa fa-refresh"></i> Update-Status</span>
-                    <span>
-                        Version: <strong><?php echo htmlspecialchars(EASY_VERSION); ?></strong>
+                    <span class="d-flex align-items-center gap-2">
+                        <span>Version: <strong><?php echo htmlspecialchars(EASY_VERSION); ?></strong>
                         <?php if ($_has_update): ?>
                             <span class="badge bg-warning text-dark ms-1"><i class="fa fa-arrow-up"></i> <?php echo htmlspecialchars($_avail_ver); ?> verfügbar</span>
                         <?php elseif ($_avail_ver !== ''): ?>
                             <span class="badge bg-success ms-1"><i class="fa fa-check"></i> aktuell</span>
                         <?php else: ?>
                             <span class="badge bg-secondary ms-1"><i class="fa fa-question"></i> unbekannt</span>
-                        <?php endif; ?>
+                        <?php endif; ?></span>
+                        <a href="?p=update&c=check_now" class="btn btn-sm btn-outline-secondary" title="GitHub neu abfragen"><i class="fa fa-refresh"></i></a>
                     </span>
                 </div>
                 <div class="card-body">

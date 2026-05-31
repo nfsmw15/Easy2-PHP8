@@ -181,6 +181,13 @@ if($p == 'settings' && $c == 'mainsave'){
 
 if ($p == 'update' && $updater !== null && $loginsystem->auditRight('mainsave')) {
 
+    // GitHub-Version neu prüfen (Cache leeren)
+    if ($c == 'check_now') {
+        $updater->checkNow();
+        header('Location: index.php?p=update');
+        exit();
+    }
+
     // Backup-Pfad speichern
     if ($c == 'save_config' && $_SERVER['REQUEST_METHOD'] === 'POST') {
         $__backup_dir = trim($_POST['backup_dir'] ?? '');

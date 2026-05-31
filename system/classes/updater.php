@@ -616,6 +616,42 @@ class updater extends loginsystem
         return ['version' => $version, 'url' => $url];
     }
 
+    public function checkNow(): array
+    {
+        $branch   = defined('EASY_BRANCH') ? EASY_BRANCH : 'bs5';
+        $cacheKey = 'easy2_gh_version_' . $branch;
+
+        // Session-Cache löschen und GitHub neu abfragen
+        unset($_SESSION[$cacheKey], $_SESSION[$cacheKey . '_url'], $_SESSION[$cacheKey . '_time']);
+
+        $ctx  = stream_context_create(['http' => ['header' => "User-Agent: Easy2-PHP8\r\n", 'timeout' => 5]]);
+        $json = @file_get_contents('https://api.github.com/repos/nfsmw15/Easy2-PHP8/releases?per_page=50', false, $ctx);
+        if ($json === false) {
+            return ['version' => '', 'url' => '', 'error' => 'GitHub nicht erreichbar.'];
+        }
+
+        $releases = json_decode($json, true);
+        $version  = '';
+        $url      = '';
+        if (is_array($releases)) {
+            foreach ($releases as $rel) {
+                if ($rel['prerelease'] ?? false) continue;
+                $tag = $rel['tag_name'] ?? '';
+                if (str_ends_with($tag, '-' . $branch)) {
+                    $version = ltrim(preg_replace('/-[^-]+$/', '', $tag), 'v');
+                    $url     = $rel['zipball_url'] ?? '';
+                    break;
+                }
+            }
+        }
+
+        $_SESSION[$cacheKey]          = $version;
+        $_SESSION[$cacheKey . '_url'] = $url;
+        $_SESSION[$cacheKey . '_time'] = time();
+
+        return ['version' => $version, 'url' => $url];
+    }
+
     // ─── Hilfsmethoden ───────────────────────────────────────────────────────
 
     private function delTree(string $dir): bool
