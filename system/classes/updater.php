@@ -13,16 +13,16 @@ class updater extends loginsystem
 {
     private string $rootDir;
     private string $tmpDir;
+    private string $workDir;  // update_work/ — temporäres Arbeitsverzeichnis
 
-    private const MAINTENANCE_FLAG = 'maintenance.flag';
-    private const DOWNLOAD_FILE    = 'update_download.zip';
-    private const EXTRACT_DIR      = 'update_extract/';
-    private const BACKUP_PREFIX_MANUAL = 'manual_';
-    private const BACKUP_PREFIX_UPDATE = 'pre-update_';
-    private const DB_BACKUP_DIR    = 'updater_backup_dir';
+    private const MAINTENANCE_FLAG       = 'maintenance.flag';
+    private const WORK_DIR_NAME          = 'update_work/';
+    private const BACKUP_PREFIX_MANUAL   = 'manual_';
+    private const BACKUP_PREFIX_UPDATE   = 'pre-update_';
+    private const DB_BACKUP_DIR          = 'updater_backup_dir';
 
     // Pfade die beim Backup ausgelassen werden
-    private array $backupExclude = ['tmp/', 'avatare/'];
+    private array $backupExclude = ['tmp/', 'avatare/', 'update_work/'];
 
     // Pfade die beim Installieren nie überschrieben werden
     private array $installPreserve = [
@@ -34,14 +34,40 @@ class updater extends loginsystem
     ];
 
     // Verzeichnisse die beim Installieren übersprungen werden
-    private array $installExclude = ['tmp/', 'avatare/', 'install/'];
+    private array $installExclude = ['tmp/', 'avatare/', 'install/', 'update_work/'];
+
+    // Dateien auf Root-Ebene die nie installiert werden (Doku, Git-Dateien)
+    private array $installExcludeRootFiles = [
+        '.gitignore', '.gitattributes', '.gitmodules',
+    ];
 
     public function __construct()
     {
         parent::__construct();
         $this->rootDir = dirname(dirname(__DIR__)) . '/';
         $this->tmpDir  = $this->rootDir . 'tmp/';
+        $this->workDir = $this->rootDir . self::WORK_DIR_NAME;
         $this->ensurePageRegistered();
+    }
+
+    // ─── Update-Arbeitsverzeichnis ────────────────────────────────────────────
+
+    private function ensureWorkDir(): void
+    {
+        if (!is_dir($this->workDir)) {
+            mkdir($this->workDir, 0755, true);
+        }
+        $htaccess = $this->workDir . '.htaccess';
+        if (!file_exists($htaccess)) {
+            file_put_contents($htaccess, "Order Deny,Allow\nDeny from all\n");
+        }
+    }
+
+    private function cleanWorkDir(): void
+    {
+        if (is_dir($this->workDir)) {
+            $this->delTree($this->workDir);
+        }
     }
 
     // ─── Schritt-Fortschritt (tmp/updater_progress.json) ────────────────────────
@@ -254,7 +280,8 @@ class updater extends loginsystem
         }
         $addLog('ok', 'Download-URL validiert.');
 
-        $targetFile = $this->tmpDir . self::DOWNLOAD_FILE;
+        $this->ensureWorkDir();
+        $targetFile = $this->workDir . 'update_download.zip';
         if (file_exists($targetFile)) {
             unlink($targetFile);
         }
@@ -320,7 +347,8 @@ class updater extends loginsystem
             return ['success' => false, 'error' => $log[array_key_last($log)][1], 'log' => $log];
         }
 
-        $extractDir = $this->tmpDir . self::EXTRACT_DIR;
+        $this->ensureWorkDir();
+        $extractDir = $this->workDir . 'extract/';
         if (is_dir($extractDir)) {
             $this->delTree($extractDir);
         }
@@ -362,6 +390,18 @@ class updater extends loginsystem
                 }
             }
 
+            // Root-Ebene: .gitignore, .gitattributes etc. und *.md / *.txt überspringen
+            if (!str_contains($relativePath, '/')) {
+                if (in_array($relativePath, $this->installExcludeRootFiles, true)) {
+                    $filesSkipped++;
+                    continue;
+                }
+                if (preg_match('/\.(md|txt)$/i', $relativePath)) {
+                    $filesSkipped++;
+                    continue;
+                }
+            }
+
             $destFile = $this->rootDir . $relativePath;
             $destDir  = dirname($destFile);
             if (!is_dir($destDir)) {
@@ -375,10 +415,8 @@ class updater extends loginsystem
             }
         }
 
-        $this->delTree($extractDir);
-        if (file_exists($zipFile)) {
-            unlink($zipFile);
-        }
+        // Arbeitsverzeichnis komplett aufräumen
+        $this->cleanWorkDir();
 
         $addLog('ok', $filesUpdated . ' Dateien aktualisiert.');
         if ($filesSkipped > 0) {
@@ -559,7 +597,8 @@ class updater extends loginsystem
             return ['success' => false, 'error' => $log[array_key_last($log)][1], 'log' => $log];
         }
 
-        $extractDir = $this->tmpDir . 'restore_extract/';
+        $this->ensureWorkDir();
+        $extractDir = $this->workDir . 'restore_extract/';
         if (is_dir($extractDir)) {
             $this->delTree($extractDir);
         }
@@ -608,7 +647,7 @@ class updater extends loginsystem
             }
         }
 
-        $this->delTree($extractDir);
+        $this->cleanWorkDir();
 
         $addLog('ok', $filesRestored . ' Dateien wiederhergestellt.');
         if ($filesSkipped > 0) {

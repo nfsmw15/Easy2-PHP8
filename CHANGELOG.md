@@ -1,5 +1,16 @@
 # Changelog — EASY 2.0 PHP8 Fork (Bootstrap 5)
 
+## [1.4.2] — 2026-05-31
+
+### Verbesserungen
+- **Update-Arbeitsverzeichnis**: Download und Entpacken laufen jetzt in `update_work/` statt in `tmp/`; das Verzeichnis wird nach dem Update automatisch gelöscht und ist per `.htaccess` gegen direkten Zugriff gesperrt
+- **Saubere Installation**: `.gitignore`, `.gitattributes` sowie `*.md`- und `*.txt`-Dateien auf Root-Ebene werden beim Update übersprungen (Dokumentation gehört nicht auf den Webserver)
+- **Updater-Terminal**: Alle Schritte (Backup → Download → Install) laufen in einer einzigen Terminal-Seite ohne Seitenwechsel; nach dem Backup erscheint ein Download-Button direkt im Terminal
+- **Schritt-Tracking**: Fortschritt wird in Datei gespeichert statt Session (zuverlässig auch bei langen SSE-Streams)
+- **`install/`-Verzeichnis** wird beim Update übersprungen
+
+---
+
 ## [1.4.1] — 2026-05-28
 
 ### Verbesserungen
