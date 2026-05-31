@@ -34,7 +34,7 @@ class updater extends loginsystem
     ];
 
     // Verzeichnisse die beim Installieren übersprungen werden
-    private array $installExclude = ['tmp/', 'avatare/'];
+    private array $installExclude = ['tmp/', 'avatare/', 'install/'];
 
     public function __construct()
     {
