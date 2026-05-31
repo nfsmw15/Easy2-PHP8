@@ -88,15 +88,20 @@ $sites->includeSite(true);
 
 // ─── Wartungsmodus ────────────────────────────────────────────────────────────
 // Flag-Datei tmp/maintenance.flag: Besucher sehen Wartungsseite, Admins nicht.
-if (file_exists('./tmp/maintenance.flag') && !$loginsystem->auditRight('mainsave')) {
+// Login-POST und Unlock-POST immer durchlassen damit Admins sich anmelden können.
+$_maintenance_bypass = $loginsystem->auditRight('mainsave')
+    || ($c === 'login')
+    || ($c === 'unlock');
+if (file_exists('./tmp/maintenance.flag') && !$_maintenance_bypass) {
     http_response_code(503);
     header('Retry-After: 300');
+    $_maint_title = htmlspecialchars((string)$loginsystem->getMainData('site_title'));
     ?><!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Wartung &mdash; <?php echo htmlspecialchars((string)$loginsystem->getMainData('site_title')); ?></title>
+    <title>Wartung &mdash; <?php echo $_maint_title; ?></title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="d-flex align-items-center justify-content-center" style="min-height:100vh;background:#f8f9fa;">
@@ -104,11 +109,13 @@ if (file_exists('./tmp/maintenance.flag') && !$loginsystem->auditRight('mainsave
     <div style="font-size:4rem;">&#9881;</div>
     <h1 class="h3 mt-3 mb-2">Wartungsarbeiten</h1>
     <p class="text-muted">Die Seite wird gerade aktualisiert und ist in K&uuml;rze wieder erreichbar.<br>Bitte versuche es sp&auml;ter noch einmal.</p>
+    <p class="mt-4"><a href="./?c=login" style="font-size:.8rem;color:#adb5bd;">Administrator-Login</a></p>
 </div>
 </body>
 </html><?php
     exit();
 }
+unset($_maintenance_bypass);
 
 $_layout = in_array($loginsystem->getMainData('layout'), ['navbar', 'dashboard'])
     ? $loginsystem->getMainData('layout')

@@ -1,5 +1,13 @@
 # Changelog — EASY 2.0 PHP8 Fork (Bootstrap 5)
 
+## [1.4.1] — 2026-05-28
+
+### Verbesserungen
+- **Backup-Benennung**: Manuelle Backups heißen `manual_VERSION_DATUM.zip`, automatische Backups vor einem Update `pre-update_VERSION_DATUM.zip` — auf einen Blick erkennbar was welches Backup ist
+- **Notfall-Hinweis in der Update-UI**: Gelber Hinweisblock erklärt was zu tun ist wenn nach einem Update die Seite nicht mehr erreichbar ist (FTP + phpMyAdmin)
+
+---
+
 ## [1.4.0] — 2026-05-28
 
 ### Neu: Auto-Updater

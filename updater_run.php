@@ -232,7 +232,7 @@ if ($mode === 'stream') {
                 $emit('ok', 'Wartungsmodus wird aktiviert…');
                 $updater->enableMaintenance();
                 $emit('ok', 'Wartungsmodus aktiv.');
-                $r = $updater->createBackup($emit);
+                $r = $updater->createBackup($emit, true);
                 if ($r['success']) {
                     // Session für step-tracking kurz öffnen
                     session_start();

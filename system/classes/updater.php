@@ -17,7 +17,8 @@ class updater extends loginsystem
     private const MAINTENANCE_FLAG = 'maintenance.flag';
     private const DOWNLOAD_FILE    = 'update_download.zip';
     private const EXTRACT_DIR      = 'update_extract/';
-    private const BACKUP_PREFIX    = 'backup_';
+    private const BACKUP_PREFIX_MANUAL = 'manual_';
+    private const BACKUP_PREFIX_UPDATE = 'pre-update_';
     private const DB_BACKUP_DIR    = 'updater_backup_dir';
 
     // Pfade die beim Backup ausgelassen werden
@@ -111,7 +112,7 @@ class updater extends loginsystem
 
     // ─── Backup ───────────────────────────────────────────────────────────────
 
-    public function createBackup(?callable $emit = null): array
+    public function createBackup(?callable $emit = null, bool $preUpdate = false): array
     {
         $log    = [];
         $addLog = function(string $type, string $msg) use (&$log, $emit): void {
@@ -139,7 +140,8 @@ class updater extends loginsystem
             $addLog('ok', '.htaccess-Schutz gesetzt.');
         }
 
-        $filename = self::BACKUP_PREFIX . EASY_VERSION . '_' . date('Ymd_His') . '.zip';
+        $prefix   = $preUpdate ? self::BACKUP_PREFIX_UPDATE : self::BACKUP_PREFIX_MANUAL;
+        $filename = $prefix . EASY_VERSION . '_' . date('Ymd_His') . '.zip';
         $zipFile  = $backupDir . $filename;
         $addLog('ok', 'Archiv wird erstellt: <code>' . htmlspecialchars($filename) . '</code>');
 
@@ -367,7 +369,10 @@ class updater extends loginsystem
             return [];
         }
 
-        $files = glob($backupDir . self::BACKUP_PREFIX . '*.zip') ?: [];
+        $files = array_merge(
+            glob($backupDir . self::BACKUP_PREFIX_MANUAL . '*.zip') ?: [],
+            glob($backupDir . self::BACKUP_PREFIX_UPDATE . '*.zip') ?: []
+        );
         $backups = [];
 
         foreach ($files as $file) {
@@ -387,7 +392,7 @@ class updater extends loginsystem
 
     public function deleteBackup(string $filename): bool
     {
-        if (!preg_match('/^backup_[a-zA-Z0-9._\-]+\.zip$/', $filename)) {
+        if (!preg_match('/^(manual|pre-update)_[a-zA-Z0-9._\-]+\.zip$/', $filename)) {
             return false;
         }
         $backupDir = realpath($this->getBackupDir());
@@ -402,7 +407,7 @@ class updater extends loginsystem
 
     public function sendBackupDownload(string $filename): bool
     {
-        if (!preg_match('/^backup_[a-zA-Z0-9._\-]+\.zip$/', $filename)) {
+        if (!preg_match('/^(manual|pre-update)_[a-zA-Z0-9._\-]+\.zip$/', $filename)) {
             return false;
         }
         $backupDir = realpath($this->getBackupDir());
@@ -497,7 +502,7 @@ class updater extends loginsystem
             return ['success' => false, 'error' => $log[0][1], 'log' => $log];
         }
 
-        if (!preg_match('/^backup_[a-zA-Z0-9._\-]+\.zip$/', $filename)) {
+        if (!preg_match('/^(manual|pre-update)_[a-zA-Z0-9._\-]+\.zip$/', $filename)) {
             $addLog('err', 'Ungültiger Backup-Dateiname.');
             return ['success' => false, 'error' => $log[0][1], 'log' => $log];
         }

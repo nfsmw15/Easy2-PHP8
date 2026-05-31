@@ -80,12 +80,18 @@ unset($_SESSION['updater_last_log']);
                 </div>
                 <div class="card-body">
                     <?php if ($_has_update): ?>
-                        <p class="mb-3">Eine neue Version <strong><?php echo htmlspecialchars($_avail_ver); ?></strong> ist verfügbar. Der Update-Prozess läuft in folgenden Schritten ab:</p>
+                        <p class="mb-2">Eine neue Version <strong><?php echo htmlspecialchars($_avail_ver); ?></strong> ist verfügbar. Der Update-Prozess läuft in folgenden Schritten ab:</p>
                         <ol class="mb-3">
-                            <li>Backup der aktuellen Installation erstellen</li>
+                            <li>Backup der aktuellen Installation erstellen <small class="text-muted">(Dateien + Datenbank)</small></li>
                             <li>Neue Version von GitHub herunterladen</li>
-                            <li>Dateien installieren (ohne Config &amp; Benutzerdaten)</li>
+                            <li>Dateien installieren <small class="text-muted">(Config &amp; Benutzerdaten bleiben erhalten)</small></li>
                         </ol>
+                        <div class="alert alert-warning py-2 mb-3">
+                            <i class="fa fa-exclamation-triangle"></i>
+                            <strong>Hinweis:</strong> Lade das Backup nach Schritt&nbsp;1 herunter, bevor du weiter machst.
+                            Falls etwas schiefläuft und die Seite nicht mehr erreichbar ist:
+                            Dateien per <strong>FTP</strong> wiederherstellen und die SQL-Datei aus dem Backup-ZIP über <strong>phpMyAdmin</strong> importieren.
+                        </div>
                     <?php else: ?>
                         <p class="text-muted mb-3">Es ist kein Update verfügbar. Du kannst trotzdem manuell ein Backup erstellen.</p>
                     <?php endif; ?>
